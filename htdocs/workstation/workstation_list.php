@@ -136,7 +136,7 @@ foreach ($object->fields as $key => $val) {
 $arrayfields['wug.fk_usergroup'] = array(
 	'label' => $langs->trans('UserGroups'),
 	'checked' => '1',
-	'enabled' => (string) (int) (abs($visible) != 3 && (bool) dol_eval((string) $val['enabled'], 1)),
+	'enabled' => '1',
 	'position' => 1000,
 	'help' => empty($val['help']) ? '' : $val['help'],
 	'csslist' => 'minwidth100'
@@ -693,7 +693,7 @@ while ($i < $imaxinloop) {
 	} else {
 		// Show line of result
 		$j = 0;
-		print '<tr data-rowid="'.$object->id.'" class="oddeven">';
+		print '<tr data-rowid="'.$object->id.'" class="oddeven row-with-select">';
 		// Action column
 		if (getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
 			print '<td class="nowrap center">';

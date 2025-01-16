@@ -137,9 +137,12 @@ print "
 
 // Call to external receipt modules factory if it exists and if we can (not allowed in some cases)
 if (isALNERunningVersion()) {
-	// If LNE version, we force format. Custom templates is not allowed
+	// If LNE version, we force parameters.
 	$conf->global->TAKEPOS_SHOW_HT_RECEIPT = 1;
 	$conf->global->TAKEPOS_TICKET_VAT_GROUPPED = 1;
+	$conf->global->TAKEPOS_PRINT_PAYMENT_METHOD = 1;
+	$conf->global->TAKEPOS_GIFT_RECEIPT = 0;
+	$conf->global->TAKEPOS_PRINT_WITHOUT_DETAILS = 0;
 } else {
 	$parameters = array();
 	$hookmanager->initHooks(array('takeposfrontend'));
