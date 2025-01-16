@@ -105,6 +105,7 @@ class Societe extends CommonObject
 		'projet' => array('name' => 'Project'),
 		'expedition' => array('name' => 'Shipment'),
 		'prelevement_lignes' => array('name' => 'DirectDebitRecord'),
+		'adherent' => array('name' => 'Member')
 	);
 
 	/**
@@ -4646,7 +4647,7 @@ class Societe extends CommonObject
 	 * 	@param	string		$socname		Name of third party to force
 	 *	@param	string		$socalias		Alias name of third party to force
 	 *  @param	string		$customercode	Customer code
-	 *  @return int							Return integer <0 if KO, id of created account if OK
+	 *  @return int							Return integer <0 if KO, id of created thirdparty if OK
 	 */
 	public function create_from_member(Adherent $member, $socname = '', $socalias = '', $customercode = '')
 	{
