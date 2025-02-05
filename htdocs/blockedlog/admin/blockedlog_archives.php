@@ -261,8 +261,8 @@ if ($action == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is 
 
 	if (!$error && $fh) {
 		// Now restart request with all data, so without the limit(1) in sql request
-		$sql = "SELECT rowid, date_creation, tms, user_fullname, action, amounts_taxexcl, amounts, element, fk_object, date_object, ref_object,";
-		$sql .= " signature, fk_user, object_data, object_version, object_format, debuginfo";
+		$sql = "SELECT rowid, entity, date_creation, tms, user_fullname, action, module_source, amounts_taxexcl, amounts, element, fk_object, date_object, ref_object,";
+		$sql .= " linktoref, linktype, signature, fk_user, object_data, object_version, object_format, debuginfo";
 		$sql .= " FROM ".MAIN_DB_PREFIX."blockedlog";
 		$sql .= " WHERE entity = ".((int) $conf->entity);
 		// For unalterable log, we are using the date of creation of the log. Note that a bookkeeper may decide to dispatch an invoice
@@ -304,21 +304,30 @@ if ($action == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is 
 
 			while ($obj = $db->fetch_object($resql)) {
 				// We set here all data used into signature calculation (see checkSignature method) and more
-				// IMPORTANT: We must have here, the same rule for transformation of data than into the fetch method (db->jdate for date, ...)
+
+				// IMPORTANT: We must have here, the same rule for transformation of data than into
+				// the blockedlog->fetch() method (db->jdate for date, ...)
+
 				$block_static->id = $obj->rowid;
 				$block_static->entity = $obj->entity;
 
 				$block_static->date_creation = $db->jdate($obj->date_creation);		// jdate(date_creation) is UTC
-
-				$block_static->module_source = $obj->module_source;
-
-				$block_static->amounts_taxexcl = (float) $obj->amounts_taxexcl;		// Database store value with 8 digits, we cut ending 0 them with (flow)
-				$block_static->amounts = (float) $obj->amounts;						// Database store value with 8 digits, we cut ending 0 them with (flow)
+				$block_static->date_modification = $db->jdate($obj->tms);			// jdate(tms) is UTC
 
 				$block_static->action = $obj->action;
+				$block_static->module_source = $obj->module_source;
+
+				$block_static->amounts_taxexcl = is_null($obj->amounts_taxexcl) ? null : (float) $obj->amounts_taxexcl;	// Database store value with 8 digits, we cut ending 0 them with (flow)
+				$block_static->amounts = (float) $obj->amounts;															// Database store value with 8 digits, we cut ending 0 them with (flow)
+
+				$block_static->fk_object = $obj->fk_object;							// Not in signature
 				$block_static->date_object = $db->jdate($obj->date_object);			// jdate(date_object) is UTC
 				$block_static->ref_object = $obj->ref_object;
 
+				$block_static->linktoref = $obj->linktoref;
+				$block_static->linktype = $obj->linktype;
+
+				$block_static->fk_user = $obj->fk_user;								// Not in signature
 				$block_static->user_fullname = $obj->user_fullname;
 
 				$block_static->object_data = $block_static->dolDecodeBlockedData($obj->object_data);
@@ -327,31 +336,25 @@ if ($action == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is 
 				$block_static->signature = $obj->signature;
 
 				$block_static->element = $obj->element;								// Not in signature
-				$block_static->fk_object = $obj->fk_object;							// Not in signature
 
-				$block_static->fk_user = $obj->fk_user;								// Not in signature
-
-				$block_static->date_modification = $db->jdate($obj->tms);			// Not in signature
 				$block_static->object_version = $obj->object_version;				// Not in signature
 				$block_static->object_format = $obj->object_format;					// Not in signature
 
-				$block_static->certified = ($obj->certified == 1);
+				$block_static->certified = ($obj->certified == 1);					// Not in signature
 
-				$block_static->linktoref = $obj->linktoref;
-				$block_static->linktype = $obj->linktype;
-
-				$block_static->debuginfo = $obj->debuginfo;
+				//$block_static->debuginfo = $obj->debuginfo;
 
 				//var_dump($block->id.' '.$block->signature, $block->object_data);
 
 				$checksignature = $block_static->checkSignature($previoushash); 	// If $previoushash is not defined, checkSignature will search it from $block_static->id
 
-				/* To see detail to get signature
-				if ($block_static->id == 397) {
-					$concatenateddata = $block_static->buildKeyForSignature();
-					var_export($concatenateddata);
+				// To see detail to get signature
+				/*
+				if ($block_static->id == 411) {
+					$concatenateddata = $block_static->buildKeyForSignature($block_static->object_format);
 
-					var_dump($block_static->checkSignature($previoushash, 2));
+					$tmparray = $block_static->checkSignature($previoushash, 2);
+					var_dump($previoushash, $concatenateddata, $tmparray);
 					exit;
 				}
 				*/
@@ -798,9 +801,9 @@ if ($action == 'check' || $action == 'checkconfirmed') {
 	$secretkey = $registrationnumber;
 
 	// Prepare to create a temporary file
-	$fullpathtmp = $upload_dir.'/tmp/'.GETPOST('urlfile').'.tmp';
+	$fullpathtmp = $upload_dir.'/temp/'.GETPOST('urlfile').'.tmp';
 
-	dol_mkdir($upload_dir.'/tmp');
+	dol_mkdir($upload_dir.'/temp');
 	$result = dol_copy($fullpath, $fullpathtmp);
 
 	// Generate tmp file content without the last line

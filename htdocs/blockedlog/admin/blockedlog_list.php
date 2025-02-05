@@ -499,7 +499,7 @@ if (is_array($blocks)) {
 
 			// Amount
 			print '<td class="right nowraponall">';
-			if (!in_array($block->action, array('BLOCKEDLOG_EXPORT', 'MODULE_SET', 'MODULE_RESET'))) {
+			if (!in_array($block->action, array('BLOCKEDLOG_EXPORT', 'CASHCONTROL_CLOSE', 'MODULE_SET', 'MODULE_RESET'))) {
 				$ingrey = !in_array($block->action, array('BILL_VALIDATE', 'PAYMENT_CUSTOMER_CREATE'));
 				if ($ingrey) {
 					print '<span class="opacitymedium">';
