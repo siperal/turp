@@ -273,6 +273,14 @@ if ($resql) {
 				$transactionspertype[$objp->code] = 0;
 			}
 			$transactionspertype[$objp->code] += 1;
+		} elseif ($objp->code == 'LIQ') {
+			$cash += $objp->amount;
+			// } elseif (getDolGlobalString($var2) == $bankaccount->id) $bank+=$objp->amount;
+			//elseif (getDolGlobalString($var3) == $bankaccount->id) $cheque+=$objp->amount;
+			if (empty($transactionspertype['CASH'])) {
+				$transactionspertype['CASH'] = 0;
+			}
+			$transactionspertype['CASH'] += 1;
 		} else {
 			if (getDolGlobalString($var1) == $bankaccount->id) {
 				$cash += $objp->amount;
@@ -402,7 +410,7 @@ if ($resql) {
 	print "<br>";
 
 	//print '<br>';
-	print $langs->trans("PaymentTypeCHQ").(!empty($transactionspertype['CHQ']) ? ' ('.$transactionspertype['CHQ'].' '.$langs->trans("Articles").')' : '').' : ';
+	print $langs->trans("PaymentTypeCHQ").(!empty($transactionspertype['CHQ']) ? ' ('.$transactionspertype['CHQ'].' '.$langs->trans("Payments").')' : '').' : ';
 	print '<div class="inline-block amount width100"></div>';
 	print '<div class="inline-block amount width100">'.price($cheque).'</div>';
 	if (!$summaryonly && $object->status == $object::STATUS_CLOSED && price2num($cheque) != price2num((float) $object->cheque_declared)) {
@@ -411,7 +419,7 @@ if ($resql) {
 	print "<br>";
 
 	//print '<br>';
-	print $langs->trans("PaymentTypeCB").(!empty($transactionspertype['CB']) ? ' ('.$transactionspertype['CB'].' '.$langs->trans("Articles").')' : '').' : ';
+	print $langs->trans("PaymentTypeCB").(!empty($transactionspertype['CB']) ? ' ('.$transactionspertype['CB'].' '.$langs->trans("Payments").')' : '').' : ';
 	print '<div class="inline-block amount width100"></div>';
 	print '<div class="inline-block amount width100">'.price($bank).'</div>';
 	if (!$summaryonly && $object->status == $object::STATUS_CLOSED && price2num($bank) != price2num((float) $object->card_declared)) {
@@ -421,7 +429,7 @@ if ($resql) {
 
 	// print '<br>';
 	if ($other) {
-		print ''.$langs->trans("Other").(!empty($transactionspertype['OTHER']) ? ' ('.$transactionspertype['OTHER'].' '.$langs->trans("Articles").')' : '').' : ';
+		print ''.$langs->trans("Other").(!empty($transactionspertype['OTHER']) ? ' ('.$transactionspertype['OTHER'].' '.$langs->trans("Payments").')' : '').' : ';
 		print '<div class="inline-block amount width100"></div>';
 		print '<div class="inline-block amount width100">'.price($other)."</div>";
 		print '<br>';
