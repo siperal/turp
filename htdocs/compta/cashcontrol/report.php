@@ -106,7 +106,7 @@ $conf->dol_hide_leftmenu = 1;
 
 llxHeader('', $title, '', '', 0, 0, array(), array(), $param);
 
-print '<!-- Begin div id-container --><div id="id-container" class="id-container center">';
+print '<!-- Begin div id-container --><div id="id-container" class="id-container centpercent">';
 
 $dates = $datee = 0;
 
@@ -302,6 +302,7 @@ if ($resql) {
 			$amountpertype[$objp->code] -= $objp->amount;
 		}
 
+		// List of all invoices
 		if (!$summaryonly) {
 			print '<tr class="oddeven">';
 
@@ -374,6 +375,7 @@ if ($resql) {
 
 	if (!$summaryonly) {
 		// Show total line
+		$moreinfoontotal = ' ('.$num.' '.$langs->trans($num > 1 ? "Invoices" : "Invoice").')';		// Used in the .tpl
 		include DOL_DOCUMENT_ROOT.'/core/tpl/list_print_total.tpl.php';
 
 		print "</table>";
@@ -386,7 +388,7 @@ if ($resql) {
 	print '<div style="text-align: right">';
 	print '<h2>';
 
-	print $langs->trans("Cash").(!empty($transactionspertype['CASH']) ? ' ('.$transactionspertype['CASH'].' '.$langs->trans("Articles").')' : '').' : ';
+	print $langs->trans("Cash").(!empty($transactionspertype['CASH']) ? ' ('.$transactionspertype['CASH'].' '.$langs->trans("Payments").')' : '').' : ';
 	if (!$summaryonly) {
 		print '<div class="inline-block amount width100">'.($cash >= 0 ? '+' : '').price($cash).'</div>';
 		print '<div class="inline-block amount width100">'.price($newcash).'</div>';
@@ -424,6 +426,7 @@ if ($resql) {
 		print '<div class="inline-block amount width100">'.price($other)."</div>";
 		print '<br>';
 	}
+
 
 	print "<br>";
 

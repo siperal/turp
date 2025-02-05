@@ -765,7 +765,9 @@ if ($action == "create" || $action == "start") {
 
 		print '<tr>';
 		// Initial amount
-		print '<td>'.$langs->trans("TheoricalAmount").'</td>';
+		print '<td>';
+		print $form->textwithpicto($langs->trans("TheoricalAmount"), $langs->trans("TheoricalAmountAtOpening"));
+		print '</td>';
 		print '<td class="center">';
 		print price($initialbalanceforterminal[$terminalid]['cash']).'<br>';
 		print '</td>';
@@ -978,7 +980,8 @@ if (empty($action) || $action == "view" || $action == "close") {
 			print '</div>';
 
 			if ($contextpage != 'takepos') {
-				print '<center><iframe src="report.php?id='.$id.'" width="60%" height="800"></iframe></center>';
+				// Add ifram of report
+				print '<center><iframe src="'.DOL_URL_ROOT.'/compta/cashcontrol/report.php?id='.$id.'" width="60%" height="800"></iframe></center>';
 			}
 		} else {
 			print '<form method="POST" action="'.$_SERVER["PHP_SELF"].'" name="formclose">';
@@ -1028,7 +1031,7 @@ if (empty($action) || $action == "view" || $action == "close") {
 				print '</td>';
 				$i = 0;
 				foreach ($arrayofpaymentmode as $key => $val) {
-					print '<td align="center"'.($i == 0 ? ' class="hide0"' : '').'>'.$langs->trans($val);
+					print '<td class="center'.($i == 0 ? ' hide0' : '').'">'.$langs->trans($val);
 					//print '<br>'.$langs->trans("TheoricalAmount").'<br>'.$langs->trans("RealAmount");
 					print '</td>';
 					$i++;
@@ -1044,7 +1047,7 @@ if (empty($action) || $action == "view" || $action == "close") {
 				// Amount per payment type
 				$i = 0;
 				foreach ($arrayofpaymentmode as $key => $val) {
-					print '<td align="center"'.($i == 0 ? ' class="hide0"' : '').'>';
+					print '<td class="center'.($i == 0 ? ' hide0' : '').'">';
 					print $theoricalnbofinvoiceforterminal[$terminalid][$key];
 					print '</td>';
 					$i++;
