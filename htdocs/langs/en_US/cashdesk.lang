@@ -188,3 +188,4 @@ NoneOrChooseAnEmailTemplateForInvoice=None or select an email template for invoi
 TheoricalAmountAtOpening=Estimated and theorical amount (based on the balance, at date, of the cash account currently defined on terminal)
 KeepEmptyForAYearlyControl=Keep empty for a yearly control
 KeepEmptyForAMonthlyControl=Keep empty for a yearly or monthly control
+AmuntCountedByUserShort=Counted by user
