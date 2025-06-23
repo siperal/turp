@@ -1963,6 +1963,7 @@ ApiProductionMode=Enable production mode (this will activate use of a cache for 
 ApiExporerIs=You can explore and test the APIs at URL
 OnlyActiveElementsAreExposed=Only elements from enabled modules are exposed
 ApiKey=Key for API
+UseApiKey=Use keys for API
 WarningAPIExplorerDisabled=The API explorer has been disabled. API explorer is not required to provide API services. It is a tool for developer to find/test REST APIs. If you need this tool, go into setup of module API REST to activate it.
 ##### Bank #####
 BankSetupModule=Bank module setup
