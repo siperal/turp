@@ -56,6 +56,8 @@ if (!isset($id) || empty($id)) {
 }
 '@phan-var-force int<1,max> $id';
 
+$toselect = GETPOST('toselect', 'array');
+
 // $user est le user qui edite, $id est l'id de l'utilisateur edite
 $caneditfield = ((($user->id == $id) && $user->hasRight("user", "self", "write"))
 	|| (($user->id != $id) && $user->hasRight("user", "user", "write")));
@@ -111,6 +113,9 @@ $help_url = '';
 
 llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card_param_ihm');
 
+$massaction = GETPOST('massaction', 'alpha');
+$arrayofselected = is_array($toselect) ? $toselect : array();
+
 $head = user_prepare_head($object);
 
 $title = $langs->trans("User");
@@ -134,6 +139,9 @@ $urltovirtualcard = '/user/virtualcard.php?id='.((int) $object->id);
 $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl").' - '.$object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
 dol_banner_tab($object, 'id', $linkback, $user->hasRight("user", "user", "read") || $user->admin, 'rowid', 'ref', $morehtmlref);
+
+$arrayofmassactions['predelete'] = img_picto('', 'delete', 'class="pictofixedwidth"').$langs->trans("Delete");
+$massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
 print '<div class="fichecenter">';
 
@@ -177,7 +185,11 @@ $tmpurlforbutton = DOL_URL_ROOT.'/user/api_token/list.php?id='.$id.'&action=crea
 $morehtmlright .= dolGetButtonTitle($langs->trans('New'), '', 'fa fa-plus-circle', $tmpurlforbutton);
 //}
 
-print load_fiche_titre($langs->trans("ListOfTokensForUser"), $morehtmlright, '');
+print '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">'."\n";
+print '<input type="hidden" name="token" value="'.newToken().'">';
+
+print load_fiche_titre($langs->trans("ListOfTokensForUser"), $morehtmlright, '', 0, '', '', $massactionbutton);
+print '</form>';
 
 // TODO : Build the hook management
 // Other form for add user to group
@@ -189,7 +201,13 @@ if (empty($reshook)) {
 
 	print '<!-- List of tokens of the user -->';
 	print '<table class="noborder centpercent">';
+
 	print '<tr class="liste_titre">';
+	if (getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
+		print '<th class="wrapcolumntitle center maxwidthsearch liste_titre">';
+		print $form->showCheckAddButtons('checkforselect', 1);
+		print '</th>';
+	}
 	print '<th class="liste_titre">'.$langs->trans("ApiToken").'</th>';
 	print '<th class="liste_titre">'.$langs->trans("Entity").'</th>';
 	print '<th class="liste_titre">'.$langs->trans("NumberOfPermissions").'</th>';
@@ -197,7 +215,7 @@ if (empty($reshook)) {
 	print '<th class="liste_titre">'.$langs->trans("DateModification").'</th>';
 	print '</tr>';
 
-	$sql = "SELECT ot.token, ot.entity, ot.state, ot.datec, ot.tms";
+	$sql = "SELECT ot.rowid as token_id, ot.token, ot.entity, ot.state, ot.datec, ot.tms";
 	$sql .= " FROM ".MAIN_DB_PREFIX."oauth_token as ot";
 	$sql .= " WHERE ot.fk_user = ".((int) $object->id);
 
@@ -207,8 +225,22 @@ if (empty($reshook)) {
 	if ($db->num_rows($resql) > 0) {
 		while ($obj = $db->fetch_object($resql)) {
 			print '<tr class="oddeven">';
+			// Action column
+			if (getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
+				print '<td class="nowrap center">';
+				if ($massactionbutton || $massaction) {   // If we are in select mode (massactionbutton defined) or if we have already selected and sent an action ($massaction) defined
+					$selected = 0;
+					if (in_array($obj->token_id, $arrayofselected)) {
+						$selected = 1;
+					}
+					print '<input id="cb'.$obj->token_id.'" class="flat checkforselect" type="checkbox" name="toselect[]" value="'.$obj->token_id.'"'.($selected ? ' checked="checked"' : '').'>';
+				}
+				print '</td>';
+			}
 			print '<td>';
+			print '<a href="'.DOL_URL_ROOT.'/user/api_token/card.php?id='.$obj->token_id.'">'.img_object($langs->trans("ShowToken"), "email").' ';  // TODO : change icon
 			print $obj->token;
+			print '</a>';
 			print '</td>';
 			print '<td>';
 			print $obj->entity;
