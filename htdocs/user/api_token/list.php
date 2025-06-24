@@ -219,7 +219,7 @@ if (empty($reshook)) {
 				print '</td>';
 			}
 			print '<td>';
-			print '<a href="'.DOL_URL_ROOT.'/user/api_token/card.php?id='.$obj->token_id.'">'.img_object($langs->trans("ShowToken"), "email").' ';  // TODO : change icon
+			print '<a href="'.DOL_URL_ROOT.'/user/api_token/card.php?id='.$object->id.'&tokenid='.$obj->token_id.'">'.img_object($langs->trans("ShowToken"), "email").' ';  // TODO : change icon
 			print $obj->token;
 			print '</a>';
 			print '</td>';

@@ -146,4 +146,5 @@ NewEmailUserClone=Email address of the new user
 SocialNetworksUser=Social networks for user
 ApiToken=Api token
 ListOfTokensForUser=List of tokens for this user
+ListOfRightsForToken=List of rights for this token
 NumberOfPermissions=Number of permissions
