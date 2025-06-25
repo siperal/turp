@@ -315,8 +315,7 @@ foreach ($modulesdir as $dir) {
 $db->commit();
 
 // Load perms ids for the user
-$permsuser = explode(",", $token->rights);
-dol_syslog("get user perms", LOG_DEBUG);
+$tokenperms = explode(",", $token->rights);
 
 print '<div class="div-table-responsive-no-min">';
 print '<table class="noborder centpercent">';
@@ -403,6 +402,35 @@ if ($result) {
 	}
 }
 
+//Load perms ids for user and user's groups to show only the perms the user has and avoid better perms in the token.
+$allusersperms = array();
+
+// Users perms
+$sql = "SELECT ur.fk_id";
+$sql .= " FROM ".MAIN_DB_PREFIX."user_rights as ur";
+$sql .= " WHERE ur.entity = ".((int) $entity);
+$sql .= " AND ur.fk_user = ".((int) $object->id);
+$sql .= " UNION ";
+// Groups perms
+$sql .= "SELECT gr.fk_id";
+$sql .= " FROM ".MAIN_DB_PREFIX."usergroup_rights as gr";
+$sql .= " WHERE EXISTS(SELECT gu.rowid FROM llx_usergroup_user as gu WHERE gu.fk_user = ".((int) $id)." AND gu.fk_usergroup = gr.fk_usergroup)";
+
+dol_syslog("get user perms", LOG_DEBUG);
+$result = $db->query($sql);
+if ($result) {
+	$num = $db->num_rows($result);
+	$i = 0;
+	while ($i < $num) {
+		$obj = $db->fetch_object($result);
+		array_push($allusersperms, $obj->fk_id);
+		$i++;
+	}
+	$db->free($result);
+} else {
+	dol_print_error($db);
+}
+
 // Load and show all the perms grouped by module
 
 //print "xx".$conf->global->MAIN_USE_ADVANCED_PERMS;
@@ -410,6 +438,7 @@ $sql = "SELECT r.id, r.libelle as label, r.module, r.perms, r.subperms, r.module
 $sql .= " FROM ".MAIN_DB_PREFIX."rights_def as r";
 $sql .= " WHERE r.libelle NOT LIKE 'tou%'"; // On ignore droits "tous"
 $sql .= " AND r.entity = ".((int) $entity);
+$sql .= " AND r.id IN (".implode(', ', $allusersperms).")";
 if (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
 	$sql .= " AND r.perms NOT LIKE '%_advance'"; // Hide advanced perms if option is not enabled
 }
@@ -563,7 +592,7 @@ if ($result) {
 			}
 			print '<td>';
 			print '</td>';
-		} elseif (in_array($obj->id, $permsuser)) {					// Permission granted by user
+		} elseif (in_array($obj->id, $tokenperms)) {					// Permission granted by user
 			print '<!-- user has perm -->';
 			if ($caneditperms) {
 				print '<td class="center nowrap">';
@@ -651,7 +680,7 @@ if ($result) {
 		// Special warning case for the permission "Allow to modify other users password"
 		if ($obj->module == 'user' && $obj->perms == 'user' && $obj->subperms == 'password') {
 			if ((!empty($object->admin) && !empty($objMod->rights_admin_allowed)) ||
-				in_array($obj->id, $permsuser) /* if edited user owns this permissions */ ||
+				in_array($obj->id, $tokenperms) /* if edited user owns this permissions */ ||
 				(isset($permsgroupbyentitypluszero) && is_array($permsgroupbyentitypluszero) && in_array($obj->id, $permsgroupbyentitypluszero))) {
 				print ' '.img_warning($langs->trans("AllowPasswordResetBySendingANewPassByEmail"));
 			}
@@ -659,7 +688,7 @@ if ($result) {
 		// Special warning case for the permission "Create/modify other users, groups and permissions"
 		if ($obj->module == 'user' && $obj->perms == 'user' && ($obj->subperms == 'creer' || $obj->subperms == 'create')) {
 			if ((!empty($object->admin) && !empty($objMod->rights_admin_allowed)) ||
-				in_array($obj->id, $permsuser) /* if edited user owns this permissions */ ||
+				in_array($obj->id, $tokenperms) /* if edited user owns this permissions */ ||
 				(isset($permsgroupbyentitypluszero) && is_array($permsgroupbyentitypluszero) && in_array($obj->id, $permsgroupbyentitypluszero))) {
 				print ' '.img_warning($langs->trans("AllowAnyPrivileges"));
 			}
