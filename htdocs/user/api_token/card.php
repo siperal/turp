@@ -104,7 +104,7 @@ if (empty($reshook)) {
 	if (in_array($action, array('addrights', 'delrights'))) {
 		$rigthsarray = [];
 
-		if ($rights != '') {
+		if (!empty($rights)) {
 			$sql = "SELECT module, perms, subperms";
 			$sql .= " FROM ".$db->prefix()."rights_def";
 			$sql .= " WHERE id = ".((int) $rights);
@@ -146,13 +146,24 @@ if (empty($reshook)) {
 			while ($obj = $db->fetch_object($resql)) {
 				$rigthsarray []= $obj->id;
 			}
-		} elseif ($module != '') {
+		} elseif (!empty($module)) {
 			$sql = "SELECT id";
 			$sql .= " FROM ".MAIN_DB_PREFIX."rights_def";
 			$sql .= " WHERE entity IN (".$db->sanitize($token->entity, 0, 0, 0, 0).")";
 			if ($module != 'allmodules') {
 				$sql .= " AND (module='".$db->escape($module)."')";
 			}
+			// To enable only all perms in a module that a user has to avoid better perms in token
+			$sql .= " AND id IN (";
+			$sql .= " SELECT ur.fk_id";
+			$sql .= " FROM llx_user_rights as ur";
+			$sql .= " WHERE ur.entity = ".$token->entity;
+			$sql .= " AND ur.fk_user = ".$id;
+			$sql .= " UNION";
+			$sql .= " SELECT gr.fk_id";
+			$sql .= " FROM llx_usergroup_rights as gr";
+			$sql .= " WHERE EXISTS(SELECT gu.rowid FROM llx_usergroup_user as gu WHERE gu.fk_user = ".$id;
+			$sql .= " AND gu.fk_usergroup = gr.fk_usergroup))";
 			$resql = $db->query($sql);
 			while ($obj = $db->fetch_object($resql)) {
 				$rigthsarray []= $obj->id;
@@ -160,7 +171,12 @@ if (empty($reshook)) {
 		}
 	}
 	if ($action == 'addrights' && $caneditperms && $confirm == 'yes') {
-		$tokenrigthsarray = explode(',', $token->rights);
+		$tokenrigthsarray = [];
+
+		if (!empty($token->rights)) {
+			$tokenrigthsarray = explode(',', $token->rights);
+		}
+
 		if (isset($rigthsarray)) {
 			$tokenrigthsarray = array_merge($tokenrigthsarray, $rigthsarray);
 		} else {
