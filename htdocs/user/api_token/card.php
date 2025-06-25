@@ -223,6 +223,21 @@ if (empty($reshook)) {
 
 		$token->rights = $newrigths;
 	}
+
+	elseif ($action == 'confirm_delete' && $confirm == 'yes' && $caneditfield) {
+		// Remove token
+		$sql = "DELETE FROM ".MAIN_DB_PREFIX."oauth_token";
+		$sql .= " WHERE rowid = '".$tokenid."'";
+
+		$resql = $db->query($sql);
+
+		if ($resql) {
+			header('Location: list.php?id='.$object->id);
+			exit;
+		} else {
+			dol_print_error($db);
+		}
+	}
 }
 
 
@@ -235,6 +250,14 @@ $title = $person_name." - ".$langs->trans('Card');
 $help_url = '';
 
 llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card_param_ihm');
+
+$formconfirm = '';
+
+if ($action == 'delete') {
+	$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"].'?id='.$object->id.'&tokenid='.$token->token_id, $langs->trans('DeleteToken'), $langs->trans('ConfirmDeleteToken'), 'confirm_delete', '', 0, 1);
+}
+
+print $formconfirm;
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -255,11 +278,7 @@ $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->tra
 
 dol_banner_tab($object, 'id', $linkback, $user->hasRight("user", "user", "read") || $user->admin, 'rowid', 'ref', $morehtmlref);
 
-print '<form method="POST" action="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&tokenid='.$token->token_id.'">'."\n";
-print '<input type="hidden" name="token" value="'.newToken().'">';
-print '<input type="hidden" name="formfilteraction" id="formfilteraction" value="list">';
-print '<input type="hidden" name="action" value="edit">';
-
+// Tokens info
 print '<div class="fichecenter">';
 print '<div class="underbanner clearboth"></div>';
 print '<table class="border centpercent tableforfield">';
@@ -285,46 +304,39 @@ if (!empty($object->ldap_sid) && $object->status == 0) {
 }
 print '</tr>'."\n";
 
-//var_dump(showValueWithClipboardCPButton($token->token, 1, $token->token));
-
 // Token
 print '<tr><td class="titlefield">'.$langs->trans("ApiToken").'</td>';
 print '<td>';
-print '<input class="minwidth300 maxwidth400 widthcentpercentminusx" type="text" id="api_key" name="api_key" value="'.$token->token.'" autocomplete="off">';
-if (!empty($conf->use_javascript_ajax)) {
-	print img_picto($langs->transnoentities('Generate'), 'refresh', 'id="generate_api_key" class="linkobject paddingleft"');
-}
+print showValueWithClipboardCPButton($token->token, 1, $token->token);
 print '</td>';
 print '</tr>'."\n";
 
 // Entity
 print '<tr><td class="titlefield">'.$langs->trans("Entity").'</td>';
 print '<td>';
-print '<input type="text" id="entity" name="entity" value="'.$token->entity.'" readonly>';
+print $token->entity;
 print '</td>';
 print '</tr>'."\n";
 
 // Creation date
 print '<tr><td class="titlefield">'.$langs->trans("DateCreation").'</td>';
 print '<td>';
-print '<input type="text" id="creation_date" name="creation_date" value="'.$token->date_creation.'" readonly>';
+print $token->date_creation;
 print '</td>';
 print '</tr>'."\n";
 
 // Modification date
 print '<tr><td class="titlefield">'.$langs->trans("DateModification").'</td>';
 print '<td>';
-print '<input type="text" id="modification_date" name="modification_date" value="'.$token->date_modification.'" readonly>';
+print $token->date_modification;
 print '</td>';
 print '</tr>'."\n";
 
 print '</table>';
-print '<div class="right">';
-print '<input class="button button-save" type="submit" value="'.$langs->trans("Save").'">';
-print '<a class="button" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&tokenid='.$token->token_id.'&action=delete&token='.newToken().'">'.$langs->trans("Delete").'</a>';
+print '<div class="tabsAction">';
+print dolGetButtonAction($langs->trans('Delete'), '', 'delete', $_SERVER["PHP_SELF"].'?id='.$object->id.'&tokenid='.$token->token_id.'&action=delete&token='.newToken(), '', $caneditperms);
 print '</div>';
 print '</div>';
-print '</form>';
 
 print dol_get_fiche_end();
 

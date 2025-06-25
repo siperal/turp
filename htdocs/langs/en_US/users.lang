@@ -148,3 +148,5 @@ ApiToken=Api token
 ListOfTokensForUser=List of tokens for this user
 ListOfRightsForToken=List of rights for this token
 NumberOfPermissions=Number of permissions
+DeleteToken=Delete token
+ConfirmDeleteToken=Are you sure you want to delete this token?
