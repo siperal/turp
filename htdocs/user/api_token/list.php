@@ -162,7 +162,7 @@ $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
 $morehtmlright = '';
 //if (!empty($moreoptions['showhideaddbutton']) && $conf->use_javascript_ajax) {
-$tmpurlforbutton = DOL_URL_ROOT.'/user/api_token/list.php?id='.$id.'&action=create';
+$tmpurlforbutton = DOL_URL_ROOT.'/user/api_token/card.php?id='.$id.'&action=create';
 //	TODO Permissions ? $morehtmlright .= dolGetButtonTitle($langs->trans('New'), '', 'fa fa-plus-circle', $tmpurlforbutton, '', $permtoeditline);
 $morehtmlright .= dolGetButtonTitle($langs->trans('New'), '', 'fa fa-plus-circle', $tmpurlforbutton);
 //}
