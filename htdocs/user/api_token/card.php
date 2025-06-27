@@ -382,11 +382,13 @@ if ($action == 'create') {
 	print '</tr>'."\n";
 
 	// Entity
-	print '<tr><td class="titlefield">'.$langs->trans("Entity").'</td>';
-	print '<td>';
-	print $token->entity;
-	print '</td>';
-	print '</tr>'."\n";
+	if (isModEnabled('multicompany')) {
+		print '<tr><td class="titlefield">'.$langs->trans("Entity").'</td>';
+		print '<td>';
+		print $token->entity;
+		print '</td>';
+		print '</tr>'."\n";
+	}
 
 	// Creation date
 	print '<tr><td class="titlefield">'.$langs->trans("DateCreation").'</td>';

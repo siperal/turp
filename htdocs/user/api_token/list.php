@@ -355,7 +355,7 @@ if (empty($reshook)) {
 	}
 
 	// Entity
-	if (!empty($arrayfields['ot.entity']['checked'])) {
+	if (!empty($arrayfields['ot.entity']['checked']) && isModEnabled('multicompany')) {
 		print '<td class="liste_titre">';
 		print '<input class="flat maxwidth100" type="text" name="search_entity" value="'.dol_escape_htmltag($search_entity).'"'.($socid > 0 ? " disabled" : "").'>';
 		print '</td>';
@@ -364,7 +364,7 @@ if (empty($reshook)) {
 	// Number of perms
 	// We don't search out number of perms because it is a string field,
 	// and we don't want to count into it with sql query
-	print '<td></td>';
+	print '<td class="liste_titre"></td>';
 
 	// Date creation
 	if (!empty($arrayfields['ot.datec']['checked'])) {
@@ -409,7 +409,7 @@ if (empty($reshook)) {
 	if (!empty($arrayfields['ot.token']['checked'])) {
 		print_liste_field_titre($arrayfields['ot.token']['label'], $_SERVER["PHP_SELF"], 'ot.token', '', $param, '', $sortfield, $sortorder);
 	}
-	if (!empty($arrayfields['ot.entity']['checked'])) {
+	if (!empty($arrayfields['ot.entity']['checked']) && isModEnabled('multicompany')) {
 		print_liste_field_titre($arrayfields['ot.entity']['label'], $_SERVER["PHP_SELF"], 'ot.entity', '', $param, '', $sortfield, $sortorder);
 	}
 	print '<th class="liste_titre right">'.$langs->trans("NumberOfPermissions").'</th>';
@@ -455,9 +455,11 @@ if (empty($reshook)) {
 			print $obj->token;
 			print '</a>';
 			print '</td>';
-			print '<td>';
-			print $obj->entity;
-			print '</td>';
+			if (isModEnabled('multicompany')) {
+				print '<td>';
+				print $obj->entity;
+				print '</td>';
+			}
 			print '<td class="right">';
 			print $numperms;
 			print '</td>';
@@ -479,10 +481,14 @@ if (empty($reshook)) {
 				print '</td>';
 			}
 			print '</tr>';
-			$i ++;
+			$i++;
 		}
 	} else {
-		print '<tr class="oddeven"><td colspan="2"><span class="opacitymedium">'.$langs->trans("None").'</span></td></tr>';
+		$colspan = 5; // Base colspan
+		if (isModEnabled('multicompany')) {
+			$colspan++;
+		}
+		print '<tr class="oddeven"><td colspan="'.$colspan.'"><span class="opacitymedium">'.$langs->trans("None").'</span></td></tr>';
 	}
 
 	print "</table>";
