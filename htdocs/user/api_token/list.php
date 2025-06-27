@@ -54,6 +54,7 @@ if (!isset($id) || empty($id)) {
 // Action / Massaction
 $action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha');
+$confirm    = GETPOST('confirm', 'alpha');
 $toselect = GETPOST('toselect', 'array');
 
 // List filters
@@ -146,6 +147,10 @@ if (empty($reshook)) {
 		$search_tms_end = '';
 
 		$toselect = array();
+	}
+	if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter.x', 'alpha') || GETPOST('button_removefilter', 'alpha')
+		|| GETPOST('button_search_x', 'alpha') || GETPOST('button_search.x', 'alpha') || GETPOST('button_search', 'alpha')) {
+		$massaction = ''; // Protection to avoid mass action if we force a new search during a mass action confirmation
 	}
 
 	if ($action == 'update' && ($caneditfield || !empty($user->admin))) {
@@ -308,6 +313,9 @@ print dol_get_fiche_end();
 print '<!-- Token section -->'."\n";
 
 $arrayofmassactions['predelete'] = img_picto('', 'delete', 'class="pictofixedwidth"').$langs->trans("Delete");
+if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predelete'))) {
+	$arrayofmassactions = array();
+}
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
 $morehtmlright = '';
