@@ -208,7 +208,7 @@ if (empty($reshook)) {
 			dol_print_error($db);
 		}
 
-		$token->rights = $newrigths;
+		$reloadtoken = true;
 	}
 
 	if ($action == 'delrights' && $caneditperms && $confirm == 'yes') {
@@ -232,7 +232,7 @@ if (empty($reshook)) {
 			dol_print_error($db);
 		}
 
-		$token->rights = $newrigths;
+		$reloadtoken = true;
 	}
 
 	if ($action == 'add') {
@@ -277,6 +277,14 @@ if (empty($reshook)) {
 	}
 }
 
+if (isset($reloadtoken)) { // If we add or del rights, we want to refresh the token with its new updated fields
+	$sql = "SELECT ot.rowid as token_id, ot.token, ot.entity, ot.state as rights, ot.datec as date_creation, ot.tms as date_modification";
+	$sql .= " FROM ".MAIN_DB_PREFIX."oauth_token as ot";
+	$sql .= " WHERE ot.rowid = ".((int) $tokenid);
+
+	$resql = $db->query($sql);
+	$token = $db->fetch_object($resql);
+}
 
 /*
  * View
@@ -393,14 +401,14 @@ if ($action == 'create') {
 	// Creation date
 	print '<tr><td class="titlefield">'.$langs->trans("DateCreation").'</td>';
 	print '<td>';
-	print $token->date_creation;
+	print dol_print_date($db->jdate($token->date_creation), 'day');
 	print '</td>';
 	print '</tr>'."\n";
 
 	// Modification date
 	print '<tr><td class="titlefield">'.$langs->trans("DateModification").'</td>';
 	print '<td>';
-	print $token->date_modification;
+	print dol_print_date($db->jdate($token->date_modification), 'day');
 	print '</td>';
 	print '</tr>'."\n";
 

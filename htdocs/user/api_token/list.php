@@ -472,10 +472,10 @@ if (empty($reshook)) {
 			print $numperms;
 			print '</td>';
 			print '<td class="center">';
-			print $obj->date_creation;
+			print dol_print_date($db->jdate($obj->date_creation), 'day');
 			print '</td>';
 			print '<td class="center">';
-			print $obj->date_modification;
+			print dol_print_date($db->jdate($obj->date_modification), 'day');
 			print '</td>';
 			if (!getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
 				print '<td class="nowrap center">';
