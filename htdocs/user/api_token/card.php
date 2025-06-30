@@ -41,7 +41,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/html.formadmin.class.php';
  */
 
 // Load translation files required by page
-$langs->loadLangs(array('admin', 'users'));
+$langs->loadLangs(array('admin', 'users', 'errors'));
 $error = 0;
 
 // Security check
@@ -240,6 +240,23 @@ if (empty($reshook)) {
 
 		if (empty($tokenstring)) {
 			setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("ApiToken")), null, 'errors');
+			$action = 'create';
+			$error++;
+		}
+
+		$sqlforcount = 'SELECT COUNT(*) as nbtotalofrecords';
+		$sqlforcount .= " FROM ".MAIN_DB_PREFIX."oauth_token as ot";
+		$sqlforcount .= " WHERE token = '".$db->escape($tokenstring)."'";
+		$sqlforcount .= " AND service = 'dolibarr_rest_api'";
+		$resql = $db->query($sqlforcount);
+		if ($resql) {
+			$objforcount = $db->fetch_object($resql);
+			$nbtotalofrecords = $objforcount->nbtotalofrecords;
+		} else {
+			dol_print_error($db);
+		}
+		if ($nbtotalofrecords > 0) {
+			setEventMessages($langs->trans("ErrorFieldExist", $langs->transnoentitiesnoconv("ApiToken")), null, 'errors');
 			$action = 'create';
 			$error++;
 		}
