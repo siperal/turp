@@ -212,8 +212,10 @@ $sql .= " JOIN llx_user as u ON u.rowid = oat.fk_user";
 if (isModEnabled('multicompany')) {
 	$sql .= " JOIN ".$db->prefix()."entity as e ON oat.entity = e.rowid";
 }
-$sql .= " WHERE oat.entity IN (".$conf->entity.")";
-$sql .= " AND service = 'dolibarr_rest_api'";
+$sql .= " WHERE service = 'dolibarr_rest_api'";
+if (!isModEnabled('multicompany') || $conf->entity > 1) {
+	$sql .= " AND oat.entity IN (".$conf->entity.")";
+}
 if ($search_token) {
 	$sql .= natural_search('oat.token', $search_token);
 }
