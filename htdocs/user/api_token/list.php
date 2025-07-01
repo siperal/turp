@@ -216,7 +216,9 @@ if (!getDolGlobalInt('MAIN_DISABLE_FULL_SCANLIST')) {
 	/* The fast and low memory method to get and count full list converts the sql into a sql count */
 	$sqlforcount = 'SELECT COUNT(*) as nbtotalofrecords';
 	$sqlforcount .= " FROM ".MAIN_DB_PREFIX."oauth_token as oat";
-	$sqlforcount .= " WHERE entity IN (".$conf->entity.") AND fk_user = ".$id;
+	$sqlforcount .= " WHERE entity IN (".$conf->entity.")";
+	$sqlforcount .= " AND fk_user = ".$id;
+	$sqlforcount .= " AND service = 'dolibarr_rest_api'";
 	$resql = $db->query($sqlforcount);
 	if ($resql) {
 		$objforcount = $db->fetch_object($resql);
@@ -234,7 +236,9 @@ if (!getDolGlobalInt('MAIN_DISABLE_FULL_SCANLIST')) {
 
 $sql = "SELECT oat.rowid as token_id, oat.token, oat.entity, oat.state as rights, oat.datec as date_creation, oat.tms as date_modification";
 $sql .= " FROM ".MAIN_DB_PREFIX."oauth_token as oat";
-$sql .= " WHERE oat.fk_user = ".((int) $object->id)." AND entity IN (".$conf->entity.")";
+$sql .= " WHERE oat.fk_user = ".((int) $object->id);
+$sql .= " AND entity IN (".$conf->entity.")";
+$sql .= " AND service = 'dolibarr_rest_api'";
 if ($search_token) {
 	$sql .= natural_search('oat.token', $search_token);
 }
