@@ -42,6 +42,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/html.formadmin.class.php';
 
 // Load translation files required by page
 $langs->loadLangs(array('admin', 'users'));
+$error = 0;
 
 // Security check
 $id = GETPOSTINT('id');
@@ -100,6 +101,7 @@ if (!$sortorder) {
 $canreaduser = ($user->admin || $user->hasRight("user", "user", "read"));
 $caneditfield = ((($user->id == $id) && $user->hasRight("user", "self", "write"))
 	|| (($user->id != $id) && $user->hasRight("user", "user", "write")));
+$permissiontodelete = ($user->admin || $caneditfield);
 
 // Security check
 $socid = 0;
@@ -156,6 +158,47 @@ if (empty($reshook)) {
 	if ($action == 'update' && ($caneditfield || !empty($user->admin))) {
 		header('Location: '.$_SERVER["PHP_SELF"].'?id='.$id);
 		exit;
+	}
+
+	if (($action == 'delete' && $confirm == 'yes') && $permissiontodelete) {
+		$db->begin();
+
+		$nbok = 0;
+		$TMsg = array();
+
+		//$toselect could contain duplicate entries, cf https://github.com/Dolibarr/dolibarr/issues/26244
+		$unique_arr = array_unique($toselect);
+		foreach ($unique_arr as $toselectid) {
+			$sql = "DELETE FROM ".MAIN_DB_PREFIX."oauth_token";
+			$sql .= " WHERE rowid = '".$toselectid."'";
+			$sql .= " AND service = 'dolibarr_rest_api'";
+
+			$result = $db->query($sql);
+
+			if ($result > 0) {
+				$nbok++;
+			} else {
+				setEventMessages($db->error(), null, 'errors');
+				$error++;
+				break;
+			}
+		}
+
+		if (empty($error)) {
+			// Message for elements well deleted
+			if ($nbok > 1) {
+				setEventMessages($langs->trans("RecordsDeleted", $nbok), null, 'mesgs');
+			} elseif ($nbok > 0) {
+				setEventMessages($langs->trans("RecordDeleted", $nbok), null, 'mesgs');
+			} else {
+				setEventMessages($langs->trans("NoRecordDeleted"), null, 'mesgs');
+			}
+			$db->commit();
+		} else {
+			$db->rollback();
+		}
+
+		//var_dump($listofobjectthirdparties);exit;
 	}
 }
 
@@ -333,6 +376,8 @@ print '<input type="hidden" name="sortfield" value="'.$sortfield.'">';
 print '<input type="hidden" name="sortorder" value="'.$sortorder.'">';
 
 print_barre_liste($langs->trans("ListOfTokensForUser"), $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, '', 0, $morehtmlright, '', $limit, 0, 0, 1);
+
+include DOL_DOCUMENT_ROOT.'/core/tpl/massactions_pre.tpl.php';
 
 // TODO : Build the hook management
 // Other form for add user to group
