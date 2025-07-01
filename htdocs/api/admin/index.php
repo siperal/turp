@@ -31,6 +31,7 @@
 require '../../main.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/core/lib/api.lib.php';
 
 /**
  * @var Conf $conf
@@ -111,6 +112,10 @@ llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-api page-admin-index');
 
 $linkback = '<a href="'.DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1">'.$langs->trans("BackToModuleList").'</a>';
 print load_fiche_titre($langs->trans("ApiSetup"), $linkback, 'title_setup');
+
+$head = api_admin_prepare_head();
+
+print dol_get_fiche_head($head, 'parameter', '', -1);
 
 print '<span class="opacitymedium">'.$langs->trans("ApiDesc")."</span><br>\n";
 print "<br>\n";
