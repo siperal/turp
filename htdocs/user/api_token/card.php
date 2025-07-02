@@ -275,7 +275,7 @@ if (empty($reshook)) {
 
 		$sqlforcount = 'SELECT COUNT(*) as nbtotalofrecords';
 		$sqlforcount .= " FROM ".MAIN_DB_PREFIX."oauth_token as oat";
-		$sqlforcount .= " WHERE token = '".$db->escape($tokenstring)."'";
+		$sqlforcount .= " WHERE token = '".$db->escape(dolEncrypt($tokenstring, '', '', 'dolibarr'))."'";
 		$sqlforcount .= " AND service = 'dolibarr_rest_api'";
 		$resql = $db->query($sqlforcount);
 		if ($resql) {
@@ -294,7 +294,7 @@ if (empty($reshook)) {
 			$db->begin();
 
 			$sql = "INSERT INTO ".MAIN_DB_PREFIX."oauth_token (service, token, fk_user, entity, datec)";
-			$sql .= " VALUES ('dolibarr_rest_api', '".$db->escape($tokenstring)."', ".($useridtoadd).", ".((int) $conf->entity).", '".$db->idate(dol_now())."')";
+			$sql .= " VALUES ('dolibarr_rest_api', '".$db->escape(dolEncrypt($tokenstring, '', '', 'dolibarr'))."', ".($useridtoadd).", ".((int) $conf->entity).", '".$db->idate(dol_now())."')";
 			$resql = $db->query($sql);
 
 			if (!$resql) {
@@ -336,6 +336,7 @@ if (isset($reloadtoken)) { // If we add or del rights, we want to refresh the to
 
 	$resql = $db->query($sql);
 	$token = $db->fetch_object($resql);
+	$tokenvalue = dolDecrypt($token->token);
 }
 
 /*
@@ -412,6 +413,8 @@ if ($action == 'create') {
 
 	print dol_get_fiche_head($head, 'apitoken', $title, -1, 'user');
 
+	$tokenvalue = dolDecrypt($token->token);
+
 	$linkback = '<a href="'.DOL_URL_ROOT.'/user/api_token/list.php?id='.$id.'">'.$langs->trans("BackToList").'</a>';
 
 	$morehtmlref = '<a href="'.DOL_URL_ROOT.'/user/vcard.php?id='.$object->id.'&output=file&file='.urlencode(dol_sanitizeFileName($object->getFullName($langs).'.vcf')).'" class="refid" rel="noopener">';
@@ -453,7 +456,7 @@ if ($action == 'create') {
 	// Token
 	print '<tr><td class="titlefield">'.$langs->trans("ApiToken").'</td>';
 	print '<td>';
-	print showValueWithClipboardCPButton($token->token, 1, $token->token);
+	print showValueWithClipboardCPButton($tokenvalue, 1, $tokenvalue);
 	print '</td>';
 	print '</tr>'."\n";
 

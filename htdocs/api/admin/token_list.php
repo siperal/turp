@@ -449,7 +449,7 @@ if (empty($reshook)) {
 			}
 			print '<td>';
 			print '<a href="'.DOL_URL_ROOT.'/user/api_token/card.php?id='.$obj->user_id.'&tokenid='.$obj->token_id.'">';
-			print $obj->token;
+			print dolDecrypt($obj->token);
 			print '</a>';
 			print '</td>';
 			print '<td>';
