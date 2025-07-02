@@ -459,7 +459,10 @@ if (empty($reshook)) {
 			print '</td>';
 			if (isModEnabled('multicompany')) {
 				print '<td>';
+				print '<span class="multicompany-entity-container">';
+				print '<span class="fa fa-globe multicompany-button-template" title="'.$langs->trans("Entity").'"></span>';
 				print $obj->entity_name;
+				print '&nbsp;</span>';
 				print '</td>';
 			}
 			print '<td class="right">';

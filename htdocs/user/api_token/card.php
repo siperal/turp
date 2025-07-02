@@ -465,7 +465,10 @@ if ($action == 'create') {
 		$mc->getInfo($conf->entity);
 		print '<tr><td class="titlefield">'.$langs->trans("Entity").'</td>';
 		print '<td>';
+		print '<span class="multicompany-entity-container">';
+		print '<span class="fa fa-globe multicompany-button-template" title="'.$langs->trans("Entity").'"></span>';
 		print $mc->label;
+		print '&nbsp;</span>';
 		print '</td>';
 		print '</tr>'."\n";
 	}
