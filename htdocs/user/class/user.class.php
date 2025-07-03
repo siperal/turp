@@ -1276,6 +1276,7 @@ class User extends CommonObject
 				$sqlusertokens = "SELECT oat.rowid, oat.state as rights";
 				$sqlusertokens .= " FROM llx_oauth_token AS oat";
 				$sqlusertokens .= " WHERE oat.fk_user = ".((int) $this->id);
+				$sqlusertokens .= " AND oat.service = 'dolibarr_rest_api'";
 
 				$idtodeletequery = $this->db->query($sql);
 				$resulttokens = $this->db->query($sqlusertokens);
