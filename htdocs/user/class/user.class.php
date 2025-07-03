@@ -1269,6 +1269,38 @@ class User extends CommonObject
 				$error++;
 				dol_print_error($this->db);
 			}
+
+			if (!$error) {
+				$idtodelete = array();
+
+				$sqlusertokens = "SELECT oat.rowid, oat.state as rights";
+				$sqlusertokens .= " FROM llx_oauth_token AS oat";
+				$sqlusertokens .= " WHERE oat.fk_user = ".((int) $this->id);
+
+				$idtodeletequery = $this->db->query($sql);
+				$resulttokens = $this->db->query($sqlusertokens);
+				if ($resulttokens && $idtodeletequery) {
+					while ($idobj = $this->db->fetch_object($idtodeletequery)) {
+						$idtodelete []= $idobj->id;
+					}
+
+					while ($obj = $this->db->fetch_object($resulttokens)) {
+						if (!empty($obj->rights)) {
+							$newtokenrigths = array_diff(explode(',', $obj->rights), $idtodelete);
+
+							$sqlupdate = "UPDATE ".MAIN_DB_PREFIX."oauth_token";
+							$sqlupdate.= " SET state = '".$this->db->escape(preg_replace('/\s+/', '', implode(',', $newtokenrigths)))."'";
+							$sqlupdate.= " WHERE rowid = '".$obj->rowid."'";
+
+							$resupdate = $this->db->query($sqlupdate);
+							if (!$resupdate) {
+								$error++;
+								dol_print_error($this->db);
+							}
+						}
+					}
+				}
+			}
 		}
 
 		if (!$error && !$notrigger) {
