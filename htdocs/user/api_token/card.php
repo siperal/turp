@@ -286,7 +286,7 @@ if (empty($reshook)) {
 		} else {
 			dol_print_error($db);
 		}
-		if (empty($nbtotalofrecords) || $nbtotalofrecords > 0) {
+		if (!empty($nbtotalofrecords) && $nbtotalofrecords > 0) {
 			setEventMessages($langs->trans("ErrorFieldExist", $langs->transnoentitiesnoconv("ApiToken")), null, 'errors');
 			$action = 'create';
 			$error++;
