@@ -3034,6 +3034,26 @@ class User extends CommonObject
 
 		$this->db->begin();
 
+		$idtodelete = array();
+
+		$sqlforid = "SELECT gr.fk_id";
+		$sqlforid .= " FROM llx_usergroup_user AS gu";
+		$sqlforid .= " JOIN llx_usergroup_rights AS gr ON gu.fk_usergroup = gr.fk_usergroup";
+		$sqlforid .= " WHERE (gu.fk_user = ".((int) $this->id)." AND gu.fk_usergroup = ".((int) $group);
+		if (empty($entity)) {
+			$sqlforid .= " AND gu.entity IN (0, 1)";
+		} else {
+			$sqlforid .= " AND gu.entity = ".((int) $entity);
+		}
+		$sqlforid .= ") AND NOT EXISTS(SELECT ur.fk_id FROM llx_user_rights as ur WHERE ur.entity = 1 AND ur.fk_user = ".((int) $this->id)." AND gr.fk_id = ur.fk_id)";
+
+		$idtodeletequery = $this->db->query($sqlforid);
+		if ($idtodeletequery) {
+			while ($idobj = $this->db->fetch_object($idtodeletequery)) {
+				$idtodelete [] = $idobj->fk_id;
+			}
+		}
+
 		$sql = "DELETE FROM ".$this->db->prefix()."usergroup_user";
 		$sql .= " WHERE fk_user  = ".((int) $this->id);
 		$sql .= " AND fk_usergroup = ".((int) $group);
@@ -3045,6 +3065,34 @@ class User extends CommonObject
 
 		$result = $this->db->query($sql);
 		if ($result) {
+			if (!$error) {
+				$sqlusertokens = "SELECT oat.rowid, oat.state as rights";
+				$sqlusertokens .= " FROM llx_oauth_token AS oat";
+				$sqlusertokens .= " WHERE oat.fk_user = ".((int) $this->id);
+				$sqlusertokens .= " AND oat.service = 'dolibarr_rest_api'";
+
+				$idtodeletequery = $this->db->query($sqlforid);
+				$resulttokens = $this->db->query($sqlusertokens);
+				if ($resulttokens) {
+					var_dump($idtodelete);
+
+					while ($obj = $this->db->fetch_object($resulttokens)) {
+						if (!empty($obj->rights)) {
+							$newtokenrigths = array_diff(explode(',', $obj->rights), $idtodelete);
+
+							$sqlupdate = "UPDATE ".MAIN_DB_PREFIX."oauth_token";
+							$sqlupdate.= " SET state = '".$this->db->escape(preg_replace('/\s+/', '', implode(',', $newtokenrigths)))."'";
+							$sqlupdate.= " WHERE rowid = '".$obj->rowid."'";
+
+							$resupdate = $this->db->query($sqlupdate);
+							if (!$resupdate) {
+								$error++;
+								dol_print_error($this->db);
+							}
+						}
+					}
+				}
+			}
 			if (!$error && !$notrigger) {
 				$this->context = array('audit' => $langs->trans("UserRemovedFromGroup"), 'oldgroupid' => $group);
 
