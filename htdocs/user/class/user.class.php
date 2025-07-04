@@ -1467,9 +1467,9 @@ class User extends CommonObject
 				} else {
 					// On table r=rights_def, the unique key is (id, entity) because id is hard coded into module descriptor and inserted during module activation.
 					// So we must include the filter on entity on both table r. and ur.
-					$sql .= " AND r.entity = " . ((int)$conf->entity) . " AND ur.entity = " . ((int)$conf->entity);
+					$sql .= " AND r.entity = " . ((int) $conf->entity) . " AND ur.entity = " . ((int) $conf->entity);
 				}
-				$sql .= " AND ur.fk_user = " . ((int)$this->id);
+				$sql .= " AND ur.fk_user = " . ((int) $this->id);
 				$sql .= " AND r.perms IS NOT NULL";
 				if (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
 					$sql .= " AND r.perms NOT LIKE '%_advance'"; // Hide advanced perms if option is not enabled
@@ -1530,19 +1530,19 @@ class User extends CommonObject
 					if (isModEnabled('multicompany') && getDolGlobalString('MULTICOMPANY_TRANSVERSE_MODE')) {
 						$sql .= " AND gu.entity IN (0," . $conf->entity . ")";
 					} else {
-						$sql .= " AND r.entity = " . ((int)$conf->entity);
+						$sql .= " AND r.entity = " . ((int) $conf->entity);
 					}
 				} else {
-					$sql .= " AND gr.entity = " . ((int)$conf->entity);    // Only groups created in current entity
+					$sql .= " AND gr.entity = " . ((int) $conf->entity);    // Only groups created in current entity
 					// The entity on the table gu=usergroup_user should be useless and should never be used because it is already into gr and r.
 					// but when using MULTICOMPANY_TRANSVERSE_MODE, we may have inserted record that make rubbish result here due to the duplicate record of
 					// other entities, so we are forced to add a filter on gu here
 					$sql .= " AND gu.entity IN (0," . $conf->entity . ")";
-					$sql .= " AND r.entity = " . ((int)$conf->entity);    // Only permission of modules enabled in current entity
+					$sql .= " AND r.entity = " . ((int) $conf->entity);    // Only permission of modules enabled in current entity
 				}
 				// End of strange business rule
 				$sql .= " AND gr.fk_usergroup = gu.fk_usergroup";
-				$sql .= " AND gu.fk_user = " . ((int)$this->id);
+				$sql .= " AND gu.fk_user = " . ((int) $this->id);
 				$sql .= " AND r.perms IS NOT NULL";
 				if (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
 					$sql .= " AND r.perms NOT LIKE '%_advance'"; // Hide advanced perms if option is not enabled
