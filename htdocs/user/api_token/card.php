@@ -65,7 +65,7 @@ $toselect = GETPOST('toselect', 'array');
 $canreaduser = ($user->admin || $user->hasRight("user", "user", "read"));
 $caneditfield = ((($user->id == $id) && $user->hasRight("user", "self", "write"))
 	|| (($user->id != $id) && $user->hasRight("user", "user", "write")));
-$caneditperms = ($user->admin || $user->hasRight("user", "user", "write"));
+$canedittoken = ($user->admin || ($user->id == $id));
 
 // Security check
 $socid = 0;
@@ -98,6 +98,8 @@ $object->loadRights();
 $form = new Form($db);
 $formadmin = new FormAdmin($db);
 $token = $db->fetch_object($resql);
+
+$entity = $conf->entity;
 
 /*
  * Actions
@@ -205,7 +207,7 @@ if (empty($reshook)) {
 		}
 	}
 
-	if ($action == 'addrights' && $caneditperms && $confirm == 'yes') {
+	if ($action == 'addrights' && $canedittoken && $confirm == 'yes') {
 		$tokenrigthsarray = [];
 
 		if (!empty($token->rights)) {
@@ -234,7 +236,7 @@ if (empty($reshook)) {
 		$reloadtoken = true;
 	}
 
-	if ($action == 'delrights' && $caneditperms && $confirm == 'yes') {
+	if ($action == 'delrights' && $canedittoken && $confirm == 'yes') {
 		$tokenrigthsarray = explode(',', $token->rights);
 		if (isset($rigthsarray)) {
 			$tokenrigthsarray = array_diff($tokenrigthsarray, $rigthsarray);
@@ -296,7 +298,7 @@ if (empty($reshook)) {
 			$db->begin();
 
 			$sql = "INSERT INTO ".MAIN_DB_PREFIX."oauth_token (service, token, fk_user, entity, datec)";
-			$sql .= " VALUES ('dolibarr_rest_api', '".$db->escape(dolEncrypt($tokenstring, '', '', 'dolibarr'))."', ".($useridtoadd).", ".((int) $conf->entity).", '".$db->idate(dol_now())."')";
+			$sql .= " VALUES ('dolibarr_rest_api', '".$db->escape(dolEncrypt($tokenstring, '', '', 'dolibarr'))."', ".($useridtoadd).", ".((int) $entity).", '".$db->idate(dol_now())."')";
 			$resql = $db->query($sql);
 
 			if (!$resql) {
@@ -385,7 +387,7 @@ if ($action == 'create') {
 	}
 
 	if (isModEnabled('multicompany') && is_object($mc)) {
-		$mc->getInfo($conf->entity);
+		$mc->getInfo($entity);
 		print '<tr class="field_ref"><td class="titlefieldcreate fieldrequired">'.$langs->trans('Entity').'</td><td class="valuefieldcreate">'.$mc->label.'</td></tr>';
 	}
 
@@ -491,7 +493,7 @@ if ($action == 'create') {
 
 	print '</table>';
 	print '<div class="tabsAction">';
-	print dolGetButtonAction($langs->trans('Delete'), '', 'delete', $_SERVER["PHP_SELF"].'?id='.$object->id.'&tokenid='.$token->token_id.'&action=delete&token='.newToken(), '', $caneditperms);
+	print dolGetButtonAction($langs->trans('Delete'), '', 'delete', $_SERVER["PHP_SELF"].'?id='.$object->id.'&tokenid='.$token->token_id.'&action=delete&token='.newToken(), '', $canedittoken);
 	print '</div>';
 	print '</div>';
 
@@ -499,8 +501,6 @@ if ($action == 'create') {
 
 	print load_fiche_titre($langs->trans("ListOfRightsForToken"), '', '');
 
-
-	// TODO : Rights part
 	print '<!-- Rights section -->'."\n";
 
 	if ($user->admin) {
@@ -553,11 +553,11 @@ if ($action == 'create') {
 
 	print '<tr class="liste_titre">';
 	print '<td>'.$langs->trans("Module").'</td>';
-	if ($caneditperms) {
+	if ($canedittoken) {
 		print '<td class="center nowrap">';
-		print '<a class="reposition commonlink addexpandedmodulesinparamlist" title="'.dol_escape_htmltag($langs->trans("All")).'" alt="'.dol_escape_htmltag($langs->trans("All")).'" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=addrights&token='.newToken().'&entity='.$entity.'&module=allmodules&confirm=yes">'.$langs->trans("All")."</a>";
+		print '<a class="reposition commonlink addexpandedmodulesinparamlist" title="'.dol_escape_htmltag($langs->trans("All")).'" alt="'.dol_escape_htmltag($langs->trans("All")).'" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=addrights&token='.newToken().'&module=allmodules&confirm=yes">'.$langs->trans("All")."</a>";
 		print ' / ';
-		print '<a class="reposition commonlink addexpandedmodulesinparamlist" title="'.dol_escape_htmltag($langs->trans("None")).'" alt="'.dol_escape_htmltag($langs->trans("None")).'" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=delrights&token='.newToken().'&entity='.$entity.'&module=allmodules&confirm=yes">'.$langs->trans("None")."</a>";
+		print '<a class="reposition commonlink addexpandedmodulesinparamlist" title="'.dol_escape_htmltag($langs->trans("None")).'" alt="'.dol_escape_htmltag($langs->trans("None")).'" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=delrights&token='.newToken().'&module=allmodules&confirm=yes">'.$langs->trans("None")."</a>";
 		print '</td>';
 	} else {
 		print '<td></td>';
@@ -669,7 +669,6 @@ if ($action == 'create') {
 		$sql .= " FROM ".MAIN_DB_PREFIX."rights_def as r";
 		$sql .= " WHERE r.libelle NOT LIKE 'tou%'"; // On ignore droits "tous"
 		$sql .= " AND r.entity = ".((int) $entity);
-		$sql .= " AND r.id IN (".implode(', ', $allusersperms).")";
 		if (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
 			$sql .= " AND r.perms NOT LIKE '%_advance'"; // Hide advanced perms if option is not enabled
 		}
@@ -758,13 +757,13 @@ if ($action == 'create') {
 					print '</td>';
 
 					// Permission and tick (2 columns)
-					if (($caneditperms && empty($objMod->rights_admin_allowed)) || empty($object->admin)) {
-						if ($caneditperms) {
+					if (($canedittoken && empty($objMod->rights_admin_allowed)) || empty($object->admin)) {
+						if ($canedittoken) {
 							print '<td class="tdforbreakperms tdforbreakpermsifnotempty center width50 nowraponall" data-hide-perms="'.dol_escape_htmltag($obj->module).'">';
 							print '<span class="permtohide_'.dol_escape_htmltag($obj->module).'" '.(!$isexpanded ? ' style="display:none"' : '').'>';
-							print '<a class="reposition alink addexpandedmodulesinparamlist" title="'.dol_escape_htmltag($langs->trans("All")).'" alt="'.dol_escape_htmltag($langs->trans("All")).'" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=addrights&token='.newToken().'&entity='.$entity.'&module='.$obj->module.'&confirm=yes">'.$langs->trans("All")."</a>";
+							print '<a class="reposition alink addexpandedmodulesinparamlist" title="'.dol_escape_htmltag($langs->trans("All")).'" alt="'.dol_escape_htmltag($langs->trans("All")).'" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=addrights&token='.newToken().'&module='.$obj->module.'&confirm=yes">'.$langs->trans("All")."</a>";
 							print ' / ';
-							print '<a class="reposition alink addexpandedmodulesinparamlist" title="'.dol_escape_htmltag($langs->trans("None")).'" alt="'.dol_escape_htmltag($langs->trans("None")).'" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=delrights&token='.newToken().'&entity='.$entity.'&module='.$obj->module.'&confirm=yes&">'.$langs->trans("None")."</a>";
+							print '<a class="reposition alink addexpandedmodulesinparamlist" title="'.dol_escape_htmltag($langs->trans("None")).'" alt="'.dol_escape_htmltag($langs->trans("None")).'" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=delrights&token='.newToken().'&module='.$obj->module.'&confirm=yes&">'.$langs->trans("None")."</a>";
 							print '</span>';
 							print '</td>';
 							print '<td class="tdforbreakperms" data-hide-perms="'.dol_escape_htmltag($obj->module).'">';
@@ -774,7 +773,7 @@ if ($action == 'create') {
 							print '<td class="tdforbreakperms" data-hide-perms="'.dol_escape_htmltag($obj->module).'"></td>';
 						}
 					} else {
-						if ($caneditperms) {
+						if ($canedittoken) {
 							print '<td class="tdforbreakperms center wraponsmartphone" data-hide-perms="'.dol_escape_htmltag($obj->module).'">';
 							print '</td>';
 							print '<td class="tdforbreakperms" data-hide-perms="'.dol_escape_htmltag($obj->module).'">';
@@ -812,7 +811,7 @@ if ($action == 'create') {
 				// Permission and tick (2 columns)
 				if (!empty($object->admin) && !empty($objMod->rights_admin_allowed)) {    // Permission granted because admin
 					print '<!-- perm is a perm allowed to any admin -->';
-					if ($caneditperms) {
+					if ($canedittoken) {
 						print '<td class="center nowrap">';
 						print img_picto($langs->trans("AdministratorDesc"), 'star', 'class="paddingleft valignmiddle"');
 						print '</td>';
@@ -825,9 +824,9 @@ if ($action == 'create') {
 					print '</td>';
 				} elseif (in_array($obj->id, $tokenperms)) {                    // Permission granted by user
 					print '<!-- user has perm -->';
-					if ($caneditperms) {
+					if ($canedittoken) {
 						print '<td class="center nowrap">';
-						print '<a class="reposition addexpandedmodulesinparamlist" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=delrights&token='.newToken().'&entity='.$entity.'&rights='.$obj->id.'&confirm=yes">';
+						print '<a class="reposition addexpandedmodulesinparamlist" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=delrights&token='.newToken().'&rights='.$obj->id.'&confirm=yes">';
 						//print img_edit_remove($langs->trans("Remove"));
 						print img_picto($langs->trans("Remove"), 'switch_on');
 						print '</a>';
@@ -851,9 +850,9 @@ if ($action == 'create') {
 						print '</td>';
 					} else {
 						// Do not own permission
-						if ($caneditperms) {
+						if ($canedittoken && in_array($obj->id, $allusersperms)) {
 							print '<td class="center nowrap">';
-							print '<a class="reposition addexpandedmodulesinparamlist" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=addrights&entity='.$entity.'&rights='.$obj->id.'&confirm=yes&token='.newToken().'">';
+							print '<a class="reposition addexpandedmodulesinparamlist" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=addrights&rights='.$obj->id.'&confirm=yes&token='.newToken().'">';
 							//print img_edit_add($langs->trans("Add"));
 							print img_picto($langs->trans("Add"), 'switch_off');
 							print '</a>';
@@ -869,9 +868,9 @@ if ($action == 'create') {
 				} else {
 					// Do not own permission
 					print '<!-- do not own permission -->';
-					if ($caneditperms) {
+					if ($canedittoken && in_array($obj->id, $allusersperms)) {
 						print '<td class="center nowrap">';
-						print '<a class="reposition addexpandedmodulesinparamlist" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=addrights&entity='.$entity.'&rights='.$obj->id.'&confirm=yes&token='.newToken().'">';
+						print '<a class="reposition addexpandedmodulesinparamlist" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=addrights&rights='.$obj->id.'&confirm=yes&token='.newToken().'">';
 						//print img_edit_add($langs->trans("Add"));
 						print img_picto($langs->trans("Add"), 'switch_off');
 						print '</a>';
