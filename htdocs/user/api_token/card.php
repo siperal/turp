@@ -639,13 +639,14 @@ if ($action == 'create') {
 	// Users perms
 	$sql = "SELECT ur.fk_id";
 	$sql .= " FROM ".MAIN_DB_PREFIX."user_rights as ur";
-	$sql .= " WHERE ur.entity = ".((int) $entity);
+	$sql .= " WHERE ur.entity = ".((int) $token->entity);
 	$sql .= " AND ur.fk_user = ".((int) $object->id);
 	$sql .= " UNION ";
 	// Groups perms
 	$sql .= "SELECT gr.fk_id";
 	$sql .= " FROM ".MAIN_DB_PREFIX."usergroup_rights as gr";
-	$sql .= " WHERE EXISTS(SELECT gu.rowid FROM llx_usergroup_user as gu WHERE gu.fk_user = ".((int) $id)." AND gu.fk_usergroup = gr.fk_usergroup)";
+	$sql .= " WHERE gr.entity = ".((int) $token->entity);
+	$sql .= " AND EXISTS(SELECT gu.rowid FROM llx_usergroup_user as gu WHERE gu.fk_user = ".((int) $id)." AND gu.fk_usergroup = gr.fk_usergroup)";
 
 	dol_syslog("get user perms", LOG_DEBUG);
 	$result = $db->query($sql);
