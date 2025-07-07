@@ -59,7 +59,6 @@ $confirm    = GETPOST('confirm', 'alpha');
 $toselect = GETPOST('toselect', 'array');
 
 // List filters
-$search_token = GETPOST('search_token', 'alpha');
 $search_entity = GETPOST('search_entity', 'alpha');
 $search_datec_startday = GETPOSTINT('search_datec_startday');
 $search_datec_startmonth = GETPOSTINT('search_datec_startmonth');
@@ -91,7 +90,7 @@ $pageprev = $page - 1;
 $pagenext = $page + 1;
 
 if (!$sortfield) {
-	$sortfield = 'oat.token';
+	$sortfield = 'oat.tms';
 }
 if (!$sortorder) {
 	$sortorder = 'DESC';
@@ -116,7 +115,6 @@ if ($user->id != $id && !$canreaduser) {
 }
 
 $arrayfields = array(
-	'oat.token' => array('label' => "ApiToken", 'checked' => '1'),
 	'e.label' => array('label' => "Entity", 'checked' => '1'),
 	'oat.datec' => array('label' => "DateCreation", 'checked' => '1'),
 	'oat.tms' => array('label' => "DateModification", 'checked' => '1'),
@@ -141,7 +139,6 @@ if ($reshook < 0) {
 
 if (empty($reshook)) {
 	if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter.x', 'alpha') || GETPOST('button_removefilter', 'alpha')) { // All tests are required to be compatible with all browsers
-		$search_token = '';
 		$search_entity = '';
 		$search_datec_start = '';
 		$search_datec_end = '';
@@ -234,7 +231,7 @@ if (!getDolGlobalInt('MAIN_DISABLE_FULL_SCANLIST')) {
 	$db->free($resql);
 }
 
-$sql = "SELECT oat.rowid as token_id, oat.token, oat.entity, oat.state as rights, oat.datec as date_creation, oat.tms as date_modification";
+$sql = "SELECT oat.rowid, oat.token, oat.entity, oat.state as rights, oat.datec as date_creation, oat.tms as date_modification";
 if (isModEnabled('multicompany')) {
 	$sql .= ", e.label as entity_name";
 }
@@ -245,9 +242,6 @@ if (isModEnabled('multicompany')) {
 $sql .= " WHERE oat.fk_user = ".((int) $object->id);
 $sql .= " AND entity IN (".$conf->entity.")";
 $sql .= " AND service = 'dolibarr_rest_api'";
-if ($search_token) {
-	$sql .= natural_search('oat.token', $search_token);
-}
 if ($search_entity) {
 	$sql .= natural_search('oat.entity', $search_entity);
 }
@@ -413,11 +407,8 @@ if (empty($reshook)) {
 	}
 
 	// Token string
-	if (!empty($arrayfields['oat.token']['checked'])) {
-		print '<td class="liste_titre">';
-		print '<input class="flat" type="text" name="search_token" value="'.dol_escape_htmltag($search_token).'">';
-		print '</td>';
-	}
+	// We don't search out tokens because it is encrypted in database
+	print '<td class="liste_titre"></td>';
 
 	// Entity
 	if (!empty($arrayfields['e.label']['checked']) && isModEnabled('multicompany')) {
@@ -471,9 +462,7 @@ if (empty($reshook)) {
 		print $form->showCheckAddButtons('checkforselect', 1);
 		print '</th>';
 	}
-	if (!empty($arrayfields['oat.token']['checked'])) {
-		print_liste_field_titre($arrayfields['oat.token']['label'], $_SERVER["PHP_SELF"], 'oat.token', '', $param, '', $sortfield, $sortorder);
-	}
+	print '<th class="liste_titre">'.$langs->trans("ApiToken").'</th>';
 	if (!empty($arrayfields['e.label']['checked']) && isModEnabled('multicompany')) {
 		print_liste_field_titre($arrayfields['e.label']['label'], $_SERVER["PHP_SELF"], 'e.label', '', $param, '', $sortfield, $sortorder);
 	}
@@ -508,15 +497,15 @@ if (empty($reshook)) {
 				print '<td class="nowrap center">';
 				if ($massactionbutton || $massaction) {   // If we are in select mode (massactionbutton defined) or if we have already selected and sent an action ($massaction) defined
 					$selected = 0;
-					if (in_array($obj->token_id, $arrayofselected)) {
+					if (in_array($obj->rowid, $arrayofselected)) {
 						$selected = 1;
 					}
-					print '<input id="cb'.$obj->token_id.'" class="flat checkforselect" type="checkbox" name="toselect[]" value="'.$obj->token_id.'"'.($selected ? ' checked="checked"' : '').'>';
+					print '<input id="cb'.$obj->rowid.'" class="flat checkforselect" type="checkbox" name="toselect[]" value="'.$obj->rowid.'"'.($selected ? ' checked="checked"' : '').'>';
 				}
 				print '</td>';
 			}
 			print '<td>';
-			print '<a href="'.DOL_URL_ROOT.'/user/api_token/card.php?id='.$object->id.'&tokenid='.$obj->token_id.'">';
+			print '<a href="'.DOL_URL_ROOT.'/user/api_token/card.php?id='.$object->id.'&tokenid='.$obj->rowid.'">';
 			print dolDecrypt($obj->token);
 			print '</a>';
 			print '</td>';
@@ -541,10 +530,10 @@ if (empty($reshook)) {
 				print '<td class="nowrap center">';
 				if ($massactionbutton || $massaction) {
 					$selected = 0;
-					if (in_array($obj->token_id, $arrayofselected)) {
+					if (in_array($obj->rowid, $arrayofselected)) {
 						$selected = 1;
 					}
-					print '<input id="cb'.$obj->token_id.'" class="flat checkforselect" type="checkbox" name="toselect[]" value="'.$obj->token_id.'"'.($selected ? ' checked="checked"' : '').'>';
+					print '<input id="cb'.$obj->rowid.'" class="flat checkforselect" type="checkbox" name="toselect[]" value="'.$obj->rowid.'"'.($selected ? ' checked="checked"' : '').'>';
 				}
 				print '</td>';
 			}
