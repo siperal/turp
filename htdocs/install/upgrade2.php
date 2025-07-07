@@ -5325,20 +5325,17 @@ function migrate_apiresttokens()
 	}
 
 	if (!$error) {
-		$sql = "SELECT 'dolibarr_rest_api' AS service, u.api_key AS token, GROUP_CONCAT(rights.fk_id SEPARATOR ',') AS state, u.rowid AS fk_user, CURRENT_TIMESTAMP AS datec, rights.entity";
+		$sql = "SELECT 'dolibarr_rest_api' AS service, u.api_key AS token, u.rowid AS fk_user, CURRENT_TIMESTAMP AS datec, u.entity";
 		$sql .= " FROM llx_user AS u";
-		$sql .= " LEFT JOIN (SELECT fk_user, fk_id, entity FROM llx_user_rights UNION SELECT gu.fk_user, gr.fk_id, gr.entity FROM llx_usergroup_user AS gu JOIN llx_usergroup_rights AS gr on gu.fk_usergroup = gr.fk_usergroup) AS rights on rights.fk_user = u.rowid";
 		$sql .= " WHERE u.api_key IS NOT NULL";
-		$sql .= " AND rights.entity = 1";
-		$sql .= " GROUP BY u.login, u.api_key, u.rowid, rights.entity";
 
 		$result = $db->query($sql);
 
 		if ($result) {
 			while ($obj = $db->fetch_object($result)) {
 				if (!in_array(dolDecrypt($obj->token), $allexistingtokens)) {
-					$sqlforinsert = "INSERT INTO ".MAIN_DB_PREFIX."oauth_token (service, token, state, fk_user, datec, entity)";
-					$sqlforinsert .= " VALUES ('".$obj->service."', '".$obj->token."', '".$obj->state."', ".$obj->fk_user.", '".$obj->datec."', ".$obj->entity.")";
+					$sqlforinsert = "INSERT INTO ".MAIN_DB_PREFIX."oauth_token (service, token, fk_user, datec, entity)";
+					$sqlforinsert .= " VALUES ('".$obj->service."', '".$obj->token."', ".$obj->fk_user.", '".$obj->datec."', ".$obj->entity.")";
 
 					$insertresult = $db->query($sqlforinsert);
 					if (!$insertresult) {
