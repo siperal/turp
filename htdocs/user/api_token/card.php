@@ -127,6 +127,38 @@ if (empty($reshook)) {
 	if (in_array($action, array('addrights', 'delrights'))) {
 		$rigthsarray = [];
 
+		if ((strlen($token->rights) == 1 && substr($token->rights, 0, 1) == 0)) {
+			$token->rights = "";
+		} elseif (empty($token->rights)) {
+			// Users perms
+			$sql = "SELECT ur.fk_id";
+			$sql .= " FROM ".MAIN_DB_PREFIX."user_rights as ur";
+			$sql .= " WHERE ur.entity = ".((int) $token->entity);
+			$sql .= " AND ur.fk_user = ".((int) $object->id);
+			$sql .= " UNION ";
+			// Groups perms
+			$sql .= "SELECT gr.fk_id";
+			$sql .= " FROM ".MAIN_DB_PREFIX."usergroup_rights as gr";
+			$sql .= " WHERE gr.entity = ".((int) $token->entity);
+			$sql .= " AND EXISTS(SELECT gu.rowid FROM llx_usergroup_user as gu WHERE gu.fk_user = ".((int) $id)." AND gu.fk_usergroup = gr.fk_usergroup)";
+
+			dol_syslog("get user perms", LOG_DEBUG);
+			$result = $db->query($sql);
+			if ($result) {
+				$num = $db->num_rows($result);
+				$i = 0;
+				while ($i < $num) {
+					$obj = $db->fetch_object($result);
+					$token->rights .= $obj->fk_id.",";
+					$i++;
+				}
+				$db->free($result);
+			} else {
+				dol_print_error($db);
+			}
+			$token->rights = rtrim($token->rights, ",");
+		}
+
 		if (!empty($rights)) {
 			$module = $perms = $subperms = '';
 
