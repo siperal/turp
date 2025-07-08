@@ -49,8 +49,6 @@
 
 echo "<!-- BEGIN PHP TEMPLATE apitoken_list.tpl.php -->\n";
 
-
-print '<!-- List of tokens of the user -->';
 print '<table class="noborder centpercent">';
 
 print '<tr class="liste_titre_filter">';
