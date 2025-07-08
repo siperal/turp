@@ -245,6 +245,10 @@ if (empty($reshook)) {
 			$tokenrigthsarray = array_diff($tokenrigthsarray, array($rights));
 		}
 
+		if (count($tokenrigthsarray) == 0) {
+			$tokenrigthsarray = array(0);
+		}
+
 		$tokenrigthsarray = array_unique($tokenrigthsarray);
 		sort($tokenrigthsarray);
 		$newrigths = preg_replace('/\s+/', '', implode(',', $tokenrigthsarray));
