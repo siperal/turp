@@ -1403,6 +1403,11 @@ class User extends CommonObject
 					$tokenobj = $this->db->fetch_object($resql);
 					$this->db->free($resql);
 
+					if (empty($tokenobj->rights)) {
+						$this->loadRights($moduletag, $forcereload);
+						return;
+					}
+
 					$sql = "SELECT r.module, r.perms, r.subperms";
 					$sql .= " FROM llx_rights_def as r";
 					$sql .= " WHERE r.id IN (".$tokenobj->rights.")";
