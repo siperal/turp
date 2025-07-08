@@ -305,8 +305,8 @@ if (empty($reshook)) {
 		if (!$error) {
 			$db->begin();
 
-			$sql = "INSERT INTO ".MAIN_DB_PREFIX."oauth_token (service, token, fk_user, entity, datec)";
-			$sql .= " VALUES ('dolibarr_rest_api', '".$db->escape(dolEncrypt($tokenstring, '', '', 'dolibarr'))."', ".($useridtoadd).", ".((int) $entity).", '".$db->idate(dol_now())."')";
+			$sql = "INSERT INTO ".MAIN_DB_PREFIX."oauth_token (service, token, state, fk_user, entity, datec)";
+			$sql .= " VALUES ('dolibarr_rest_api', '".$db->escape(dolEncrypt($tokenstring, '', '', 'dolibarr'))."', 0, ".($useridtoadd).", ".((int) $entity).", '".$db->idate(dol_now())."')";
 			$resql = $db->query($sql);
 
 			if (!$resql) {
