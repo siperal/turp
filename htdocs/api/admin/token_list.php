@@ -209,6 +209,7 @@ if (isModEnabled('multicompany')) {
 	$sql .= " JOIN ".$db->prefix()."entity as e ON oat.entity = e.rowid";
 }
 $sql .= " WHERE service = 'dolibarr_rest_api'";
+$sql .= " AND EXISTS(SELECT 'exist' FROM llx_user as u WHERE u.api_key IS NOT NULL AND u.rowid = oat.fk_user)";
 if (!isModEnabled('multicompany') || $conf->entity > 1) {
 	$sql .= " AND oat.entity IN (".$conf->entity.")";
 }
