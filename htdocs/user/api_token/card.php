@@ -226,6 +226,7 @@ if (empty($reshook)) {
 
 		$sql = "UPDATE ".MAIN_DB_PREFIX."oauth_token";
 		$sql.= " SET state = '".$db->escape($newrigths)."'";
+		$sql.= ", tms = '".$db->idate(dol_now())."'";
 		$sql.= " WHERE rowid = '".$tokenid."'";
 
 		$resql = $db->query($sql);
@@ -250,6 +251,7 @@ if (empty($reshook)) {
 
 		$sql = "UPDATE ".MAIN_DB_PREFIX."oauth_token";
 		$sql.= " SET state = '".$db->escape($newrigths)."'";
+		$sql.= ", tms = '".$db->idate(dol_now())."'";
 		$sql.= " WHERE rowid = '".$tokenid."'";
 
 		$resql = $db->query($sql);

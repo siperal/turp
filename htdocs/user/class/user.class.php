@@ -1301,6 +1301,7 @@ class User extends CommonObject
 
 							$sqlupdate = "UPDATE ".MAIN_DB_PREFIX."oauth_token";
 							$sqlupdate.= " SET state = '".$this->db->escape(preg_replace('/\s+/', '', implode(',', $newtokenrigths)))."'";
+							$sqlupdate.= ", tms = '".$this->db->idate(dol_now())."'";
 							$sqlupdate.= " WHERE rowid = '".$obj->rowid."'";
 
 							$resupdate = $this->db->query($sqlupdate);
@@ -3082,6 +3083,7 @@ class User extends CommonObject
 
 							$sqlupdate = "UPDATE ".MAIN_DB_PREFIX."oauth_token";
 							$sqlupdate.= " SET state = '".$this->db->escape(preg_replace('/\s+/', '', implode(',', $newtokenrigths)))."'";
+							$sqlupdate.= ", tms = '".$this->db->idate(dol_now())."'";
 							$sqlupdate.= " WHERE rowid = '".$obj->rowid."'";
 
 							$resupdate = $this->db->query($sqlupdate);
