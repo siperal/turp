@@ -95,6 +95,7 @@ class DolibarrApiAccess implements iAuthenticate
 
 		$login = '';
 		$stored_key = '';
+		$use_api = '';
 
 		$userClass = Defaults::$userIdentifierClass;
 
@@ -133,7 +134,7 @@ class DolibarrApiAccess implements iAuthenticate
 		if ($api_key) {
 			$userentity = 0;
 
-			$sql = "SELECT u.login, u.api_key as use_api, oat.token as api_key, oat.entity";
+			$sql = "SELECT u.login, u.api_key as use_api, u.entity, oat.token as api_key, oat.entity as token_entity";
 			$sql .= " FROM ".MAIN_DB_PREFIX."oauth_token AS oat";
 			$sql .= " JOIN ".MAIN_DB_PREFIX."user AS u ON u.rowid = oat.fk_user";
 			$sql .= " WHERE oat.token = '".$this->db->escape($api_key)."'";
@@ -148,6 +149,7 @@ class DolibarrApiAccess implements iAuthenticate
 					$login = $obj->login;
 					$stored_key = dolDecrypt($obj->api_key);
 					$userentity = $obj->entity;
+					$tokenentity = $obj->token_entity;
 					$use_api = $obj->use_api;
 
 					if (!defined("DOLENTITY") && $conf->entity != ($obj->entity ? $obj->entity : 1)) {		// If API was not forced with HTTP_DOLENTITY, and user is on another entity, so we reset entity to entity of user
@@ -155,6 +157,9 @@ class DolibarrApiAccess implements iAuthenticate
 						// We must also reload global conf to get params from the entity
 						dol_syslog("Entity was not set on http header with HTTP_DOLAPIENTITY (recommended for performance purpose), so we switch now on entity of user (".$conf->entity.") and we have to reload configuration.", LOG_WARNING);
 						$conf->setValues($this->db);
+					}
+					if ($conf->entity != ($tokenentity ? $tokenentity : 1)) {
+						throw new RestException(401, 'Forbidden');
 					}
 				} elseif ($nbrows > 1) {
 					throw new RestException(503, 'Error when fetching user api_key : More than 1 user with this apikey');
