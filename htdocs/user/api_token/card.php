@@ -132,8 +132,11 @@ if (empty($reshook)) {
 		$rigthsarray = [];
 
 		if ((strlen($token->rights) == 1 && substr($token->rights, 0, 1) == 0)) {
+			// If the string only contains "0", we empty it so that we store the rights in state without the 0
 			$token->rights = "";
 		} elseif (empty($token->rights)) {
+			// If we delete a perm from a token with empty state (meaning all user perms) and not "0"
+			// we add all perms from the user before ungranting selected ones
 			// Users perms
 			$sql = "SELECT ur.fk_id";
 			$sql .= " FROM ".MAIN_DB_PREFIX."user_rights as ur";
