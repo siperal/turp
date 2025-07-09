@@ -44,6 +44,7 @@
 
 '
 @phan-var-force Propal|Contrat|Commande|Facture|Expedition|Delivery|FactureFournisseur|FactureFournisseur|SupplierProposal $object
+@phan-var-force array<string,array{label:string,checked?:string,position?:int,help?:string,enabled?:string}> $arrayfields
 @phan-var-force int $num
 @phan-var-force string $search_user
 @phan-var-force string $search_entity
