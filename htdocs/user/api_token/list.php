@@ -97,10 +97,8 @@ if (!$sortorder) {
 }
 
 // $user is current user, $id is id of edited user
-$canreaduser = ($user->admin || $user->hasRight("user", "user", "read"));
-$caneditfield = ((($user->id == $id) && $user->hasRight("user", "self", "write"))
-	|| (($user->id != $id) && $user->hasRight("user", "user", "write")));
-$permissiontodelete = ($user->admin || $caneditfield);
+$canreaduser = ($user->admin || ($user->id == $id));
+$canedittoken = ($user->admin || (($user->id == $id) && $user->hasRight("user", "self", "write")));
 
 // Security check
 $socid = 0;
@@ -110,7 +108,7 @@ if ($user->socid > 0) {
 $feature2 = (($socid && $user->hasRight("user", "self", "write")) ? '' : 'user');
 
 $result = restrictedArea($user, 'user', $id, 'user&user', $feature2);
-if ($user->id != $id && !$canreaduser) {
+if (!$canreaduser) {
 	accessforbidden();
 }
 
@@ -123,6 +121,11 @@ $arrayfields = array(
 $object = new User($db);
 $object->fetch($id, '', '', 1);
 $object->loadRights();
+
+// Deny access if user not using api
+if (empty($object->api_key)) {
+	accessforbidden();
+}
 
 $form = new Form($db);
 $formadmin = new FormAdmin($db);
@@ -152,12 +155,7 @@ if (empty($reshook)) {
 		$massaction = ''; // Protection to avoid mass action if we force a new search during a mass action confirmation
 	}
 
-	if ($action == 'update' && ($caneditfield || !empty($user->admin))) {
-		header('Location: '.$_SERVER["PHP_SELF"].'?id='.$id);
-		exit;
-	}
-
-	if (($action == 'delete' && $confirm == 'yes') && $permissiontodelete) {
+	if (($action == 'delete' && $confirm == 'yes') && $canedittoken) {
 		$db->begin();
 
 		$nbok = 0;
@@ -194,8 +192,6 @@ if (empty($reshook)) {
 		} else {
 			$db->rollback();
 		}
-
-		//var_dump($listofobjectthirdparties);exit;
 	}
 }
 

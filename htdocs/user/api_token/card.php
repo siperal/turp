@@ -62,10 +62,8 @@ if (empty($id) && $action != 'add' && $action != 'create') {
 $toselect = GETPOST('toselect', 'array');
 
 // $user is current user, $id is id of edited user
-$canreaduser = ($user->admin || $user->hasRight("user", "user", "read"));
-$caneditfield = ((($user->id == $id) && $user->hasRight("user", "self", "write"))
-	|| (($user->id != $id) && $user->hasRight("user", "user", "write")));
-$canedittoken = ($user->admin || ($user->id == $id));
+$canreaduser = ($user->admin || ($user->id == $id));
+$canedittoken = ($user->admin || (($user->id == $id) && $user->hasRight("user", "self", "write")));
 
 // Security check
 $socid = 0;
@@ -75,7 +73,7 @@ if ($user->socid > 0) {
 $feature2 = (($socid && $user->hasRight("user", "self", "write")) ? '' : 'user');
 
 $result = restrictedArea($user, 'user', $id, 'user&user', $feature2);
-if ($user->id != $id && !$canreaduser) {
+if (!$canreaduser) {
 	accessforbidden();
 }
 
@@ -94,6 +92,11 @@ $resql = $db->query($sql);
 $object = new User($db);
 $object->fetch($id, '', '', 1);
 $object->loadRights();
+
+// Deny access if user not using api
+if (empty($object->api_key)) {
+	accessforbidden();
+}
 
 $form = new Form($db);
 $formadmin = new FormAdmin($db);
@@ -351,7 +354,7 @@ if (empty($reshook)) {
 				exit;
 			}
 		}
-	} elseif ($action == 'confirm_delete' && $confirm == 'yes' && $caneditfield) {
+	} elseif ($action == 'confirm_delete' && $confirm == 'yes' && $canedittoken) {
 		// Remove token
 		$sql = "DELETE FROM ".MAIN_DB_PREFIX."oauth_token";
 		$sql .= " WHERE rowid = '".$tokenid."'";
