@@ -933,7 +933,7 @@ if ($action == 'create') {
 				if ($obj->module == 'user' && $obj->perms == 'user' && $obj->subperms == 'password') {
 					if ((!empty($object->admin) && !empty($objMod->rights_admin_allowed)) ||
 						in_array($obj->id, $tokenperms) /* if edited user owns this permissions */ ||
-						(isset($permsgroupbyentitypluszero) && is_array($permsgroupbyentitypluszero) && in_array($obj->id, $permsgroupbyentitypluszero))) {
+						(in_array($obj->id, $permsgroupbyentitypluszero))) {
 						print ' '.img_warning($langs->trans("AllowPasswordResetBySendingANewPassByEmail"));
 					}
 				}
@@ -941,7 +941,7 @@ if ($action == 'create') {
 				if ($obj->module == 'user' && $obj->perms == 'user' && ($obj->subperms == 'creer' || $obj->subperms == 'create')) {
 					if ((!empty($object->admin) && !empty($objMod->rights_admin_allowed)) ||
 						in_array($obj->id, $tokenperms) /* if edited user owns this permissions */ ||
-						(isset($permsgroupbyentitypluszero) && is_array($permsgroupbyentitypluszero) && in_array($obj->id, $permsgroupbyentitypluszero))) {
+						(in_array($obj->id, $permsgroupbyentitypluszero))) {
 						print ' '.img_warning($langs->trans("AllowAnyPrivileges"));
 					}
 				}
