@@ -126,7 +126,7 @@ if (empty($reshook)) {
 		$action = '';
 	}
 
-	// Get perms lost by loosing choosen perm in $rights
+	// Get perms lost by losing chosen perm in $rights
 	// or get all perms by module
 	if (in_array($action, array('addrights', 'delrights'))) {
 		$rigthsarray = [];
