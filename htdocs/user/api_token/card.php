@@ -877,7 +877,7 @@ if ($action == 'create') {
 					}
 					print '<td>';
 					print '</td>';
-				} elseif (isset($permsgroupbyentitypluszero) && is_array($permsgroupbyentitypluszero)) {
+				} else {
 					print '<!-- permsgroupbyentitypluszero -->';
 					if (in_array($obj->id, $permsgroupbyentitypluszero)) {    // Permission granted by group
 						print '<td class="center nowrap">';
@@ -904,23 +904,6 @@ if ($action == 'create') {
 						print '<td>';
 						print '</td>';
 					}
-				} else {
-					// Do not own permission
-					print '<!-- do not own permission -->';
-					if ($canedittoken && in_array($obj->id, $allusersperms)) {
-						print '<td class="center nowrap">';
-						print '<a class="reposition addexpandedmodulesinparamlist" href="'.$_SERVER["PHP_SELF"].'?id='.$id.'&tokenid='.$tokenid.'&action=addrights&rights='.$obj->id.'&confirm=yes&token='.newToken().'">';
-						//print img_edit_add($langs->trans("Add"));
-						print img_picto($langs->trans("Add"), 'switch_off');
-						print '</a>';
-						print '</td>';
-					} else {
-						print '<td class="center nowrap">';
-						print img_picto($langs->trans("Disabled"), 'switch_off', '', 0, 0, 0, '', 'opacitymedium');
-						print '</td>';
-					}
-					print '<td>';
-					print '</td>';
 				}
 
 				// Description of permission (1 or 2 columns)
