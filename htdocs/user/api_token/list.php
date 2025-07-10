@@ -21,16 +21,13 @@
  */
 
 /**
- *       \file       htdocs/user/param_ihm.php
- *       \brief      Page to show user setup for display
+ *       \file       htdocs/user/api_toke/list.php
+ *       \brief      Page to show user list of token
  */
 
 // Load Dolibarr environment
 require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/usergroups.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formadmin.class.php';
 
 /**
  * @var Conf $conf
@@ -48,6 +45,22 @@ $error = 0;
 $id = GETPOSTINT('id');
 
 if (!isset($id) || empty($id)) {
+	accessforbidden();
+}
+
+$socid = 0;
+if ($user->socid > 0) {
+	$socid = $user->socid;
+}
+$feature2 = (($socid && $user->hasRight("user", "self", "write")) ? '' : 'user');
+
+$result = restrictedArea($user, 'user', $id, 'user&user', $feature2);
+
+// $user is current user, $id is id of edited user
+$canreaduser = ($user->admin || ($user->id == $id));
+$canedittoken = ($user->admin || (($user->id == $id) && $user->hasRight("user", "self", "write")));
+
+if (!$canreaduser) {
 	accessforbidden();
 }
 
@@ -96,22 +109,6 @@ if (!$sortorder) {
 	$sortorder = 'DESC';
 }
 
-// $user is current user, $id is id of edited user
-$canreaduser = ($user->admin || ($user->id == $id));
-$canedittoken = ($user->admin || (($user->id == $id) && $user->hasRight("user", "self", "write")));
-
-// Security check
-$socid = 0;
-if ($user->socid > 0) {
-	$socid = $user->socid;
-}
-$feature2 = (($socid && $user->hasRight("user", "self", "write")) ? '' : 'user');
-
-$result = restrictedArea($user, 'user', $id, 'user&user', $feature2);
-if (!$canreaduser) {
-	accessforbidden();
-}
-
 $arrayfields = array(
 	'e.label' => array('label' => "Entity", 'checked' => '1'),
 	'oat.datec' => array('label' => "DateCreation", 'checked' => '1'),
@@ -128,7 +125,6 @@ if (empty($object->api_key)) {
 }
 
 $form = new Form($db);
-$formadmin = new FormAdmin($db);
 
 /*
  * Actions

@@ -21,16 +21,14 @@
  */
 
 /**
- *       \file       htdocs/user/param_ihm.php
- *       \brief      Page to show user setup for display
+ *       \file       htdocs/user/api_toke/card.php
+ *       \brief      Page to show user token and corresponding perm
  */
 
 // Load Dolibarr environment
 require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/usergroups.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formadmin.class.php';
 
 /**
  * @var Conf $conf
@@ -47,25 +45,11 @@ $error = 0;
 // Security check
 $id = GETPOSTINT('id');
 $action = GETPOST('action', 'aZ09');
-$tokenid = GETPOST('tokenid', 'aZ09');
-$confirm = GETPOST('confirm', 'alpha');
-$module = GETPOST('module', 'alpha');
-$rights = GETPOSTINT('rights');
-$cancel = GETPOST('cancel', 'alpha');
-$backtopage = GETPOST('backtopage', 'alpha');
 
 if (empty($id) && $action != 'add' && $action != 'create') {
 	accessforbidden();
 }
 
-// Retrieve needed GETPOSTS for this file
-$toselect = GETPOST('toselect', 'array');
-
-// $user is current user, $id is id of edited user
-$canreaduser = ($user->admin || ($user->id == $id));
-$canedittoken = ($user->admin || (($user->id == $id) && $user->hasRight("user", "self", "write")));
-
-// Security check
 $socid = 0;
 if ($user->socid > 0) {
 	$socid = $user->socid;
@@ -73,10 +57,25 @@ if ($user->socid > 0) {
 $feature2 = (($socid && $user->hasRight("user", "self", "write")) ? '' : 'user');
 
 $result = restrictedArea($user, 'user', $id, 'user&user', $feature2);
+
+// $user is current user, $id is id of edited user
+$canreaduser = ($user->admin || ($user->id == $id));
+$canedittoken = ($user->admin || (($user->id == $id) && $user->hasRight("user", "self", "write")));
+
 if (!$canreaduser) {
 	accessforbidden();
 }
 
+// Retrieve needed GETPOSTS for this file
+$toselect = GETPOST('toselect', 'array');
+$tokenid = GETPOST('tokenid', 'aZ09');
+$confirm = GETPOST('confirm', 'alpha');
+$module = GETPOST('module', 'alpha');
+$rights = GETPOSTINT('rights');
+$cancel = GETPOST('cancel', 'alpha');
+$backtopage = GETPOST('backtopage', 'alpha');
+
+// SQL query to retrieve the selected token
 $sql = "SELECT oat.rowid as token_id, oat.token, oat.entity, oat.state as rights, oat.datec as date_creation, oat.tms as date_modification";
 if (isModEnabled('multicompany')) {
 	$sql .= ", e.label";
@@ -99,7 +98,6 @@ if (empty($object->api_key)) {
 }
 
 $form = new Form($db);
-$formadmin = new FormAdmin($db);
 $token = $db->fetch_object($resql);
 
 $entity = $conf->entity;
@@ -128,6 +126,8 @@ if (empty($reshook)) {
 		$action = '';
 	}
 
+	// Get perms lost by loosing choosen perm in $rights
+	// or get all perms by module
 	if (in_array($action, array('addrights', 'delrights'))) {
 		$rigthsarray = [];
 
@@ -322,6 +322,7 @@ if (empty($reshook)) {
 			$error++;
 		}
 
+		// Check if a token already exists for the dolibarr api service duplicates
 		$nbtotalofrecords = '';
 		$sqlforcount = 'SELECT COUNT(*) as nbtotalofrecords';
 		$sqlforcount .= " FROM ".MAIN_DB_PREFIX."oauth_token as oat";
@@ -476,7 +477,6 @@ if ($action == 'create') {
 	$urltovirtualcard = '/user/virtualcard.php?id='.((int) $object->id);
 	$morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl").' - '.$object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
-	// Disabled prev/next because there is no token object
 	dol_banner_tab($object, 'api_token_card', $linkback, $user->admin, 'rowid', 'ref', $morehtmlref);
 
 	// Tokens info
@@ -1071,12 +1071,6 @@ if ($action == 'create') {
 		cursor: pointer;
 	}';
 	print '</style>';
-
-	// TODO : Build the hook management
-	// Other form for add user to group
-	//$parameters = array('caneditgroup' => $permissiontoeditgroup, 'groupslist' => $groupslist, 'exclude' => $exclude);
-	//$reshook = $hookmanager->executeHooks('formAddUserToGroup', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
-	//print $hookmanager->resPrint;
 }
 
 if (isModEnabled('api') && $action == 'create') {
