@@ -2102,8 +2102,8 @@ if ($resql) {
 			}
 			// Note public
 			if (!empty($arrayfields['cf.note_public']['checked'])) {
-				print '<td class="center">';
-				print '<div class="small lineheightsmall twolinesmax-normallineheight">'.dolPrintHTML(dolGetFirstLineOfText($obj->note_public), 5).'</div>';
+				print '<td class="sensiblehtmlcontent center">';
+				print '<div class="small lineheightsmall twolinesmax-normallineheight">'.dolPrintHTML(dolGetFirstLineOfText($obj->note_public, 5)).'</div>';
 				print '</td>';
 				if (!$i) {
 					$totalarray['nbfield']++;
@@ -2113,7 +2113,7 @@ if ($resql) {
 			// Note private
 			if (!empty($arrayfields['cf.note_private']['checked'])) {
 				print '<td class="sensiblehtmlcontent center">';
-				print '<div class="small lineheightsmall twolinesmax-normallineheight">'.dolPrintHTML(dolGetFirstLineOfText($obj->note_private), 5).'</div>';
+				print '<div class="small lineheightsmall twolinesmax-normallineheight">'.dolPrintHTML(dolGetFirstLineOfText($obj->note_private, 5)).'</div>';
 				print '</td>';
 				if (!$i) {
 					$totalarray['nbfield']++;
