@@ -10776,7 +10776,7 @@ abstract class CommonObject
 
 		$error = 0;
 
-		$now = dol_now();
+		$now = dol_now('tzuser');
 
 		// $this->oldcopy should have been set by the caller of update
 		//if (empty($this->oldcopy)) {
@@ -10790,6 +10790,9 @@ abstract class CommonObject
 
 		if (array_key_exists('date_modification', $fieldvalues) && empty($fieldvalues['date_modification'])) {
 			$fieldvalues['date_modification'] = $this->db->idate($now);
+		}
+		if (getDolGlobalString('MAIN_DISABLE_AUTO_UPDATE_OF_TMS_FIELDS') && array_key_exists('tms', $fieldvalues)) {
+			$fieldvalues['tms'] = $this->db->idate($now);
 		}
 		if (array_key_exists('fk_user_modif', $fieldvalues) && !($fieldvalues['fk_user_modif'] > 0)) {
 			$fieldvalues['fk_user_modif'] = $user->id;
