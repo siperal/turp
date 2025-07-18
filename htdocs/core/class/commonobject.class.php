@@ -10776,7 +10776,7 @@ abstract class CommonObject
 
 		$error = 0;
 
-		$now = dol_now('tzuser');
+		$now = dol_now();
 
 		// $this->oldcopy should have been set by the caller of update
 		//if (empty($this->oldcopy)) {
