@@ -656,11 +656,11 @@ while ($i < $imaxinloop) {
 				} elseif ($key == 'rowid') {
 					print $object->showOutputField($val, $key, (string) $object->id, '');
 				} else {
-					if ($val['type'] == 'html') {
+					if ($val['type'] == 'html' || $key == 'lastresult') {
 						print '<div class="small lineheightsmall twolinesmax-normallineheight">';
 					}
 					print $object->showOutputField($val, $key, (string) $object->$key, '');
-					if ($val['type'] == 'html') {
+					if ($val['type'] == 'html' || $key == 'lastresult') {
 						print '</div>';
 					}
 				}
