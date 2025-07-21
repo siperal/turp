@@ -1568,10 +1568,10 @@ class SMTPs
 
 		$trackid = $this->getTrackId();
 		if ($trackid) {
-			$_header .= 'Message-ID: <'.(empty($this->_msgId) ? uniqid() : $this->_msgId).'.SMTPs-dolibarr-'.$trackid.'@'.$host.">\r\n";
+			$_header .= 'Message-ID: <'.(empty($this->_msgId) ? uniqid().'.SMTPs-dolibarr-'.$trackid.'@'.$host : $this->_msgId).">\r\n";
 			$_header .= 'X-Dolibarr-TRACKID: '.$trackid.'@'.$host."\r\n";
 		} else {
-			$_header .= 'Message-ID: <'.(empty($this->_msgId) ? uniqid() : $this->_msgId).'.SMTPs@'.$host.">\r\n";
+			$_header .= 'Message-ID: <'.(empty($this->_msgId) ? uniqid().'.SMTPs@'.$host : $this->_msgId).">\r\n";
 		}
 		if (!empty($_SERVER['REMOTE_ADDR'])) {
 			$_header .= "X-RemoteAddr: ".$_SERVER['REMOTE_ADDR']."\r\n";
