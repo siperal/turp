@@ -1847,7 +1847,9 @@ class EmailCollector extends CommonObject
 					$trackidfoundintomsgidid = $reg[1];
 				}
 
-				// If there is an emailcollecter filter on trackid
+				// Now apply some filters.
+
+				//If there is an emailcollector filter on trackid
 				if ($searchfilterdoltrackid > 0) {
 					if (empty($trackidfoundintorecipienttype) && empty($trackidfoundintomsgidtype)) {
 						if (empty($headers['References']) || !preg_match('/@'.preg_quote($host, '/').'/', $headers['References'])) {
@@ -2157,6 +2159,8 @@ class EmailCollector extends CommonObject
 				// var_dump($headers['References']);
 				// var_dump($arrayofreferences);
 
+				// We loop on References, but as soon as we found one that allow us to find an existing object,
+				// we do a break (See line with comment "Exit loop of references").
 				foreach ($arrayofreferences as $reference) {
 					//print "Process mail ".$iforemailloop." email_msgid ".$msgid.", date ".dol_print_date($dateemail, 'dayhour', 'gmt').", subject ".$subject.", reference ".dol_escape_htmltag($reference)."<br>\n";
 					if (!empty($trackidfoundintorecipienttype)) {
@@ -2318,7 +2322,7 @@ class EmailCollector extends CommonObject
 								$projectid = $objectemail->id;
 							}
 
-							if ($objectemail instanceof Ticket) {
+							if ($objectemail instanceof Ticket) {	// For tickets, we have a column to store all met references, so we complete it if we need to.
 								$ticketid = $objectemail->id;
 
 								$changeonticket_references = false;
@@ -2337,7 +2341,8 @@ class EmailCollector extends CommonObject
 									}
 								}
 								if ($changeonticket_references) {
-									$objectemail->update($user, 1);		// We complete the references field, that is a field for technical tracking purpose, not a user field, so no need to execute triggers
+									$operationslog .= '<br>We complete ticket ID='.$ticketid.' with property origin_references='.$objectemail->origin_references;
+									$objectemail->update($user, 1);		// We complete the references field with all references mentioned into this email. This field is for technical tracking purpose, not a user field, so no need to execute triggers
 								}
 							}
 						}
@@ -2450,7 +2455,8 @@ class EmailCollector extends CommonObject
 				 }
 				 */
 
-				// Do operations (extract variables and creating data)
+
+				// Now do all operations for the email (extract variables and creating data)
 				if ($mode < 2) {	// 0=Mode production, 1=Mode test (read IMAP and try SQL update then rollback), 2=Mode test with no SQL updates
 					foreach ($this->actions as $operation) {
 						$errorforthisaction = 0;
@@ -2507,7 +2513,10 @@ class EmailCollector extends CommonObject
 							$tickettocreate = new Ticket($this->db);
 							$errorfetchticket = 0;
 							$alreadycreated = 0;
-							if (!empty($trackid)) {
+							if ($ticketid > 0) {
+								$alreadycreated = $tickettocreate->fetch($ticketid);
+							}
+							if ($alreadycreated == 0 && !empty($trackid)) {
 								$alreadycreated = $tickettocreate->fetch(0, '', $trackid);
 							}
 							if ($alreadycreated == 0 && !empty($msgid)) {
@@ -2521,7 +2530,7 @@ class EmailCollector extends CommonObject
 									$operationslog .= '<br>Ticket not found using trackid='.$trackid.' or msgid='.$msgid;
 									$ticketalreadyexists = 0;
 								} else {
-									$operationslog .= '<br>Ticket already found using trackid='.$trackid.' or msgid='.$msgid;	// We change the operation type to do
+									$operationslog .= '<br>Ticket already found using trackid='.$trackid.' or msgid='.$msgid.", we replace operation 'ticket' with 'recordevent' to add a new message";	// We change the operation type to do
 									$ticketalreadyexists = 1;
 									$operation['type'] = 'recordevent';
 								}
@@ -2530,11 +2539,15 @@ class EmailCollector extends CommonObject
 							}
 						}
 
-						// Process now the operation type
+						// Process now the operation according to its type
 
 						// Search and create thirdparty
 						if ($operation['type'] == 'loadthirdparty' || $operation['type'] == 'loadandcreatethirdparty') {
-							if (empty($operation['actionparam'])) {
+							if ($thirdpartyid > 0) {
+								// We already have found the thirdparty id to load, so we bypass the action loadthirdparty
+								$idtouseforthirdparty = $thirdpartyid;
+								$operationslog .= '<br>We already have found a related thirdparty id, so we bypass the action loadthirdparty and use idtouseforthirdparty='.$idtouseforthirdparty;
+							} elseif (empty($operation['actionparam'])) {
 								$errorforactions++;
 								$this->error = "Action loadthirdparty or loadandcreatethirdparty has empty parameter. Must be a rule like 'name=HEADER:^From:(.*);' or 'name=SET:xxx' or 'name=EXTRACT:(body|subject):regex where 'name' can be replaced with 'id' or 'email' to define how to set or extract data. More properties can also be set, for example client=SET:2;";
 								$this->errors[] = $this->error;
@@ -2864,7 +2877,7 @@ class EmailCollector extends CommonObject
 
 							$alreadycreated = $actioncomm->fetch(0, '', '', $msgid);
 							if ($alreadycreated == 0) {
-								$operationslog .= '<br>We did not find existing actionmail with msgid='.$msgid;
+								$operationslog .= '<br>We did not find existing actioncomm with msgid='.$msgid;
 
 								if ($projectstatic->id > 0) {
 									if ($projectfoundby) {
@@ -2977,6 +2990,8 @@ class EmailCollector extends CommonObject
 										$operationslog .= '<br>Event created -> id='.dol_escape_htmltag((string) $actioncomm->id);
 									}
 								}
+							} else {
+								$operationslog .= '<br>An event in actioncomm table already exists for the msgid = '.$msgid.' so we bypass this action.';
 							}
 						} elseif ($operation['type'] == 'recordjoinpiece') {
 							$data = [];
@@ -3454,6 +3469,11 @@ class EmailCollector extends CommonObject
 										}
 									}
 								}
+							} else {
+								// Do nothing in action ticket if ticket already exists.
+								// Note that if we want to add a new event to a ticket, we should have a collector with action "Record event in agenda" or hope the type of action 'ticket' was
+								// already replaced automatically by operation "recordevent".
+								$operationslog .= '<br>Ticket already exists, so we bypass action "ticket"';
 							}
 						} elseif ($operation['type'] == 'candidature') {
 							// Create candidature
