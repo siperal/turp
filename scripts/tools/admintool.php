@@ -82,10 +82,10 @@ if (!isset($argv[1]) || !$argv[1]) {
 }
 $key = $argv[1];
 
-/*if (!isset($argv[2]) || !$argv[2]) {
+if (!in_array($key, array('showpass', 'encodepass', 'decodepass'))) {
 	usageScript($path, $script_file);
 	exit(1);
-}*/
+}
 
 
 // Global variables
@@ -111,10 +111,12 @@ print "***** ".$script_file." (".$version.") pid=".dol_getmypid()." - ".dol_prin
 
 if ($key == 'showpass') {
 	print dolDecrypt($dolibarr_main_db_pass)."\n";
-} elseif ($key = 'encodepass') {
-	encodedecode_dbpassconf(1);
-} elseif ($key = 'decodepass') {
-	encodedecode_dbpassconf(1);
+} elseif ($key == 'encodepass') {
+	$result = encodedecode_dbpassconf(1);
+	print $result;
+} elseif ($key == 'decodepass') {
+	$result = encodedecode_dbpassconf(0);
+	print $result;
 }
 
 print "\n";
