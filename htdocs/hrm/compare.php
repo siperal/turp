@@ -559,7 +559,7 @@ function getSkillForUsers($TUser)
 			$sql1 = "SELECT COUNT(rowid) as how_many_max FROM ".MAIN_DB_PREFIX."hrm_skillrank as sr";
 			$sql1 .= " WHERE sr.rankorder = ".((int) $obj->rankorder);
 			$sql1 .= " AND sr.objecttype = '".$db->escape(SkillRank::SKILLRANK_TYPE_USER)."'";
-			$sql1 .= " AND sr.fk_skill = ".((int) $obj->fk_skill);
+			$sql1 .= " AND sr.fk_skill = ".((int) $obj->rowid);
 			$sql1 .= " AND sr.fk_object IN (".$db->sanitize(implode(',', $TUser)).")";
 			$resql1 = $db->query($sql1);
 
