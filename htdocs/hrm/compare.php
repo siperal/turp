@@ -528,14 +528,14 @@ function getSkillForUsers($TUser)
 	}
 
 	$sql = 'SELECT sk.rowid, sk.label, sk.description, sk.skill_type,';
-	$sql .= ' sr.fk_object, sr.objecttype, sr.fk_skill,';
+	$sql .= ' sr.objecttype, sr.fk_skill,';
 	$sql .= ' MAX(sr.rankorder) as rankorder';
 	$sql .= ' FROM '.MAIN_DB_PREFIX.'hrm_skill sk';
 	$sql .= ' INNER JOIN '.MAIN_DB_PREFIX.'hrm_skillrank sr';
 	$sql .= " WHERE sk.rowid = sr.fk_skill AND sr.objecttype = '".$db->escape(SkillRank::SKILLRANK_TYPE_USER)."'";
 	$sql .= ' AND sr.fk_object IN ('.$db->sanitize(implode(',', $TUser)).')';
 	$sql .= ' AND rankorder >= 0';
-	$sql .= " GROUP BY sk.rowid, sk.label, sk.description, sk.skill_type, sr.fk_object, sr.objecttype, sr.fk_skill "; // group par competence
+	$sql .= " GROUP BY sk.rowid, sk.label, sk.description, sk.skill_type, sr.objecttype, sr.fk_skill "; // group par competence
 
 	$resql = $db->query($sql);
 	$Tab = array();
