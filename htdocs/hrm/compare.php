@@ -515,7 +515,7 @@ function displayUsersListWithPicto(&$TUser, $fk_usergroup = 0, $namelist = 'list
 /**
  * 		Allow to get skill(s) of a user
  *
- * 		@param int[] $TUser array of employees we need to get skills
+ * 		@param int[] 	$TUser 			array of employees we need to get skills
  * 		@return array<int,stdClass>
  */
 function getSkillForUsers($TUser)
@@ -528,14 +528,14 @@ function getSkillForUsers($TUser)
 	}
 
 	$sql = 'SELECT sk.rowid, sk.label, sk.description, sk.skill_type,';
-	$sql .= ' sr.objecttype, sr.fk_skill,';
 	$sql .= ' MAX(sr.rankorder) as rankorder';
 	$sql .= ' FROM '.MAIN_DB_PREFIX.'hrm_skill sk';
 	$sql .= ' INNER JOIN '.MAIN_DB_PREFIX.'hrm_skillrank sr';
 	$sql .= " WHERE sk.rowid = sr.fk_skill AND sr.objecttype = '".$db->escape(SkillRank::SKILLRANK_TYPE_USER)."'";
 	$sql .= ' AND sr.fk_object IN ('.$db->sanitize(implode(',', $TUser)).')';
 	$sql .= ' AND rankorder >= 0';
-	$sql .= " GROUP BY sk.rowid, sk.label, sk.description, sk.skill_type, sr.objecttype, sr.fk_skill "; // group par competence
+	$sql .= " GROUP BY sk.rowid, sk.label, sk.description, sk.skill_type"; // group by skill
+	$sql .= " ORDER BY sk.rowid ASC";
 
 	$resql = $db->query($sql);
 	$Tab = array();
@@ -544,6 +544,18 @@ function getSkillForUsers($TUser)
 		// For each skill, we count the number of times that the max score has been reached within a given group
 		$num = 0;
 		while ($obj = $db->fetch_object($resql)) {
+			$Tab[$num] = new stdClass();
+
+			$Tab[$num]->fk_skill = $obj->rowid;
+			$Tab[$num]->label = $obj->label;
+			$Tab[$num]->description = $obj->description;
+			$Tab[$num]->skill_type = $obj->skill_type;
+			//$Tab[$num]->fk_object = $obj->fk_object;
+			$Tab[$num]->objectType = SkillRank::SKILLRANK_TYPE_USER;
+
+			$Tab[$num]->rankorder = $obj->rankorder;
+
+			// Get how_many_max
 			$sql1 = "SELECT COUNT(rowid) as how_many_max FROM ".MAIN_DB_PREFIX."hrm_skillrank as sr";
 			$sql1 .= " WHERE sr.rankorder = ".((int) $obj->rankorder);
 			$sql1 .= " AND sr.objecttype = '".$db->escape(SkillRank::SKILLRANK_TYPE_USER)."'";
@@ -553,15 +565,9 @@ function getSkillForUsers($TUser)
 
 			$objMax = $db->fetch_object($resql1);
 
-			$Tab[$num] = new stdClass();
-			$Tab[$num]->fk_skill = $obj->fk_skill;
-			$Tab[$num]->label = $obj->label;
-			$Tab[$num]->description = $obj->description;
-			$Tab[$num]->skill_type = $obj->skill_type;
-			$Tab[$num]->fk_object = $obj->fk_object;
-			$Tab[$num]->objectType = SkillRank::SKILLRANK_TYPE_USER;
-			$Tab[$num]->rankorder = $obj->rankorder;
 			$Tab[$num]->how_many_max = $objMax->how_many_max;
+
+			$db->free($resql1);
 
 			$num++;
 		}
