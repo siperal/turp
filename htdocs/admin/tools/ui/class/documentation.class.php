@@ -284,7 +284,7 @@ class Documentation
 
 		top_htmlhead('',  $title, 0, 0, $arrayofjs, $arrayofcss);
 
-		print '<body class="dolibarr-doc">';
+		print '<body class="dolibarr-doc'.(GETPOST('hidenavmenu') ? "-bis" : "").'">';
 	}
 
 	/**
