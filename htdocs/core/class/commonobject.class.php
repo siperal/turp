@@ -10807,7 +10807,7 @@ abstract class CommonObject
 		if (array_key_exists('date_modification', $fieldvalues) && empty($fieldvalues['date_modification'])) {
 			$fieldvalues['date_modification'] = $this->db->idate($now);
 		}
-		if (getDolGlobalString('MAIN_DISABLE_AUTO_UPDATE_OF_TMS_FIELDS') && array_key_exists('tms', $fieldvalues)) {
+		if (getDolGlobalString('MAIN_DISABLE_AUTO_UPDATE_OF_TMS_FIELDS') && array_key_exists('tms', $fieldvalues)) {	// If we want the auto update of tms fields by database (deprecated, prefer by PHP code)
 			$fieldvalues['tms'] = $this->db->idate($now);
 		}
 		if (array_key_exists('fk_user_modif', $fieldvalues) && !($fieldvalues['fk_user_modif'] > 0)) {
