@@ -1080,7 +1080,7 @@ class FormOther
 	/**
 	 *      Return HTML combo list of month
 	 *
-	 *      @param  string      $selected          	Preselected value
+	 *      @param  int|string  $selected          	Preselected value
 	 *      @param  string      $htmlname          	Name of HTML select object
 	 *      @param  int         $useempty          	Show empty in list
 	 *      @param  int         $longlabel         	Show long label (1) or short label (0)
@@ -1096,9 +1096,9 @@ class FormOther
 		require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
 
 		if ($longlabel) {
-			$montharray = monthArray($langs, 0); // Get array
+			$montharray = monthArray($langs, 0); // Get array of month with long labels
 		} else {
-			$montharray = monthArray($langs, 1);
+			$montharray = monthArray($langs, 1); // Get array of month with short labels
 		}
 
 		$select_month = '<select class="flat'.($morecss ? ' '.$morecss : '').'" name="'.$htmlname.'" id="'.$htmlname.'">';
@@ -1106,7 +1106,7 @@ class FormOther
 			$select_month .= '<option value="0">&nbsp;</option>';
 		}
 		foreach ($montharray as $key => $val) {
-			if ($selected == $key) {
+			if ((int) $selected == $key) {
 				$select_month .= '<option value="'.$key.'" selected>';
 			} else {
 				$select_month .= '<option value="'.$key.'">';
