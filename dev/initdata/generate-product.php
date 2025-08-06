@@ -119,15 +119,22 @@ if ($resql) {
 print "Generates ".GEN_NUMBER_PRODUIT." products\n";
 for ($s = 0; $s < GEN_NUMBER_PRODUIT; $s++) {
 	print "Product ".$s;
+
 	$produit = new Product($db);
 	$produit->type = mt_rand(0, 1);
-	$produit->status = 1;
+	$produit->status = mt_rand(0, 1);
+	$produit->status_buy = mt_rand(0, 1);
+	$produit->finished = mt_rand(0, 1);
+	$produit->stockable_product = mt_rand(0, 1);
+
 	$produit->ref = ($produit->type ? 'S' : 'P').time().$s;
 	$produit->label = 'Label '.time().$s;
-	$produit->description = 'Description '.time().$s;
+	$produit->description = 'This is a long description of '.$produit->ref;
 	$produit->price = mt_rand(1, 999.99);
 	$produit->tva_tx = "20.0";
-	$ret=$produit->create($user);
+
+	$ret = $produit->create($user);
+
 	if ($ret < 0) {
 		print "Error $ret - ".$produit->error."\n";
 	} else {
