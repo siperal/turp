@@ -495,7 +495,7 @@ if (getDolGlobalString('PRODUCT_USE_UNITS')) {
 	$sql .= ' p.fk_unit, cu.label as cu_label,';
 }
 //$sql .= ' MIN(pfp.unitprice) as bestpurchaseprice';
-$sql .= '(SELECT MIN(pfp.unitprice) FROM llx_product_fournisseur_price as pfp WHERE p.rowid = pfp.fk_product) as bestpurchaseprice';
+$sql .= '(SELECT MIN(pfp.unitprice) FROM '.MAIN_DB_PREFIX.'product_fournisseur_price as pfp WHERE p.rowid = pfp.fk_product) as bestpurchaseprice';
 if (isModEnabled('variants')) {
 	$sql .= ', pac.rowid as prod_comb_id';
 	$sql .= ', pac.fk_product_parent';
