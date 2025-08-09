@@ -5,7 +5,9 @@
 --
 -- To restrict request to Mysql version x.y minimum use -- VMYSQLx.y
 -- To restrict request to Pgsql version x.y minimum use -- VPGSQLx.y
--- To rename a table:       ALTER TABLE llx_table RENAME TO llx_table_new; -- Note that "RENAME TO" is both compatible mysql/postgesql, not "RENAME" alone.
+-- To rename a table:       ALTER TABLE llx_table RENAME TO llx_table_new;
+--                          Note that "RENAME TO" is both compatible with mysql/postgesql, not the "RENAME" alone.
+--                          Also you must complete with renaming the sequence for PGSQL with -- VPGSQL8.2 ALTER SEQUENCE llx_table_rowid_seq RENAME TO llx_table_new_rowid_seq;
 -- To add a column:         ALTER TABLE llx_table ADD COLUMN newcol varchar(60) NOT NULL DEFAULT '0' AFTER existingcol;
 -- To rename a column:      ALTER TABLE llx_table CHANGE COLUMN oldname newname varchar(60);
 -- To drop a column:        ALTER TABLE llx_table DROP COLUMN oldname;
