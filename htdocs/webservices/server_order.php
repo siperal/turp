@@ -749,18 +749,18 @@ function createOrder($authentication, $order)
 			// $key can be 'line' or '0','1',...
 			$newline = new OrderLine($db);
 
-			$newline->type = $line['type'];
+			$newline->product_type = (int) $line['type'];
 			$newline->desc = $line['desc'];
-			$newline->fk_product = $line['product_id'];
-			$newline->tva_tx = $line['vat_rate'];
-			$newline->qty = $line['qty'];
-			$newline->price = $line['price'];
-			$newline->subprice = $line['unitprice'];
-			$newline->total_ht = $line['total_net'];
-			$newline->total_tva = $line['total_vat'];
-			$newline->total_ttc = $line['total'];
-			$newline->date_start = $line['date_start'];
-			$newline->date_end = $line['date_end'];
+			$newline->fk_product = (int) $line['product_id'];
+			$newline->tva_tx = (float) $line['vat_rate'];
+			$newline->qty = (float) $line['qty'];
+			$newline->price = (float) $line['price'];
+			$newline->subprice = (float) $line['unitprice'];
+			$newline->total_ht = (float) $line['total_net'];
+			$newline->total_tva = (float) $line['total_vat'];
+			$newline->total_ttc = (float) $line['total'];
+			$newline->date_start = dol_stringtotime($line['date_start']);
+			$newline->date_end = dol_stringtotime($line['date_end']);
 
 			$elementtype = 'commandedet';
 
