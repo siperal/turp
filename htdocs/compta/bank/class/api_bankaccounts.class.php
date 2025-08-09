@@ -506,31 +506,6 @@ class BankAccounts extends DolibarrApi
 	}
 
 	/**
-	 * Get the detail of lines of the account.
-	 *
-	 * @param int $id ID of the account line
-	 * @return  AccountLine			Object with cleaned properties
-	 *
-	 * @throws RestException
-	 *
-	 * @url GET /accountlines/lines/{id}
-	 */
-	public function getDetailAccountLine($id)
-	{
-		if (!DolibarrApiAccess::$user->hasRight('banque', 'lire')) {
-			throw new RestException(403);
-		}
-
-		$accountLine = new AccountLine($this->db);
-		$result = $accountLine->fetch($id);
-		if (!$result) {
-			throw new RestException(404, 'account Line not found');
-		}
-
-		return $this->_cleanObjectDatas($accountLine);
-	}
-
-	/**
 	 * Add a line to an account
 	 *
 	 * @param int    $id               ID of account
@@ -592,13 +567,13 @@ class BankAccounts extends DolibarrApi
 	/**
 	 * Add a link to an account line
 	 *
-	 * @param int    $id			ID of account
-	 * @param int    $line_id       ID of account line
-	 * @param int    $url_id        ID to set in the URL {@from body}
-	 * @param string $url           URL of the link {@from body}
-	 * @param string $label         Label {@from body}
-	 * @param string $type          Type of link ('payment', 'company', 'member', ...) {@from body}
-	 * @return int  ID of link
+	 * @param 	int    	$id				ID of account
+	 * @param 	int    	$line_id       	ID of account line
+	 * @param 	int    	$url_id        	ID to set in the URL {@from body}
+	 * @param 	string 	$url           	URL of the link {@from body}
+	 * @param 	string 	$label         	Label {@from body}
+	 * @param 	string 	$type          	Type of link ('payment', 'company', 'member', ...) {@from body}
+	 * @return 	int  					ID of link
 	 *
 	 * @url POST {id}/lines/{line_id}/links
 	 */
@@ -743,7 +718,32 @@ class BankAccounts extends DolibarrApi
 	}
 
 	/**
-	 * Get current account balance by ID
+	 * Get the detail of a given line of the bank account.
+	 *
+	 * @param 	int 			$line_id 	ID of the account line
+	 * @return  AccountLine					Object with cleaned properties
+	 *
+	 * @throws RestException
+	 *
+	 * @url GET /lines/{line_id}
+	 */
+	public function getDetailAccountLine($line_id)
+	{
+		if (!DolibarrApiAccess::$user->hasRight('banque', 'lire')) {
+			throw new RestException(403);
+		}
+
+		$accountLine = new AccountLine($this->db);
+		$result = $accountLine->fetch($line_id);
+		if (!$result) {
+			throw new RestException(404, 'account Line not found');
+		}
+
+		return $this->_cleanObjectDatas($accountLine);
+	}
+
+	/**
+	 * Get the current account balance
 	 *
 	 * @param	int		$id				ID of account
 	 * @return	float	$balance	 	balance
@@ -763,7 +763,9 @@ class BankAccounts extends DolibarrApi
 		if (!$result) {
 			throw new RestException(404, 'account not found');
 		}
+
 		$balance = $account->solde(1);  //1=Exclude future operation date (this is to exclude input made in advance and have real account sold)
+
 		return $balance;
 	}
 }
