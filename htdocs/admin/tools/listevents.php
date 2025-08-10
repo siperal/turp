@@ -124,8 +124,8 @@ if ($date_end !== '') {
 $arrayfields = array(
 	'e.prefix_session' => array(
 		'label' => 'UserAgent',
-		'checked' => (!getDolGlobalString('AUDIT_ENABLE_PREFIX_SESSION') ? 0 : 1),
-		'enabled' => (!getDolGlobalString('AUDIT_ENABLE_PREFIX_SESSION') ? 0 : 1),
+		'checked' => getDolGlobalInt('AUDIT_ENABLE_PREFIX_SESSION'),
+		'enabled' => getDolGlobalInt('AUDIT_ENABLE_PREFIX_SESSION'),
 		'position' => 110
 	)
 );
@@ -175,7 +175,6 @@ if ($action == 'confirm_purge' && $confirm == 'yes' && $user->admin) {
 	$error = 0;
 
 	$db->begin();
-	$securityevents = new Events($db);
 
 	// Delete events
 	$sql = "DELETE FROM ".MAIN_DB_PREFIX."events";

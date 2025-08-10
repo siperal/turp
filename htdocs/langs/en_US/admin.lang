@@ -2688,3 +2688,6 @@ MAIN_DO_FETCH_IN_ONE_SQL_REQUEST=Load content of object and lines into one reque
 GoOnThisPageToInitBarCode=You can go on this page to initialize empty barcodes
 ClickHereToCheckSPFDMARCForSetup=Get a summary of the SPF and DMARC setup of all domains
 PDF_INVOICE_SHOW_BALANCE_SUMMARY= Show customer's previous and new balance
+SecurityModuleDeploymentSuccess=An external module has been deployed: %s
+SecurityModuleDeploymentError=A deployment of an external module has been tried and failed: %s
+DownloadOfModuleFileDisallowed=Download of module files not allowed (param $dolibarr_allow_download_external_modules must be set in conf.php)
