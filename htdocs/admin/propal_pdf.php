@@ -69,6 +69,7 @@ if (!empty($conf->propal->multidir_output[$conf->entity])) {
 }
 
 $varname = 'MAIN_INFO_PROPAL_TERMSOFSALE';
+$error = 0;
 
 
 /*
@@ -77,7 +78,6 @@ $varname = 'MAIN_INFO_PROPAL_TERMSOFSALE';
 
 include DOL_DOCUMENT_ROOT.'/core/actions_setmoduleoptions.inc.php';
 
-$error = 0;
 if ($action == "update") {
 	if (GETPOSTISSET('MAIN_PDF_ADD_TERMSOFSALE_PROPAL')) {
 		dolibarr_set_const($db, "MAIN_PDF_ADD_TERMSOFSALE_PROPAL", GETPOST("MAIN_PDF_ADD_TERMSOFSALE_PROPAL", 'int'), 'chaine', 0, '', $conf->entity);

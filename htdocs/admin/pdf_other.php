@@ -439,6 +439,45 @@ if (isModEnabled('invoice')) {
 	print '</td></tr>';
 
 	print '<tr class="oddeven"><td>';
+	print $form->textwithpicto($langs->trans("INVOICE_SHOW_SHIPPING_ADDRESS"), $langs->trans("INVOICE_SHOW_SHIPPING_ADDRESSMore"));
+	print '</td><td>';
+	if ($conf->use_javascript_ajax) {
+		print ajax_constantonoff('INVOICE_SHOW_SHIPPING_ADDRESS');
+	} else {
+		$arrval = array('0' => $langs->trans("No"), '1' => $langs->trans("Yes"));
+		print $form->selectarray("INVOICE_SHOW_SHIPPING_ADDRESS", $arrval, getDolGlobalString('INVOICE_SHOW_SHIPPING_ADDRESS'));
+	}
+	print '</td></tr>';
+
+	// Concat PDF
+	print '<tr class="oddeven"><td>';
+	print $form->textwithpicto($langs->trans("MAIN_PDF_ADD_TERMSOFSALE_INVOICE"), '');
+	print '</td><td>';
+	if ($conf->use_javascript_ajax) {
+		print ajax_constantonoff('MAIN_PDF_ADD_TERMSOFSALE_INVOICE', array(), null, 0, 0, 1);
+	} else {
+		$arrval = array('0' => $langs->trans("No"), '1' => $langs->trans("Yes"));
+		print $form->selectarray("MAIN_PDF_ADD_TERMSOFSALE_INVOICE", $arrval, getDolGlobalString('MAIN_PDF_ADD_TERMSOFSALE_INVOICE'));
+	}
+
+	if (getDolGlobalString("MAIN_PDF_ADD_TERMSOFSALE_INVOICE")) {
+		$modulepart = 'invoice';
+		print '<div class="inline-block nobordernopadding valignmiddle "><div class="inline-block marginrightonly">';
+		print '<input type="file" class="flat minwidth100 maxwidthinputfileonsmartphone" name="MAIN_INFO_INVOICE_TERMSOFSALE" id="MAIN_INFO_INVOICE_TERMSOFSALE" accept="application/pdf">';
+		if (getDolGlobalString("MAIN_INFO_INVOICE_TERMSOFSALE")) {
+			$termofsale = getDolGlobalString("MAIN_INFO_INVOICE_TERMSOFSALE");
+			if (file_exists($conf->invoice->dir_output.'/'.$termofsale)) {
+				$file = dol_dir_list($conf->invoice->dir_output, 'files', 0, $termofsale);
+				print '<div class="inline-block valignmiddle marginrightonly"><a href="'.$documenturl.'?modulepart='.$modulepart.'&file='.urlencode($termofsale).'">'.$termofsale.'</a>'.$formfile->showPreview($file[0], $modulepart, $termofsale, 0, '');
+				print '<div class="inline-block valignmiddle marginrightonly"><a class="reposition" href="'.$_SERVER["PHP_SELF"].'?action=removetermsofsale&modulepart='.$modulepart.'&token='.newToken().'">'.img_delete($langs->trans("Delete"), '', 'marginleftonly').'</a></div>';
+			}
+		}
+		print '</div>';
+	}
+	print '</td></tr>';
+
+	// QR Codes
+	print '<tr class="oddeven"><td>';
 	print $form->textwithpicto($langs->trans("INVOICE_ADD_ZATCA_QR_CODE"), $langs->trans("INVOICE_ADD_ZATCA_QR_CODEMore"));
 	print '</td><td>';
 	if ($conf->use_javascript_ajax) {
@@ -487,17 +526,6 @@ if (isModEnabled('invoice')) {
 	print '</td></tr>';
 
 	print '<tr class="oddeven"><td>';
-	print $form->textwithpicto($langs->trans("INVOICE_SHOW_SHIPPING_ADDRESS"), $langs->trans("INVOICE_SHOW_SHIPPING_ADDRESSMore"));
-	print '</td><td>';
-	if ($conf->use_javascript_ajax) {
-		print ajax_constantonoff('INVOICE_SHOW_SHIPPING_ADDRESS');
-	} else {
-		$arrval = array('0' => $langs->trans("No"), '1' => $langs->trans("Yes"));
-		print $form->selectarray("INVOICE_SHOW_SHIPPING_ADDRESS", $arrval, getDolGlobalString('INVOICE_SHOW_SHIPPING_ADDRESS'));
-	}
-	print '</td></tr>';
-
-	print '<tr class="oddeven"><td>';
 	print $form->textwithpicto($langs->trans("PDF_INVOICE_SHOW_VAT_ANALYSIS"), '');
 	print '</td><td>';
 	if ($conf->use_javascript_ajax) {
@@ -541,34 +569,6 @@ if (isModEnabled('invoice')) {
 		$arrval = array('0' => $langs->trans("No"), '1' => $langs->trans("Yes"));
 		print $form->selectarray("INVOICE_HIDE_LINKED_OBJECT", $arrval, getDolGlobalString('INVOICE_HIDE_LINKED_OBJECT'));
 	}
-	print '</td></tr>';
-
-	// Concat PDF
-	print '<tr class="oddeven"><td>';
-	print $form->textwithpicto($langs->trans("MAIN_PDF_ADD_TERMSOFSALE_INVOICE"), '');
-	print '</td><td>';
-	if ($conf->use_javascript_ajax) {
-		print ajax_constantonoff('MAIN_PDF_ADD_TERMSOFSALE_INVOICE', array(), null, 0, 0, 1);
-	} else {
-		$arrval = array('0' => $langs->trans("No"), '1' => $langs->trans("Yes"));
-		print $form->selectarray("MAIN_PDF_ADD_TERMSOFSALE_INVOICE", $arrval, getDolGlobalString('MAIN_PDF_ADD_TERMSOFSALE_INVOICE'));
-	}
-
-	if (getDolGlobalString("MAIN_PDF_ADD_TERMSOFSALE_INVOICE")) {
-		$modulepart = 'invoice';
-		print '<div class="inline-block nobordernopadding valignmiddle "><div class="inline-block marginrightonly">';
-		print '<input type="file" class="flat minwidth100 maxwidthinputfileonsmartphone" name="MAIN_INFO_INVOICE_TERMSOFSALE" id="MAIN_INFO_INVOICE_TERMSOFSALE" accept="application/pdf">';
-		if (getDolGlobalString("MAIN_INFO_INVOICE_TERMSOFSALE")) {
-			$termofsale = getDolGlobalString("MAIN_INFO_INVOICE_TERMSOFSALE");
-			if (file_exists($conf->invoice->dir_output.'/'.$termofsale)) {
-				$file = dol_dir_list($conf->invoice->dir_output, 'files', 0, $termofsale);
-				print '<div class="inline-block valignmiddle marginrightonly"><a href="'.$documenturl.'?modulepart='.$modulepart.'&file='.urlencode($termofsale).'">'.$termofsale.'</a>'.$formfile->showPreview($file[0], $modulepart, $termofsale, 0, '');
-				print '<div class="inline-block valignmiddle marginrightonly"><a class="reposition" href="'.$_SERVER["PHP_SELF"].'?action=removetermsofsale&modulepart='.$modulepart.'&token='.newToken().'">'.img_delete($langs->trans("Delete"), '', 'marginleftonly').'</a></div>';
-			}
-		}
-		print '</div>';
-	}
-
 	print '</td></tr>';
 
 	print '</table>';

@@ -69,6 +69,7 @@ if (!empty($conf->order->multidir_output[$conf->entity])) {
 }
 
 $varname = 'MAIN_INFO_ORDER_TERMSOFSALE';
+$error = 0;
 
 
 /*
@@ -77,7 +78,6 @@ $varname = 'MAIN_INFO_ORDER_TERMSOFSALE';
 
 include DOL_DOCUMENT_ROOT.'/core/actions_setmoduleoptions.inc.php';
 
-$error = 0;
 if ($action == "update") {
 	if (GETPOSTISSET('MAIN_PDF_ADD_TERMSOFSALE_ORDER')) {
 		dolibarr_set_const($db, "MAIN_PDF_ADD_TERMSOFSALE_ORDER", GETPOST("MAIN_PDF_ADD_TERMSOFSALE_ORDER", 'int'), 'chaine', 0, '', $conf->entity);
