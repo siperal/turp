@@ -489,6 +489,12 @@ class ObjectLinks extends DolibarrApi
 		unset($object->fk_user_creat);
 		unset($object->fk_user_modif);
 		unset($object->totalpaid);
+		unset($object->sumpayed);
+		unset($object->sumpayed_multicurrency);
+		unset($object->sumcreditnote);
+		unset($object->sumcreditnote_multicurrency);
+		unset($object->sumdeposit);
+		unset($object->sumdeposis_multicurrency);
 		unset($object->product);
 		unset($object->cond_reglement_supplier_id);
 		unset($object->deposit_percent);
