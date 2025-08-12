@@ -147,12 +147,9 @@ class Invoices extends DolibarrApi
 		}
 
 		// Get payment details
-		$this->invoice->sumpayed = $this->invoice->getSommePaiement();
-		$this->invoice->totalpaid = $this->invoice->sumpayed
-		$this->invoice->sumcreditnote = $this->invoice->getSumCreditNotesUsed();
-		$this->invoice->totalcreditnotes = $this->invoice->sumcreditnote;
-		$this->invoice->sumdeposit = $this->invoice->getSumDepositsUsed();
-		$this->invoice->totaldeposits = $this->invoice->sumdeposit;
+		$this->invoice->totalpaid = $this->invoice->getSommePaiement();
+		$this->invoice->totalcreditnotes = $this->invoice->getSumCreditNotesUsed();
+		$this->invoice->totaldeposits = $this->invoice->getSumDepositsUsed();
 		$this->invoice->remaintopay = price2num($this->invoice->total_ttc - $this->invoice->totalpaid - $this->invoice->totalcreditnotes - $this->invoice->totaldeposits, 'MT');
 
 		if (!DolibarrApi::_checkAccessToResource('facture', $this->invoice->id)) {

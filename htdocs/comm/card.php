@@ -1595,7 +1595,6 @@ if ($object->id > 0) {
 
 				$facturestatic->alreadypaid = $objp->am;
 				$facturestatic->totalpaid = $objp->am;
-				$facturestatic->sumpayed = $objp->am;
 
 				$facturestatic->date = $db->jdate($objp->df);
 				$facturestatic->date_lim_reglement = $db->jdate($objp->dl);
