@@ -24,14 +24,22 @@
  * $backtopage				URL to come back to from discount modification pages
  */
 
- /**
- * @var Object		$object
+/**
+ * @var	Conf		$conf
  * @var Form 		$form
+ * @var Object		$object
  * @var Translate 	$langs
  * @var Societe		$thirdparty
- * @var	float		$absolute_discount		Amount of fixed discounts available
- * @var	float		$absolute_creditnote	Amount of credit notes available
+ * @var string		$backtopage
+ *
+ * @var	float		$absolute_discount				Amount of fixed discounts available
+ * @var	float		$absolute_creditnote			Amount of credit notes available
+ * @var int			$nb_creditnote_notyetavailable	Nb of cedit notes not yet available (not yet converted into discount)
+ * @var	string		$filterabsolutediscount
+ * @var	string		$filtercreditnote
+ * @var	string		$resteapayer
  * @var int			$cannotApplyDiscount
+ * @var	int			$discount_type
  */
 
 print '<!-- BEGIN object_discounts.tpl.php -->'."\n";
@@ -138,6 +146,12 @@ if ($absolute_creditnote > 0) {
 		$more = $isInvoice && !$isNewObject ? ' ('.$viewabsolutediscount.')' : '';
 		$form->form_remise_dispo($_SERVER["PHP_SELF"].'?facid='.$object->id, 0, 'remise_id_for_payment', $thirdparty->id, $absolute_creditnote, $filtercreditnote, 0, $more, 0, $discount_type); // We allow credit note even if amount is higher
 	}
+}
+
+if ($nb_creditnote_notyetavailable > 0) {
+	print '<!-- absolute_creditnote not yet converted -->';
+	$translationKey = 'SomeNotConvertedCreditNoteExists';
+	print '<br><span class="opacitymedium">'.$langs->trans($translationKey, $nb_creditnote_notyetavailable).'</span>';
 }
 
 if ($absolute_discount <= 0 && $absolute_creditnote <= 0) {
