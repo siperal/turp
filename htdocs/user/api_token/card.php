@@ -655,7 +655,7 @@ if ($action == 'create') {
 
 			// Save field module_position in database if value is wrong
 			if (empty($obj->module_position) || (is_object($objMod) && $objMod->isCoreOrExternalModule() == 'external' && $obj->module_position < 100000)) {
-				if (is_object($modules[$obj->module]) && ($modules[$obj->module]->module_position > 0)) {
+				if ($modules[$obj->module]->module_position > 0) {
 					// TODO Define familyposition
 					//$familyposition = $modules[$obj->module]->family_position;
 					$familyposition = 0;
@@ -664,7 +664,7 @@ if ($action == 'create') {
 
 					// Correct $newmoduleposition position for external modules
 					$objMod = $modules[$obj->module];
-					if (is_object($objMod) && $objMod->isCoreOrExternalModule() == 'external' && $newmoduleposition < 100000) {
+					if ($objMod->isCoreOrExternalModule() == 'external' && $newmoduleposition < 100000) {
 						$newmoduleposition += 100000;
 					}
 
