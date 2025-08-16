@@ -1965,13 +1965,19 @@ if ($action == 'create' || $action == 'adduserldap') {
 			// Credentials section
 
 			print '<br>';
+			print '<!-- credential section -->'."\n";
 			print '<div class="div-table-responsive-no-min">';
 			print '<table class="noborder tableforfield centpercent">';
 
 			print '<tr class="liste_titre"><th class="liste_titre">';
 			print img_picto('', 'security', 'class="paddingleft pictofixedwidth"').$langs->trans("Security");
 			print '</th>';
-			print '<th class="liste_titre"></th>';
+			print '<th class="liste_titre right">';
+			if (getDolGlobalString('MAIN_SECURITY_ALLOW_TOTP') && $permissiontoeditpasswordandsee) {
+				$s = '<span class="fa fa-plus-circle valignmiddle btnTitle-icon"></span>';
+				print dolButtonToOpenUrlInDialogPopup('openpopuptoaddcredential', $langs->trans("AddCredential"), $s, '/user/addcredential.php?userid='.$object->id.'&token='.newToken());
+			}
+			print '</th>';
 			print '</tr>';
 
 			// Date login validity
