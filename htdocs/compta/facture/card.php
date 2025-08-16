@@ -3517,7 +3517,7 @@ if (empty($reshook)) {
 		$id = $facid;
 	}
 	if (!empty($object->id) && $action == 'send') {
-		// load sumpayed, sumdeposit, sumcreditnote that can be used in email templates
+		// load totalpaid, totaldeposits, totalcreditnotes that can be used in email templates
 		$object->getSommePaiement(-1);
 		$object->getSumCreditNotesUsed(-1);
 		$object->getSumDepositsUsed(-1);
@@ -4381,7 +4381,26 @@ if ($action == 'create') {
 			$thirdparty = $soc;	// used by object_discounts.tpl.php
 			$discount_type = 0;	// used by object_discounts.tpl.php
 			$backtopage = $_SERVER["PHP_SELF"].'?socid='.$thirdparty->id.'&action='.$action.'&origin='.urlencode((string) (GETPOST('origin'))).'&originid='.urlencode((string) (GETPOSTINT('originid')));
-			include DOL_DOCUMENT_ROOT.'/core/tpl/object_discounts.tpl.php';
+
+			// loading object_discounts.tpl.php from module core/tpl if exists
+			$defaulttpldir = '/core/tpl';
+			$dirtpls = array_merge($conf->modules_parts['tpl'], array($defaulttpldir));
+			foreach ($dirtpls as $module => $reldir) {
+				$res = 0;
+				if (!empty($module)) {
+					$tpl = dol_buildpath($reldir.'/object_discounts.tpl.php');
+				} else {
+					$tpl = DOL_DOCUMENT_ROOT.$reldir.'/object_discounts.tpl.php';
+				}
+				if (file_exists($tpl)) {
+					if (empty($conf->file->strict_mode)) {
+						$res = @include $tpl;
+					} else {
+						$res = include $tpl;
+					}
+				}
+				if ($res) { break; }
+			}
 
 			print '</td></tr>';
 		}
@@ -4769,6 +4788,8 @@ if ($action == 'create') {
 	$absolute_discount = price2num($absolute_discount, 'MT');
 	$absolute_creditnote = price2num($absolute_creditnote, 'MT');
 
+	$nb_creditnote_notyetavailable = $soc->getOpenCreditNotesNotYetConvertedIntoDiscount(0);
+
 	$author = new User($db);
 	if ($object->user_creation_id) {
 		$author->fetch($object->user_creation_id);
@@ -4778,7 +4799,7 @@ if ($action == 'create') {
 
 	$head = facture_prepare_head($object);
 
-	print dol_get_fiche_head($head, 'compta', $langs->trans('InvoiceCustomer'), -1, 'bill');
+	print dol_get_fiche_head($head, 'compta', $langs->trans('InvoiceCustomer'), -1, $object->picto);
 
 	$formconfirm = '';
 
@@ -5226,7 +5247,7 @@ if ($action == 'create') {
 			print ' <span class="opacitymediumbycolor paddingleft">'.$langs->transnoentities("CorrectInvoice", $facusing->getNomUrl(1, '', 32)).'</span>';
 		}
 
-		// Retrieve credit note ids
+		// Retrieve credit note ids (credit notes generated from this invoice)
 		$object->getListIdAvoirFromInvoice();
 
 		if (!empty($object->creditnote_ids)) {
@@ -5315,7 +5336,26 @@ if ($action == 'create') {
 		$thirdparty = $soc;
 		$discount_type = 0;
 		$backtopage = $_SERVER["PHP_SELF"].'?facid='.$object->id;
-		include DOL_DOCUMENT_ROOT.'/core/tpl/object_discounts.tpl.php';
+		$defaulttpldir = '/core/tpl';
+		// loading object_discounts.tpl.php from module core/tpl if exists
+		$dirtpls = array_merge($conf->modules_parts['tpl'], array($defaulttpldir));
+		foreach ($dirtpls as $module => $reldir) {
+			$res = 0;
+			if (!empty($module)) {
+				$tpl = dol_buildpath($reldir.'/object_discounts.tpl.php');
+			} else {
+				$tpl = DOL_DOCUMENT_ROOT.$reldir.'/object_discounts.tpl.php';
+			}
+			if (file_exists($tpl)) {
+				if (empty($conf->file->strict_mode)) {
+					$res = @include $tpl;
+				} else {
+					$res = include $tpl;
+				}
+			}
+			if ($res) { break; }
+		}
+
 		print '</td></tr>';
 
 		// Date invoice

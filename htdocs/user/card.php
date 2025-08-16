@@ -2053,9 +2053,15 @@ if ($action == 'create' || $action == 'adduserldap') {
 			if (isModEnabled('api') && ($user->id == $id || $user->admin || $user->hasRight("api", "apikey", "generate"))) {
 				print '<tr class="nooddeven"><td>'.$langs->trans("UseRestApi").'</td>';
 				print '<td>';
-				print '<span class="opacitymedium">';
-				print empty($object->api_key) ? $langs->trans("No") : $langs->trans("Yes");
-				print '</span>';
+				if (!empty($object->api_key)) {
+					print '<span class="opacitymedium">';
+					print showValueWithClipboardCPButton($object->api_key, 1, $langs->transnoentities("Hidden"));		// TODO Add an option to also reveal the hash, not only copy paste
+					print '</span>';
+				}
+
+				if (getDolGlobalString('API_ENABLE_COUNT_CALLS')) {
+					print ' &nbsp; <span class="badge badge-info" title="'.$langs->trans("TotalAPICall").'">'.getDolUserInt('API_COUNT_CALL').'</span>';
+				}
 				print '</td></tr>';
 			}
 			if ((getDolGlobalInt('MAIN_ENABLE_LOGINS_PRIVACY') == 0) || (getDolGlobalInt('MAIN_ENABLE_LOGINS_PRIVACY') == 1 && $object->id == $user->id)) {
