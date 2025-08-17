@@ -965,7 +965,7 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 	if ($amountdispute != $payment_amountInDolibarr) {
 		http_response_code(500);
 		print "The payment disputed has the amount ".$amountdispute." and the invoice has ".$payment_amountInDolibarr.". Amount differs, we don't know what to do.";
-		dol_syslog("Amount differs, we don't know what to do.", LOG_WARNING, 0, '_payment');
+		dol_syslog("Amount differs, we don't know what to do - Return HTTP 500.", LOG_WARNING, 0, '_payment');
 		http_response_code(500);
 		return -1;
 	}
@@ -1074,10 +1074,12 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 
 		if (!$error) {
 			//$db->commit();	// Code not yet enough tested
+			dol_syslog("Code not yet enough tested - Return HTTP 500.", LOG_WARNING, 0, '_payment');
 			$db->rollback();
 			http_response_code(500);
 			return -1;
 		} else {
+			dol_syslog("Error - Return HTTP 500.", LOG_WARNING, 0, '_payment');
 			$db->rollback();
 			http_response_code(500);
 			print $errormsg;
