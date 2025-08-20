@@ -249,7 +249,7 @@ if (in_array($type, array('mysql', 'mysqli'))) {
 	} else {
 		$fullpathofmysqldump = getDolGlobalString('SYSTEMTOOLS_MYSQLDUMP');
 	}
-	print '<input type="text" name="mysqldump" style="width: 80%" value="'.$fullpathofmysqldump.'">';
+	print '<input type="text" name="mysqldump" style="width: 80%" value="'.$fullpathofmysqldump.'" spellcheck="false">';
 	print '</fieldset>';
 
 	print '<br>';
