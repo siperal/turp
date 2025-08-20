@@ -143,7 +143,7 @@ if (($action == 'delete' && $confirm == 'yes')) {
 	$unique_arr = array_unique($toselect);
 	foreach ($unique_arr as $toselectid) {
 		$sql = "DELETE FROM ".MAIN_DB_PREFIX."oauth_token";
-		$sql .= " WHERE rowid = '".$toselectid."'";
+		$sql .= " WHERE rowid = ".((int) $toselectid);
 		$sql .= " AND service = 'dolibarr_rest_api'";
 
 		$result = $db->query($sql);
@@ -183,7 +183,7 @@ if (!getDolGlobalInt('MAIN_DISABLE_FULL_SCANLIST')) {
 	/* The fast and low memory method to get and count full list converts the sql into a sql count */
 	$sqlforcount = 'SELECT COUNT(*) as nbtotalofrecords';
 	$sqlforcount .= " FROM ".MAIN_DB_PREFIX."oauth_token as oat";
-	$sqlforcount .= " WHERE entity IN (".$conf->entity.")";
+	$sqlforcount .= " WHERE entity = ".((int) $conf->entity).")";
 	$sqlforcount .= " AND service = 'dolibarr_rest_api'";
 	$resql = $db->query($sqlforcount);
 	if ($resql) {
@@ -211,12 +211,12 @@ if (isModEnabled('multicompany')) {
 $sql .= " WHERE service = 'dolibarr_rest_api'";
 $sql .= " AND EXISTS(SELECT 'exist' FROM llx_user as u WHERE u.api_key IS NOT NULL AND u.rowid = oat.fk_user)";
 if (!isModEnabled('multicompany') || $conf->entity > 1) {
-	$sql .= " AND oat.entity IN (".$conf->entity.")";
+	$sql .= " AND oat.entity = ".((int) $conf->entity);
 }
 if ($search_user) {
-	$sql .= " AND EXISTS(SELECT 'exist' FROM ".MAIN_DB_PREFIX."user u";
-	$sql .= " WHERE (u.lastname LIKE '%".$search_user."%'";
-	$sql .= " OR u.firstname LIKE '%".$search_user."%')";
+	$sql .= " AND EXISTS (SELECT 'exist' FROM ".MAIN_DB_PREFIX."user u";
+	$sql .= " WHERE (u.lastname LIKE '%".$db->escape($search_user)."%'";
+	$sql .= " OR u.firstname LIKE '%".$db->escape($search_user)."%')";
 	$sql .= " AND oat.fk_user = u.rowid)";
 }
 if ($search_entity) {
