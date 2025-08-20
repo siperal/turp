@@ -366,7 +366,7 @@ class Contrat extends CommonObject
 	 *  @param	User		$user       Object User who activate contract
 	 *  @param  int			$line_id    Id of line to activate
 	 *  @param  int			$date_start Opening date
-	 *  @param  int|string	$date_end   Expected end date
+	 *  @param  int|''		$date_end   Expected end date
 	 * 	@param	string		$comment	A comment typed by user
 	 *  @return int         			Return integer <0 if KO, >0 if OK
 	 */
@@ -2080,7 +2080,7 @@ class Contrat extends CommonObject
 	 */
 	public function getNomUrl($withpicto = 0, $maxlength = 0, $notooltip = 0, $save_lastsearch_value = -1)
 	{
-		global $conf, $langs, $user, $hookmanager;
+		global $langs, $user, $hookmanager;
 
 		$result = '';
 

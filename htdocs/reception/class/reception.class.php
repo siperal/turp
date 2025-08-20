@@ -638,6 +638,7 @@ class Reception extends CommonObject
 					if ($qty == 0 || ($qty < 0 && !getDolGlobalInt('RECEPTION_ALLOW_NEGATIVE_QTY'))) {
 						continue;
 					}
+
 					dol_syslog(get_class($this)."::valid movement index ".$i." ed.rowid=".$obj->rowid);
 
 					//var_dump($this->lines[$i]);
@@ -1337,14 +1338,14 @@ class Reception extends CommonObject
 	/**
 	 *	Return clickable link of object (with eventually picto)
 	 *
-	 *	@param      int			$withpicto      Add picto into link
-	 *	@param      int			$option         Where point the link
-	 *	@param      int			$max          	Max length to show
-	 *	@param      int			$short			Use short labels
-	 *  @param      int         $notooltip      1=No tooltip
-	 *	@return     string          			String with URL
+	 *  @param	int     $withpicto                  Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto)
+	 *  @param	string  $option                     On what the link point to ('nolink', ...)
+	 *	@param	int		$max          				Max length to show
+	 *	@param  int		$short						Return only the URL. Is this used ?
+	 *  @param  int     $notooltip      			1=No tooltip
+	 *	@return string          					String with URL
 	 */
-	public function getNomUrl($withpicto = 0, $option = 0, $max = 0, $short = 0, $notooltip = 0)
+	public function getNomUrl($withpicto = 0, $option = '', $max = 0, $short = 0, $notooltip = 0)
 	{
 		global $langs, $hookmanager;
 
@@ -1756,7 +1757,8 @@ class Reception extends CommonObject
 						if ($qty <= 0) {
 							continue;
 						}
-						dol_syslog(get_class($this)."::valid movement index ".$i." ed.rowid=".$obj->rowid." edb.rowid=".$obj->edbrowid);
+
+						dol_syslog(get_class($this)."::valid movement index ".$i." ed.rowid=".$obj->rowid);
 
 						$mouvS = new MouvementStock($this->db);
 						$mouvS->origin = &$this;
@@ -1913,7 +1915,6 @@ class Reception extends CommonObject
 						if ($qty <= 0) {
 							continue;
 						}
-
 						dol_syslog(get_class($this)."::reopen reception movement index ".$i." ed.rowid=".$obj->rowid);
 
 						//var_dump($this->lines[$i]);
@@ -2045,6 +2046,10 @@ class Reception extends CommonObject
 						$obj = $this->db->fetch_object($resql);
 
 						$qty = $obj->qty;
+
+						if ($qty <= 0) {
+							continue;
+						}
 
 						dol_syslog(get_class($this)."::reopen reception movement index ".$i." ed.rowid=".$obj->rowid);
 

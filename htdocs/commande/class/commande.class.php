@@ -1550,8 +1550,8 @@ class Commande extends CommonOrder
 	 *	@param      int				$fk_remise_except	Id remise
 	 *	@param      string			$price_base_type	HT or TTC
 	 *	@param      float			$pu_ttc    		    Prix unitaire TTC
-	 *	@param      int|string		$date_start       	Start date of the line - Added by Matelli (See http://matelli.fr/showcases/patchs-dolibarr/add-dates-in-order-lines.html)
-	 *	@param      int|string		$date_end         	End date of the line - Added by Matelli (See http://matelli.fr/showcases/patchs-dolibarr/add-dates-in-order-lines.html)
+	 *	@param      int|''			$date_start       	Start date of the line
+	 *	@param      int|''			$date_end         	End date of the line
 	 *	@param      int<0,1>		$type				Type of line (0=product, 1=service). Not used if fk_product is defined, the type of product is used.
 	 *	@param      int				$rang             	Position of line
 	 *	@param		int				$special_code		Special code (also used by externals modules!)
@@ -1878,8 +1878,8 @@ class Commande extends CommonOrder
 	 *	@param  int     $idproduct          Product Id
 	 *	@param  float   $qty                Quantity
 	 *	@param  float   $remise_percent     Product discount relative
-	 * 	@param  int|string   $date_start         Start date of the line
-	 * 	@param  int|string   $date_end           End date of the line
+	 * 	@param  int|''  $date_start         Start date of the line
+	 * 	@param  int|''  $date_end           End date of the line
 	 * 	@return void
 	 *
 	 *	TODO	Remplacer les appels a cette fonction par generation object Ligne
@@ -3109,8 +3109,8 @@ class Commande extends CommonOrder
 	 *  @param		float			$txlocaltax2		Local tax 2 rate
 	 *  @param    	string			$price_base_type	HT or TTC
 	 *  @param    	int				$info_bits        	Miscellaneous information on line
-	 *  @param    	int|string		$date_start        	Start date of the line
-	 *  @param    	int|string		$date_end          	End date of the line
+	 *  @param    	int|''			$date_start        	Start date of the line
+	 *  @param    	int|''			$date_end          	End date of the line
 	 * 	@param		int				$type				Type of line (0=product, 1=service)
 	 * 	@param		int				$fk_parent_line		Id of parent line (0 in most cases, used by modules adding sublevels into lines).
 	 * 	@param		int				$skip_update_total	Keep fields total_xxx to 0 (used for special lines by some modules)
@@ -3434,6 +3434,7 @@ class Commande extends CommonOrder
 		$sql .= " note_private=".(isset($this->note_private) ? "'".$this->db->escape($this->note_private)."'" : "null").",";
 		$sql .= " note_public=".(isset($this->note_public) ? "'".$this->db->escape($this->note_public)."'" : "null").",";
 		$sql .= " model_pdf=".(isset($this->model_pdf) ? "'".$this->db->escape($this->model_pdf)."'" : "null").",";
+		$sql .= " fk_warehouse=".($this->warehouse_id > 0 ? $this->warehouse_id : "null").",";
 		$sql .= " import_key=".(isset($this->import_key) ? "'".$this->db->escape($this->import_key)."'" : "null").",";
 		$sql .= " module_source = ".(isset($this->module_source) ? "'".$this->db->escape($this->module_source)."'" : "null").",";
 		$sql .= " pos_source = ".(isset($this->pos_source) ? "'".$this->db->escape($this->pos_source)."'" : "null");
