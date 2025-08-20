@@ -468,7 +468,7 @@ if (empty($reshook)) {
 					$object->pass = GETPOST("password", 'password');
 				}
 				if ($permissiontoeditpasswordandsee || $user->hasRight("api", "apikey", "generate")) {
-					$object->api_key = GETPOST("api_key", 'alphanohtml');
+					$object->api_key = (GETPOST("api_key", 'alphanohtml')) ? GETPOST("api_key", 'alphanohtml') : $object->api_key;
 				}
 				if (!empty($user->admin) && $user->id != $id) {
 					// admin flag can only be set/unset by an admin user and not four ourself
@@ -1237,9 +1237,12 @@ if ($action == 'create' || $action == 'adduserldap') {
 	if (isModEnabled('api')) {
 		// API key
 		//$generated_password = getRandomPassword(false);
-		print '<tr><td>'.$langs->trans("UseRestApi").'</td>';
+		print '<tr><td>'.$langs->trans("ApiKey").'</td>';
 		print '<td>';
-		print '<input type="checkbox" id="api_key" name="api_key" value="'.getRandomPassword().'"'.(GETPOST('api_key') != '' ? ' checked="checked"' : "").'>';
+		print '<input class="minwidth300 maxwidth400 widthcentpercentminusx" minlength="12" maxlength="128" type="text" id="api_key" name="api_key" value="'.GETPOST('api_key', 'alphanohtml').'" autocomplete="off">';
+		if (!empty($conf->use_javascript_ajax)) {
+			print img_picto($langs->transnoentities('Generate'), 'refresh', 'id="generate_api_key" class="linkobject paddingleft"');
+		}
 		print '</td></tr>';
 	} else {
 		// PARTIAL WORKAROUND
@@ -2063,7 +2066,7 @@ if ($action == 'create' || $action == 'adduserldap') {
 
 			// Token for API
 			if (isModEnabled('api') && ($user->id == $id || $user->admin || $user->hasRight("api", "apikey", "generate"))) {
-				print '<tr class="nooddeven"><td>'.$langs->trans("UseRestApi").'</td>';
+				print '<tr class="nooddeven"><td>'.$langs->trans("ApiKey").'</td>';
 				print '<td>';
 				if (!empty($object->api_key)) {
 					print '<span class="opacitymedium">';
@@ -2664,10 +2667,13 @@ if ($action == 'create' || $action == 'adduserldap') {
 
 			// API key
 			if (isModEnabled('api')) {
-				print '<tr><td>'.$langs->trans("UseRestApi").'</td>';
+				print '<tr><td>'.$langs->trans("ApiKey").'</td>';
 				print '<td>';
 				if ($permissiontoeditpasswordandsee || $user->hasRight("api", "apikey", "generate")) {
-					print '<input type="checkbox" id="api_key" name="api_key" value="'.getRandomPassword().'"'.($object->api_key != '' ? ' checked="checked"' : "").'>';
+					print '<input class="minwidth300 maxwidth400 widthcentpercentminusx" minlength="12" maxlength="128" type="text" id="api_key" name="api_key" value="'.$object->api_key.'" autocomplete="off">';
+					if (!empty($conf->use_javascript_ajax)) {
+						print img_picto($langs->transnoentities('Generate'), 'refresh', 'id="generate_api_key" class="linkobject paddingleft"');
+					}
 				}
 				print '</td></tr>';
 			}
