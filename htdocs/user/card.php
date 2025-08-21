@@ -38,6 +38,16 @@
 
 // Load Dolibarr environment
 require '../main.inc.php';
+/**
+ * @var Conf $conf
+ * @var DoliDB $db
+ * @var HookManager $hookmanager
+ * @var Translate $langs
+ * @var User $user
+ *
+ * @var string 	$dolibarr_main_authentication
+ * @var string	$dolibarr_api_count_always_enabled
+ */
 require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
 require_once DOL_DOCUMENT_ROOT.'/user/class/usergroup.class.php';
 require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
@@ -63,16 +73,6 @@ if (isModEnabled('category')) {
 if (isModEnabled('stock')) {
 	require_once DOL_DOCUMENT_ROOT.'/product/class/html.formproduct.class.php';
 }
-
-/**
- * @var Conf $conf
- * @var DoliDB $db
- * @var HookManager $hookmanager
- * @var Translate $langs
- * @var User $user
- *
- * @var string $dolibarr_main_authentication
- */
 
 // Load translation files required by page
 $langs->loadLangs(array('users', 'companies', 'ldap', 'admin', 'hrm', 'stocks', 'other'));
@@ -2073,7 +2073,7 @@ if ($action == 'create' || $action == 'adduserldap') {
 					print showValueWithClipboardCPButton($object->api_key, 1, $langs->transnoentities("Hidden"));		// TODO Add an option to also reveal the hash, not only copy paste
 					print '</span>';
 				}
-				if (getDolGlobalString('API_ENABLE_COUNT_CALLS')) {
+				if (getDolGlobalString('API_ENABLE_COUNT_CALLS') || !empty($dolibarr_api_count_always_enabled)) {
 					print ' &nbsp; <span class="badge badge-info" title="'.$langs->trans("TotalAPICall").'">'.getDolUserInt('API_COUNT_CALL').'</span>';
 				}
 				print '</td></tr>';
