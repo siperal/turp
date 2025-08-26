@@ -53,10 +53,12 @@ $selectarrayCSPSources = GetContentPolicySources();
 $forceCSPArr = GetContentPolicyToArray($forceCSP);
 $error = 0;
 
+
 /*
  * Actions
  */
 
+$reg = array();
 if (preg_match('/set_([a-z0-9_\-]+)/i', $action, $reg)) {
 	$code = $reg[1];
 	$value = (GETPOST($code, 'alpha') ? GETPOST($code, 'alpha') : 1);
@@ -202,7 +204,7 @@ if (preg_match('/set_([a-z0-9_\-]+)/i', $action, $reg)) {
 		setEventMessages($langs->trans("MainErrorAddingSecurityPolicy"), null, 'errors');
 	}
 	header("Location: ".$_SERVER["PHP_SELF"]);
-	exit();
+	exit;
 } elseif ($action == "updateform") {
 	$db->begin();
 	$res1 = $res2 = $res3 = $res4 = 0;
@@ -221,6 +223,9 @@ if (preg_match('/set_([a-z0-9_\-]+)/i', $action, $reg)) {
 	if ($res1 >= 0 && $res2 >= 0 && $res3 >= 0 && $res4 >= 0 && $res5 >= 0) {
 		$db->commit();
 		setEventMessages($langs->trans("Saved"), null, 'mesgs');
+
+		header("Location: ")
+		exit();
 	} else {
 		$db->rollback();
 		setEventMessages($langs->trans("ErrorSavingChanges"), null, 'errors');
