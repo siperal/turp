@@ -249,16 +249,16 @@ print '<br>';
 
 print '<span class="opacitymedium">'.$langs->trans("HTTPHeaderEditor").'. '.$langs->trans("ReservedToAdvancedUsers").'.</span><br><br>';
 
+print '<form action="'.$_SERVER["PHP_SELF"].'" method="POST">';
+print '<input type="hidden" name="token" value="'.newToken().'">';
+print '<input type="hidden" name="action" value="updateform">';
+
 print '<div class="div-table-responsive-no-min">';
 print '<table class="noborder centpercent">';
 print '<tr class="liste_titre">';
 print '<td>'.$langs->trans("HTTPHeader").'</td>';
 print '<td></td>'."\n";
 print '</tr>';
-
-print '<form action="'.$_SERVER["PHP_SELF"].'" method="POST">';
-print '<input type="hidden" name="token" value="'.newToken().'">';
-print '<input type="hidden" name="action" value="updateform">';
 
 // Force RP
 print '<tr class="oddeven">';
@@ -413,6 +413,8 @@ print '<script>
 		});
 	});
 </script>';
+
+print '</form>';
 
 print dol_get_fiche_end();
 print '</div>';
