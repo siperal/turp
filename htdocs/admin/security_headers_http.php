@@ -136,7 +136,7 @@ if (preg_match('/set_([a-z0-9_\-]+)/i', $action, $reg)) {
 	}
 
 	header("Location: ".$_SERVER["PHP_SELF"]);
-	exit();
+	exit;
 } elseif ($action == "updateform" && GETPOST("btn_MAIN_SECURITY_FORCECSP")) {
 	$directivecsp = GETPOST("select_identifier_MAIN_SECURITY_FORCECSP");
 	$sourcecsp = GETPOST("select_source_MAIN_SECURITY_FORCECSP");
@@ -224,8 +224,8 @@ if (preg_match('/set_([a-z0-9_\-]+)/i', $action, $reg)) {
 		$db->commit();
 		setEventMessages($langs->trans("Saved"), null, 'mesgs');
 
-		header("Location: ")
-		exit();
+		header("Location: ".$_SERVER["PHP_SELF"]);
+		exit;
 	} else {
 		$db->rollback();
 		setEventMessages($langs->trans("ErrorSavingChanges"), null, 'errors');
