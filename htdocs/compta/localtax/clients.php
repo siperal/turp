@@ -241,7 +241,7 @@ if ($calc == 0 || $calc == 2) {
 		$totalamount = 0;
 		$i = 1;
 		foreach ($coll_list as $coll_obj) {
-			if (($min == 0 || ($min > 0 && $coll_obj['total_ht'] > $min)) && ($local == 1 ? $coll_obj['localtax1'] : $coll_obj['localtax2']) != 0) {
+			if (($min == 0 || ($min > 0 && $coll_obj['totalht'] > $min)) && ($local == 1 ? $coll_obj['localtax1'] : $coll_obj['localtax2']) != 0) {
 				$intra = str_replace($find, $replace, $coll_obj['tva_intra']);
 				if (empty($intra)) {
 					if ($coll_obj->assuj == '1') {
@@ -258,9 +258,9 @@ if ($calc == 0 || $calc == 2) {
 				$find = array(' ', '.');
 				$replace = array('', '');
 				print '<td class="nowrap">'.$intra.'</td>';
-				print '<td class="nowrap right">'.price($coll_obj['total_ht']).'</td>';
+				print '<td class="nowrap right">'.price($coll_obj['totalht']).'</td>';
 				print '<td class="nowrap right">'.price($local == 1 ? $coll_obj['localtax1'] : $coll_obj['localtax2']).'</td>';
-				$totalamount += $coll_obj['total_ht'];
+				$totalamount += $coll_obj['totalht'];
 				$total += ($local == 1 ? $coll_obj['localtax1'] : $coll_obj['localtax2']);
 				print "</tr>\n";
 				$i++;
@@ -306,7 +306,7 @@ if ($calc == 0 || $calc == 1) {
 		$totalamount = 0;
 		$i = 1;
 		foreach ($coll_list as $coll_obj) {
-			if (($min == 0 || ($min > 0 && $coll_obj['total_ht'] > $min)) && ($local == 1 ? $coll_obj['localtax1'] : $coll_obj['localtax2']) != 0) {
+			if (($min == 0 || ($min > 0 && $coll_obj['totalht'] > $min)) && ($local == 1 ? $coll_obj['localtax1'] : $coll_obj['localtax2']) != 0) {
 				$intra = str_replace($find, $replace, $coll_obj->tva_intra);
 				if (empty($intra)) {
 					if ($coll_obj['assuj'] == '1') {
@@ -323,9 +323,9 @@ if ($calc == 0 || $calc == 1) {
 				$find = array(' ', '.');
 				$replace = array('', '');
 				print '<td class="nowrap">'.$intra."</td>";
-				print '<td class="nowrap right">'.price($coll_obj['total_ht']).'</td>';
+				print '<td class="nowrap right">'.price($coll_obj['totalht']).'</td>';
 				print '<td class="nowrap right">'.price($local == 1 ? $coll_obj['localtax1'] : $coll_obj['localtax2']).'</td>';
-				$totalamount += $coll_obj['total_ht'];
+				$totalamount += $coll_obj['totalht'];
 				$total += ($local == 1 ? $coll_obj['localtax1'] : $coll_obj['localtax2']);
 				print "</tr>\n";
 				$i++;
