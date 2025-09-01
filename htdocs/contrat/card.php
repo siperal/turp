@@ -2278,7 +2278,7 @@ if ($action == 'create') {
 
 				// Create ... buttons
 				$arrayofcreatebutton = array();
-				if (isModEnabled('propal') && $object->status > 0 && $soc->client == 1) {
+				if (isModEnabled('propal') && $object->status > 0 && $soc->client > 0) {
 					$arrayofcreatebutton[] = array(
 						'attr' => array('style' => 'text-align: left;'),
 						'url' => '/comm/propal/card.php?action=create&origin='.$object->element.'&originid='.$object->id.'&socid='.$object->thirdparty->id.'&renewal=true',
@@ -2288,7 +2288,8 @@ if ($action == 'create') {
 						'enabled' => true,
 					);
 				}
-				if (isModEnabled('order') && $object->status > 0 && $object->nbofservicesclosed < $nbofservices) {
+				//if (isModEnabled('order') && $object->status > 0 && $object->nbofservicesclosed < $nbofservices) {
+				if (isModEnabled('order') && $object->status > 0 && $soc->client > 0) {
 					$arrayofcreatebutton[] = array(
 						'url' => '/commande/card.php?action=create&token='.newToken().'&origin='.$object->element.'&originid='.$object->id.'&socid='.$object->thirdparty->id,
 						'label' => $langs->trans('AddOrder'),
