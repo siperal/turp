@@ -1457,13 +1457,11 @@ class CommandeFournisseur extends CommonOrder
 	 *
 	 * 	@param	User	$user			User making action
 	 *	@param	int		$idwarehouse	Id warehouse to use for stock change (not used for supplier orders).
-	 * 	@return	int						>0 if Ok, <0 if Ko
+	 * 	@return	int						Return >0 if OK, <0 if KO
 	 */
-	public function Cancel($user, $idwarehouse = -1)
+	public function cancel($user, $idwarehouse = -1)
 	{
 		// phpcs:enable
-		global $langs, $conf;
-
 		$error = 0;
 
 		//dol_syslog("CommandeFournisseur::Cancel");

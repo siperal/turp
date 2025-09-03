@@ -881,10 +881,11 @@ class Commande extends CommonOrder
 	 * 	Cancel an order
 	 * 	If stock is decremented on order validation, we must reincrement it
 	 *
+	 * 	@param	User	$user			User making action
 	 *	@param	int		$idwarehouse	Id warehouse to use for stock change.
 	 *	@return	int						Return integer <0 if KO, >0 if OK
 	 */
-	public function cancel($idwarehouse = -1)
+	public function cancel($user, $idwarehouse = -1)
 	{
 		global $user, $langs;
 

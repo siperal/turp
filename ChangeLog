@@ -23,6 +23,7 @@ The following changes may create regressions for some external modules, but were
 * Parameters $maxlen and $notooltip of Contract have been inverted to follow the standard. It was breaking the common use of getNomUrl() but if you were using the parameter
   maxlen (rare) by using the old signature, result may be a tooltip that is no more visible on ref printed by you module.
 * Removed array $MAP_ID_TO_CODE that was a duplicate of array "array_flip($categ->MAP_ID)"
+* The signature of the Sale order ->cancel() method and shipment ->cancel() has been modified to introduce the $user param like for other methods that modify a status.
 
 
 
