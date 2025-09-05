@@ -217,11 +217,6 @@ class CommandeFournisseur extends CommonOrder
 	public $source;
 
 	/**
-	 * @var int ID
-	 */
-	public $fk_project;
-
-	/**
 	 * @var ?int 	Payment conditions ID
 	 */
 	public $cond_reglement_id;
@@ -306,7 +301,6 @@ class CommandeFournisseur extends CommonOrder
 	 * @var int
 	 */
 	public $origin_id;
-	public $linked_objects = array();
 
 	/**
 	 * @var int Date of the purchase order payment deadline
