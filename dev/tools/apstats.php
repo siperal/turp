@@ -348,13 +348,17 @@ foreach ($output_arrglpu as $valgitlog) {		// The most recent lines are first.
 			var_dump($arrayofalerts[$alreadyfoundcommitid]['branch']);
 			var_dump($tmpval);*/
 
-			if (empty($arrayofalerts[$alreadyfoundcommitid]['issueid']) && !empty($tmpval['issueid'])) {
+			$arrayofalerts[$alreadyfoundcommitid]['commitidbis'][] = $tmpval['commitid'];	// Concat the new commitid to the list of commitidbis array of the already found case.
+
+			if (empty($arrayofalerts[$alreadyfoundcommitid]['issueid']) && !empty($tmpval['issueid'])) {	// If not Github was defined, we set it.
 				$arrayofalerts[$alreadyfoundcommitid]['issueid'] = $tmpval['issueid'];
 			}
 
-			$arrayofalerts[$alreadyfoundcommitid]['branch'] = array_merge($arrayofalerts[$alreadyfoundcommitid]['branch'], $tmpval['branch']);
+			if ($arrayofalerts[$alreadyfoundcommitid]['title'] != $tmpval['title']) {		// Concat label of the new line to the already found one (if it differs)
+				$arrayofalerts[$alreadyfoundcommitid]['title'] .= ', '.$tmpval['title'];
+			}
 
-			$arrayofalerts[$alreadyfoundcommitid]['commitidbis'][] = $tmpval['commitid'];
+			$arrayofalerts[$alreadyfoundcommitid]['branch'] = array_merge($arrayofalerts[$alreadyfoundcommitid]['branch'], $tmpval['branch']);
 		}
 	}
 }
