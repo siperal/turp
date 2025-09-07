@@ -299,7 +299,9 @@ foreach ($output_arrglpu as $valgitlog) {		// The most recent lines are first.
 				$alreadyfoundcommitid = $val['commitid'];
 				break;
 			}
-			if ($val['title'] && (strpos($val['title'], $tmpval['title']) === 0 || strpos($tmpval['title'], $val['title']) === 0)) {	// Already in list
+			if ($val['title'] &&
+				(strpos($val['title'], $tmpval['title']) === 0 || strpos($val['title'], $tmpval['title']) > 0
+				|| strpos($tmpval['title'], $val['title']) === 0 || strpos($tmpval['title'], $val['title']) > 0)) {	// Already in list
 				$alreadyfound = 'title';
 				$alreadyfoundcommitid = $val['commitid'];
 				break;
