@@ -357,7 +357,7 @@ foreach ($output_arrglpu as $valgitlog) {		// The most recent lines are first.
 			}
 
 			if ($arrayofalerts[$alreadyfoundcommitid]['title'] != $tmpval['title']) {		// Concat label of the new line to the already found one (if it differs)
-				$arrayofalerts[$alreadyfoundcommitid]['title'] .= ', '.$tmpval['title'];
+				$arrayofalerts[$alreadyfoundcommitid]['title'] .= ', '.preg_replace('/\.$/', '', $tmpval['title']);
 			}
 
 			$arrayofalerts[$alreadyfoundcommitid]['branch'] = array_merge($arrayofalerts[$alreadyfoundcommitid]['branch'], $tmpval['branch']);
@@ -1137,7 +1137,7 @@ function cleanVal2($val)
 	$tmpval['issueid'] = '';
 	$tmpval['issueidyogosha'] = '';
 	$tmpval['issueidcve'] = '';
-	$tmpval['title'] = array_key_exists(5, $tmp) ? $tmp[5] : '';
+	$tmpval['title'] = array_key_exists(5, $tmp) ? preg_replace('/\.$/', '', $tmp[5]) : '';
 	$tmpval['created_at'] = array_key_exists(0, $tmp) ? $tmp[0] : '';
 	$tmpval['updated_at'] = '';
 

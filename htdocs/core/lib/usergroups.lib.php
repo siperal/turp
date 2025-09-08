@@ -528,11 +528,11 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
 
 	// TopMenuDisableImages
 	$listoftopmenumodes = array(
-		array('id' => 0, 'label' => $langs->transnoentitiesnoconv("IconAndText"), 'data-html' => $langs->transnoentitiesnoconv("IconAndText").' <span class="opacitymedium">('.$langs->trans("Default").')</span>'),
-		array('id' => 1, 'label' => $langs->transnoentitiesnoconv("TextOnly"), 'data-html' => $langs->transnoentitiesnoconv("TextOnly")),
-		array('id' => 2, 'label' => $langs->transnoentitiesnoconv("IconOnlyAllTextsOnHover"), 'data-html' => $langs->transnoentitiesnoconv("IconOnlyAllTextsOnHover")),
-		array('id' => 3, 'label' => $langs->transnoentitiesnoconv("IconOnlyTextOnHover"), 'data-html' => $langs->transnoentitiesnoconv("IconOnlyTextOnHover")),
-		array('id' => 4, 'label' => $langs->transnoentitiesnoconv("IconOnly"), 'data-html' => $langs->transnoentitiesnoconv("IconOnly")),
+		0 => array('id' => 0, 'label' => $langs->transnoentitiesnoconv("IconAndText"), 'data-html' => $langs->transnoentitiesnoconv("IconAndText").' <span class="opacitymedium">('.$langs->trans("Default").')</span>'),
+		1 => array('id' => 1, 'label' => $langs->transnoentitiesnoconv("TextOnly"), 'data-html' => $langs->transnoentitiesnoconv("TextOnly")),
+		2 => array('id' => 2, 'label' => $langs->transnoentitiesnoconv("IconOnlyAllTextsOnHover"), 'data-html' => $langs->transnoentitiesnoconv("IconOnlyAllTextsOnHover")),
+		3 => array('id' => 3, 'label' => $langs->transnoentitiesnoconv("IconOnlyTextOnHover"), 'data-html' => $langs->transnoentitiesnoconv("IconOnlyTextOnHover")),
+		4 => array('id' => 4, 'label' => $langs->transnoentitiesnoconv("IconOnly"), 'data-html' => $langs->transnoentitiesnoconv("IconOnly")),
 	);
 	if ($foruserprofile) {
 		/*
@@ -545,13 +545,11 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
 		 print '<td>';
 		 if ($edit)
 		 {
-		 print $formother->selectColor(colorArrayToHex(colorStringToArray(getDolGlobalString('THEME_TOPMENU_DISABLE_IMAGE'),array()),''),'THEME_TOPMENU_DISABLE_IMAGE','',1).' ';
+			print $form->selectarray('THEME_TOPMENU_DISABLE_IMAGE', $listoftopmenumodes, getDolGlobalInt('THEME_TOPMENU_DISABLE_IMAGE'), 0, 0, 0, '', 0, 0, 0, '', 'widthcentpercentminusx maxwidth500');
 		 }
 		 else
 		 {
-		 $color = colorArrayToHex(colorStringToArray($conf->global->THEME_TOPMENU_DISABLE_IMAGE,array()),'');
-		 if ($color) print '<input type="text" class="colorthumb" disabled style="padding: 1px; margin-top: 0; margin-bottom: 0; background-color: #'.$color.'" value="'.$color.'">';
-		 else print '';
+			print $listoftopmenumodes[getDolGlobalInt('THEME_TOPMENU_DISABLE_IMAGE')]['label'];
 		 }
 		 if ($edit) print '<br>('.$langs->trans("NotSupportedByAllThemes").', '.$langs->trans("PressF5AfterChangingThis").')';
 		 print '</td>';*/
@@ -562,7 +560,7 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
 		if ($edit) {
 			print $form->selectarray('THEME_TOPMENU_DISABLE_IMAGE', $listoftopmenumodes, getDolGlobalInt('THEME_TOPMENU_DISABLE_IMAGE'), 0, 0, 0, '', 0, 0, 0, '', 'widthcentpercentminusx maxwidth500');
 		} else {
-			print $listoftopmenumodes[getDolGlobalInt('THEME_TOPMENU_DISABLE_IMAGE')];
+			print $listoftopmenumodes[getDolGlobalInt('THEME_TOPMENU_DISABLE_IMAGE')]['label'];
 		}
 		print $form->textwithpicto('', $langs->trans("NotSupportedByAllThemes"));
 		print '</td>';

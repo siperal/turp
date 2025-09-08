@@ -6750,7 +6750,7 @@ if ($action == 'create') {
 
 		// Generated documents
 		$filename = dol_sanitizeFileName($object->ref);
-		$filedir = $conf->invoice->multidir_output[$object->entity].'/'.dol_sanitizeFileName($object->ref);
+		$filedir = $conf->invoice->multidir_output[$object->entity ?? $conf->entity].'/'.dol_sanitizeFileName($object->ref);
 		$urlsource = $_SERVER['PHP_SELF'].'?facid='.$object->id;
 		$genallowed = $usercanread;
 		$delallowed = $usercancreate;
@@ -6827,7 +6827,7 @@ if ($action == 'create') {
 	// Presend form
 	$modelmail = 'facture_send';
 	$defaulttopic = 'SendBillRef';
-	$diroutput = $conf->invoice->multidir_output[$object->entity];
+	$diroutput = $conf->invoice->multidir_output[$object->entity ?? $conf->entity];
 	$trackid = 'inv'.$object->id;
 
 	include DOL_DOCUMENT_ROOT.'/core/tpl/card_presend.tpl.php';
