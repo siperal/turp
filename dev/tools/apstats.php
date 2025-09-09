@@ -932,7 +932,7 @@ $html .= '</div>';
 $html .= '</div>';
 
 $html .= '<br>';
-$html .= 'Note:Search is done in git repository on regex string "#yogosha|CVE|Sec:|Sec\s" (not case sensitive)<br>';
+$html .= 'Note:Search is done in git repository on regex string "#yogosha|CVE[\s\-]*\d|Sec:|Sec\s" (not case sensitive)<br>';
 $html .= 'You can use this URL for RSS notifications: <a href="/'.$outputfilerss.'">'.$outputfilerss.'</a><br><br>';
 
 $html .= '</section>';
