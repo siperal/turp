@@ -259,7 +259,7 @@ Security=নিরাপত্তা
 Passwords=পাসওয়ার্ড
 DoNotStoreClearPassword=ডাটাবেসে সংরক্ষিত পাসওয়ার্ড এনক্রিপ্ট করুন।
 MainDbPasswordFileConfEncrypted=conf.php-এ সংরক্ষিত ডাটাবেস পাসওয়ার্ডটি অস্পষ্ট করুন। এই বিকল্পটি সক্রিয় করার পরামর্শ দেওয়া হচ্ছে।
-InstrucToEncodePass=<b>conf.php</b> ফাইলে পাসওয়ার্ড এনকোড করতে, <br><b> লাইনটি প্রতিস্থাপন করুন $dolibarr_main_db_pass="...";</b><br> <span> class='notranslate'><br><b>$dolibarr_main_db_pass="TXPROTECT"TXPROTECT"8TX-8 class='notranslate'></b>
+InstrucToEncodePass=To have password encoded into the <b>conf.php</b> file, replace the line <br><b>$dolibarr_main_db_pass="...";</b><br>by<br><b>$dolibarr_main_db_pass="%s";</b>
 InstrucToClearPass=To have password decoded (clear) into the <b>conf.php</b> file, replace the line <br><b>$dolibarr_main_db_pass="crypted:...";</b><br>by<br><b>$dolibarr_main_db_pass="%s";</b>
 ProtectAndEncryptPdfFiles=উত্পন্ন পিডিএফ ফাইল রক্ষা করুন. এটি বাঞ্ছনীয় নয় কারণ এটি বাল্ক পিডিএফ তৈরি করে।
 ProtectAndEncryptPdfFilesDesc=একটি পিডিএফ ডকুমেন্টের সুরক্ষা এটিকে যেকোনো পিডিএফ ব্রাউজার দিয়ে পড়তে এবং মুদ্রণের জন্য উপলব্ধ রাখে। তবে এডিট ও কপি করা আর সম্ভব নয়। মনে রাখবেন যে এই বৈশিষ্ট্যটি ব্যবহার করার ফলে একটি বিশ্বব্যাপী মার্জড PDF গুলি কাজ করছে না।
@@ -371,7 +371,7 @@ LastActivationVersion=সর্বশেষ অ্যাক্টিভেশন
 UpdateServerOffline=সার্ভার অফলাইনে আপডেট করুন
 WithCounter=একটি কাউন্টার পরিচালনা করুন
 GenericMaskCodes=আপনি যেকোনো নম্বর মাস্ক লিখতে পারেন। এই মাস্কে, নিম্নলিখিত ট্যাগগুলি ব্যবহার করা যেতে পারে:<br><b>{000000}</b> এমন একটি সংখ্যার সাথে সম্পর্কিত যা প্রতিটি %s এ বৃদ্ধি করা হবে। কাউন্টারের কাঙ্ক্ষিত দৈর্ঘ্যের মতো শূন্য লিখুন। মাস্কের মতো শূন্য ধারণ করার জন্য কাউন্টারটি বাম দিক থেকে শূন্য দ্বারা সম্পন্ন হবে। <br><b>{000000+000}</b> আগেরটির মতোই কিন্তু + চিহ্নের ডানদিকের সংখ্যার সাথে সম্পর্কিত একটি অফসেট প্রথম %s থেকে শুরু করে প্রয়োগ করা হয়। <br><b>{000000@x}</b> আগেরটির মতোই কিন্তু মাস x এ পৌঁছালে কাউন্টারটি শূন্যে রিসেট করা হয় (x 1 থেকে 12 এর মধ্যে, অথবা আপনার কনফিগারেশনে সংজ্ঞায়িত অর্থবছরের প্রথম মাসগুলি ব্যবহার করার জন্য 0, অথবা প্রতি মাসে শূন্যে রিসেট করার জন্য 99)। যদি এই বিকল্পটি ব্যবহার করা হয় এবং x 2 বা তার বেশি হয়, তাহলে {yy}{mm} বা {yyyy}{mm} ক্রমটিও প্রয়োজন।<br>
-GenericMaskCodes1=<b>{yy}</b> class='notranslate'><b>{yyyy}</b><span> class='notranslate'><b>{y}</b> বছরের পর বছর ধরে ২, ৪ অথবা ১টি সংখ্যা। <br><b>{mm} class='notranslate'></b> মাস (01 থেকে 12)।<br>TXPROTECT-aee8368 class='notranslate'>{dd}</b> দিন (01 থেকে 31)।TXPROTECT-342fcc-END1
+GenericMaskCodes1=<b>{yy}</b>, <b>{yyyy}</b> or <b>{y}</b> year over 2, 4 or 1 numbers. <br><b>{mm}</b> month (01 to 12).<br><b>{dd}</b> day (01 to 31).<br>
 GenericMaskCodes2=<b>{cccc}</b> the client code on n characters<br><b>{cccc000}</b> the client code on n characters is followed by a counter dedicated to the customer. This counter dedicated to customer is reset at same time as the global counter.<br><b>{tttt}</b> The code of third party type on n characters (see menu Home - Setup - Dictionary - Types of third parties). If you add this tag, the counter will be different for each type of third party.<br>
 GenericMaskCodes2b=<b>{uuuu}</b> বস্তু তৈরিকারী ব্যবহারকারীর শেষ নামের প্রথম অক্ষর n (n হল "u" এর সংখ্যা)।
 GenericMaskCodes3=মাস্কের অন্য সব অক্ষর অক্ষত থাকবে।<br>স্পেস অনুমোদিত নয়।<br>
