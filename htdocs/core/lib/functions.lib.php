@@ -565,7 +565,7 @@ function setEntity($currentobject)
 	if (is_object($mc) && method_exists($mc, 'setEntity')) {
 		return $mc->setEntity($currentobject);
 	} else {
-		return ((is_object($currentobject) && $currentobject->id > 0 && $currentobject->entity > 0) ? $currentobject->entity : $conf->entity);
+		return ((is_object($currentobject) && $currentobject->id > 0 && ((int) $currentobject->entity) > 0) ? (int) $currentobject->entity : $conf->entity);
 	}
 }
 
@@ -1680,7 +1680,7 @@ function dol_get_object_properties($obj, $properties = [])
 
 /**
  *  Create a clone of instance of object (new instance with same value for each properties)
- *  With native = 0: Property that are references are different memory area in the new object (full isolation clone). This means $this->object of new object may not be valid (except this->db that is voluntarly kept).
+ *  With native = 0: Deprecated. Property that are references are different memory area in the new object (full isolation clone). This means $this->objectproperty of the new object may not be valid (except this->db that is voluntarly kept).
  *  With native = 1: Use PHP clone. Property that are reference are same pointer. This means $this->db of new object is still valid but point to same this->db than original object.
  *  With native = 2: Property that are reference are different memory area in the new object (full isolation clone). Only scalar and array values are cloned. This means method are not availables and $this->db of new object is not valid.
  *
@@ -1697,6 +1697,8 @@ function dol_clone($object, $native = 2)
 {
 	if ($native == 0) {
 		// deprecated method, use the method with native = 2 instead
+		dol_syslog("Warning, call to dol_clone() with the deprecated parameter native=0, use 2 instead", LOG_WARNING);
+
 		$tmpsavdb = null;
 		if (isset($object->db) && isset($object->db->db) && is_object($object->db->db) && get_class($object->db->db) == 'PgSql\Connection') {
 			$tmpsavdb = $object->db;
@@ -1709,7 +1711,7 @@ function dol_clone($object, $native = 2)
 			$object->db = $tmpsavdb;
 		}
 	} elseif ($native == 2) {
-		// recommended method to have a full isolated cloned object
+		// recommended method to have a full secured isolated cloned object
 		$myclone = new stdClass();
 		$tmparray = get_object_vars($object);	// return only public properties
 
@@ -7093,7 +7095,7 @@ function dol_print_error_email($prefixcode, $errormessage = '', $errormessages =
  *	@param  ?string	$sortorder   Current sort order
  *  @param	string	$prefix		 Prefix for css. Use space after prefix to add your own CSS tag, for example 'mycss '.
  *  @param	?string	$tooltip	 Tooltip
- *  @param	int		$forcenowrapcolumntitle		No need for use 'wrapcolumntitle' css style
+ *  @param	int		$forcenowrapcolumntitle		No need to use 'wrapcolumntitle' css style
  *	@return	void
  */
 function print_liste_field_titre($name, $file = "", $field = "", $begin = "", $moreparam = "", $moreattrib = "", $sortfield = "", $sortorder = "", $prefix = "", $tooltip = "", $forcenowrapcolumntitle = 0)
@@ -7104,18 +7106,18 @@ function print_liste_field_titre($name, $file = "", $field = "", $begin = "", $m
 /**
  *	Get title line of an array
  *
- *	@param	?string		$name			Translation key of field to show or complete HTML string to show
- *	@param	int<0,2>	$thead	 		0=To use with standard table format, 1=To use inside <thead><tr>, 2=To use with <div>
- *	@param	string		$file			Url used when we click on sort picto
- *	@param	string		$field			Field to use for new sorting. Empty if this field is not sortable. Example "t.abc" or "t.abc,t.def"
- *	@param	string		$begin       	("" by default)
- *	@param	string		$moreparam		Add more parameters on sort url links ("" by default)
- *	@param  string		$moreattrib		Add more attributes on th ("" by default). To add more css class, use param $prefix.
- *	@param  ?string		$sortfield	 	Current field used to sort (Ex: 'd.datep,d.id')
- *	@param  ?string		$sortorder		Current sort order (Ex: 'asc,desc')
- *  @param	string		$prefix	 		Prefix for css. Use space after prefix to add your own CSS tag, for example 'mycss '.
- *  @param	int<0,1>	$disablesortlink	1=Disable sort link
- *  @param	?string		$tooltip 		Tooltip
+ *	@param	?string		$name						Translation key of field to show or complete HTML string to show
+ *	@param	int<0,2>	$thead	 					0=To use with standard table format, 1=To use inside <thead><tr>, 2=To use with <div>
+ *	@param	string		$file						Url used when we click on sort picto
+ *	@param	string		$field						Field to use for new sorting. Empty if this field is not sortable. Example "t.abc" or "t.abc,t.def"
+ *	@param	string		$begin       				("" by default)
+ *	@param	string		$moreparam					Add more parameters on sort url links ("" by default)
+ *	@param  string		$moreattrib					Add more attributes on th ("" by default). To add more css class, use param $prefix.
+ *	@param  ?string		$sortfield	 				Current field used to sort (Ex: 'd.datep,d.id')
+ *	@param  ?string		$sortorder					Current sort order (Ex: 'asc,desc')
+ *  @param	string		$prefix	 					Prefix for css. Use space after prefix to add your own CSS tag, for example 'mycss '.
+ *  @param	int<0,1>	$disablesortlink			1=Disable sort link
+ *  @param	?string		$tooltip 					Text of tooltip with syntax 'Tooltip' or 'Tooltip:[keytoenabledtheonclicktooltip]:[tooltipdirection]'
  *  @param	int<0,1> 	$forcenowrapcolumntitle		No need to use 'wrapcolumntitle' css style
  *	@return	string
  */
@@ -7127,6 +7129,8 @@ function getTitleFieldOfList($name, $thead = 0, $file = "", $field = "", $begin 
 	if ($moreattrib == 'class="right"') {
 		$prefix .= 'right '; // For backward compatibility
 	}
+
+	$tooltip = (string) $tooltip;	// In case $tooltip is null
 
 	$sortorder = strtoupper((string) $sortorder);
 	$out = '';
@@ -7142,7 +7146,15 @@ function getTitleFieldOfList($name, $thead = 0, $file = "", $field = "", $begin 
 	$tmpfield = explode(',', $field);
 	$field1 = trim($tmpfield[0]); // If $field is 'd.datep,d.id', it becomes 'd.datep'
 
-	if (!getDolGlobalString('MAIN_DISABLE_WRAPPING_ON_COLUMN_TITLE') && empty($forcenowrapcolumntitle)) {
+	if (strpos((string) $tooltip, ':') !== false) {
+		$tmptooltip = explode(':', (string) $tooltip);
+	} else {
+		$tmptooltip = array($tooltip);
+	}
+
+	$wrapcolumntitle = (empty($forcenowrapcolumntitle) || (!empty($tmptooltip[2]) && $tmptooltip[2] == '-1'));
+
+	if (!getDolGlobalString('MAIN_DISABLE_WRAPPING_ON_COLUMN_TITLE') && $wrapcolumntitle) {
 		$prefix = 'wrapcolumntitle ' . $prefix;
 	}
 
@@ -7156,7 +7168,7 @@ function getTitleFieldOfList($name, $thead = 0, $file = "", $field = "", $begin 
 
 	$tagstart = '<' . $tag . ' class="' . $prefix . $liste_titre . '" ' . $moreattrib;
 	//$out .= (($field && empty($conf->global->MAIN_DISABLE_WRAPPING_ON_COLUMN_TITLE) && preg_match('/^[a-zA-Z_0-9\s\.\-:&;]*$/', $name)) ? ' title="'.dol_escape_htmltag($langs->trans($name)).'"' : '');
-	$tagstart .= ($name && !getDolGlobalString('MAIN_DISABLE_WRAPPING_ON_COLUMN_TITLE') && empty($forcenowrapcolumntitle) && !dol_textishtml($name)) ? ' title="' . dolPrintHTMLForAttribute($langs->trans($name)) . '"' : '';
+	$tagstart .= ($name && !getDolGlobalString('MAIN_DISABLE_WRAPPING_ON_COLUMN_TITLE') && $wrapcolumntitle && !dol_textishtml($name)) ? ' title="' . dolPrintHTMLForAttribute($langs->trans($name)) . '"' : '';
 	$tagstart .= '>';
 
 	if (empty($thead) && $field && empty($disablesortlink)) {    // If this is a sort field
@@ -7186,14 +7198,9 @@ function getTitleFieldOfList($name, $thead = 0, $file = "", $field = "", $begin 
 		//$out .= (getDolGlobalString('MAIN_DISABLE_WRAPPING_ON_COLUMN_TITLE') ? '' : ' title="'.dol_escape_htmltag($langs->trans($name)).'"');
 		$out .= '>';
 	}
-	if ($tooltip) {
-		// You can also use 'TranslationString:keyfortooltiponclick:tooltipdirection' for a tooltip on click or to change tooltip position.
-		if (strpos($tooltip, ':') !== false) {
-			$tmptooltip = explode(':', $tooltip);
-		} else {
-			$tmptooltip = array($tooltip);
-		}
-		$out .= $form->textwithpicto($langs->trans((string) $name), $langs->trans($tmptooltip[0]), (empty($tmptooltip[2]) ? '1' : $tmptooltip[2]), 'help', '', 0, 3, (empty($tmptooltip[1]) ? '' : 'extra_' . str_replace('.', '_', $field) . '_' . $tmptooltip[1]));
+	if ($tooltip && $tmptooltip[0]) {
+		// You can also use 'TranslationString:[keyfortooltiponclick]:[tooltipdirection]' for a tooltip on click or to change tooltip position.
+		$out .= $form->textwithpicto($langs->trans((string) $name), $langs->trans((string) $tmptooltip[0]), (empty($tmptooltip[2]) ? '1' : $tmptooltip[2]), 'help', ((!empty($tmptooltip[2]) && $tmptooltip[2] == '-1') ? 'paddingrightonly' : ''), 0, 3, (empty($tmptooltip[1]) ? '' : 'extra_' . str_replace('.', '_', $field) . '_' . $tmptooltip[1]));
 	} else {
 		$out .= $langs->trans((string) $name);
 	}
@@ -8763,7 +8770,7 @@ function yn($yesno, $format = 1, $color = 0)
 /**
  *	Return a path to have a the directory according to object where files are stored.
  *  This function is called by getMultidirOutput
- *  New usage:  $conf->module->multidir_output[$object->entity].'/'.get_exdir(0, 0, 0, 1, $object, '').'/'
+ *  New usage:  $conf->module->multidir_output[$object->entity ?? $conf->entity].'/'.get_exdir(0, 0, 0, 1, $object, '').'/'
  *         or:  $conf->module->dir_output.'/'.get_exdir(0, 0, 0, 0, $object, '')
  *
  *  Example of output with new usage:       $object is invoice -> 'INYYMM-ABCD'
@@ -10030,6 +10037,8 @@ function getCommonSubstitutionArray($outputlangs, $onlykey = 0, $exclude = null,
 				$substitutionarray['__THIRDPARTY_CODE_FOURNISSEUR__'] = '__THIRDPARTY_CODE_FOURNISSEUR__';
 				$substitutionarray['__THIRDPARTY_EMAIL__'] = '__THIRDPARTY_EMAIL__';
 				//$substitutionarray['__THIRDPARTY_EMAIL_URLENCODED__'] = '__THIRDPARTY_EMAIL_URLENCODED__';	// We hide this one
+				$substitutionarray['__THIRDPARTY_URL__'] = '__THIRDPARTY_URL__';
+				//$substitutionarray['__THIRDPARTY_URL_URLENCODED__'] = '__THIRDPARTY_URL_URLENCODED__';		// We hide this one
 				$substitutionarray['__THIRDPARTY_PHONE__'] = '__THIRDPARTY_PHONE__';
 				$substitutionarray['__THIRDPARTY_FAX__'] = '__THIRDPARTY_FAX__';
 				$substitutionarray['__THIRDPARTY_ADDRESS__'] = '__THIRDPARTY_ADDRESS__';
@@ -10215,6 +10224,8 @@ function getCommonSubstitutionArray($outputlangs, $onlykey = 0, $exclude = null,
 				$substitutionarray['__THIRDPARTY_CODE_FOURNISSEUR__'] = $object->code_fournisseur ?? '';
 				$substitutionarray['__THIRDPARTY_EMAIL__'] = $object->email ?? '';
 				$substitutionarray['__THIRDPARTY_EMAIL_URLENCODED__'] = urlencode($object->email ?? '');
+				$substitutionarray['__THIRDPARTY_URL__'] = $object->url ?? '';
+				$substitutionarray['__THIRDPARTY_URL_URLENCODED__'] = urlencode($object->url ?? '');
 				$substitutionarray['__THIRDPARTY_PHONE__'] = dol_print_phone($object->phone ?? '');
 				$substitutionarray['__THIRDPARTY_FAX__'] = dol_print_phone($object->fax ?? '');
 				$substitutionarray['__THIRDPARTY_ADDRESS__'] = $object->address ?? '';
@@ -10435,7 +10446,7 @@ function getCommonSubstitutionArray($outputlangs, $onlykey = 0, $exclude = null,
 					$typeforonlinepayment = 'ficheinter';
 				}
 
-				$url = getOnlinePaymentUrl(0, $typeforonlinepayment, $substitutionarray['__REF__'], $amounttouse);
+				$url = getOnlinePaymentUrl(0, $typeforonlinepayment, $substitutionarray['__REF__'], (float) $amounttouse);
 				$paymenturl = $url;
 			}
 
@@ -10532,6 +10543,7 @@ function getCommonSubstitutionArray($outputlangs, $onlykey = 0, $exclude = null,
 				'@phan-var-force ActionComm $object';
 				/** @var ActionComm $object */
 				$substitutionarray['__EVENT_LABEL__'] = $object->label;
+				$substitutionarray['__EVENT_DESCRIPTION__'] = $object->note;
 				$substitutionarray['__EVENT_TYPE__'] = $outputlangs->trans("Action" . $object->type_code);
 				$substitutionarray['__EVENT_DATE__'] = dol_print_date($object->datep, 'day', 'auto', $outputlangs);
 				$substitutionarray['__EVENT_TIME__'] = dol_print_date($object->datep, 'hour', 'auto', $outputlangs);

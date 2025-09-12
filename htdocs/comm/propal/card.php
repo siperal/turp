@@ -73,7 +73,7 @@ if (isModEnabled('variants')) {
  */
 
 // Load translation files required by the page
-$langs->loadLangs(array('companies', 'propal', 'compta', 'bills', 'orders', 'products', 'deliveries', 'sendings', 'other'));
+$langs->loadLangs(array('companies', 'propal', 'compta', 'bills', 'orders', 'products', 'sendings', 'other'));
 if (isModEnabled('incoterm')) {
 	$langs->load('incoterm');
 }
@@ -2167,7 +2167,7 @@ if (empty($reshook)) {
 	}
 
 	// Actions to build doc
-	$upload_dir = !empty($conf->propal->multidir_output[$object->entity]) ? $conf->propal->multidir_output[$object->entity] : $conf->propal->dir_output;
+	$upload_dir = !empty($conf->propal->multidir_output[$object->entity ?? $conf->entity]) ? $conf->propal->multidir_output[$object->entity ?? $conf->entity] : $conf->propal->dir_output;
 	$permissiontoadd = $usercancreate;
 	include DOL_DOCUMENT_ROOT . '/core/actions_builddoc.inc.php';
 }
@@ -2926,7 +2926,7 @@ if ($action == 'create') {
 				setEventMessages($object->error, $object->errors, 'errors');
 			}
 		} else {
-			$numref = $object->ref;
+			$numref = (string) $object->ref;
 		}
 
 		$text = $langs->trans('ConfirmValidateProp', $numref);
@@ -3150,7 +3150,6 @@ if ($action == 'create') {
 		print '</td></tr>';
 
 		// Delivery date
-		$langs->load('deliveries');
 		print '<tr><td>';
 		print $form->editfieldkey($langs->trans('DeliveryDate'), 'date_livraison', $object->delivery_date, $object, (int) ($usercancreate && $caneditfield), 'datepicker');
 		print '</td><td class="valuefieldedit">';
@@ -3684,7 +3683,7 @@ if ($action == 'create') {
 		 * Generated documents
 		 */
 		$objref = dol_sanitizeFileName($object->ref);
-		$filedir = $conf->propal->multidir_output[$object->entity] . "/" . dol_sanitizeFileName($object->ref);
+		$filedir = $conf->propal->multidir_output[$object->entity ?? $conf->entity] . "/" . dol_sanitizeFileName($object->ref);
 		$urlsource = $_SERVER["PHP_SELF"] . "?id=" . $object->id;
 		$genallowed = $usercanread;
 		$delallowed = $usercancreate;
@@ -3730,7 +3729,7 @@ if ($action == 'create') {
 	// Presend form
 	$modelmail = 'propal_send';
 	$defaulttopic = 'SendPropalRef';
-	$diroutput = $conf->propal->multidir_output[$object->entity];
+	$diroutput = $conf->propal->multidir_output[$object->entity ?? $conf->entity];
 	$trackid = 'pro' . $object->id;
 
 	include DOL_DOCUMENT_ROOT . '/core/tpl/card_presend.tpl.php';

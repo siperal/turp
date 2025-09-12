@@ -71,7 +71,7 @@ if (isModEnabled('project')) {
  * @var User $user
  */
 
-$langs->loadLangs(array("receptions", "companies", "bills", 'deliveries', 'orders', 'stocks', 'other', 'propal', 'sendings'));
+$langs->loadLangs(array("receptions", "companies", "bills", 'orders', 'stocks', 'other', 'propal', 'sendings'));
 
 if (isModEnabled('incoterm')) {
 	$langs->load('incoterm');
@@ -1425,7 +1425,7 @@ if ($action == 'create') {
 		if ($objectref == 'PROV') {
 			$numref = $object->getNextNumRef($soc);
 		} else {
-			$numref = $object->ref;
+			$numref = (string) $object->ref;
 		}
 
 		$text = $langs->trans("ConfirmValidateReception", $numref);

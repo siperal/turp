@@ -660,11 +660,11 @@ if (empty($reshook)) {
 	} elseif ($action == 'setremisepercent' && $usercancreate) {
 		$object->fetch($id);
 		$result = $object->setDiscount($user, (float) price2num(GETPOST('remise_percent'), '', 2));
-	} elseif ($action == "setabsolutediscount" && $usercancreate) {
-		// We have POST[remise_id] or POST[remise_id_for_payment]
+	} elseif ($action == 'setabsolutediscount' && $usercancreate) {
+		// We have POST[remise_id] (common case) xor POST[remise_id_for_payment] (with unstable oldoption)
 		$db->begin();
 
-		// We use the credit to reduce amount of invoice
+		// We use the credit note to reduce amount of invoice
 		if (GETPOSTINT("remise_id") > 0) {
 			$ret = $object->fetch($id);
 			if ($ret > 0) {
@@ -676,8 +676,15 @@ if (empty($reshook)) {
 				$error++;
 				setEventMessages($object->error, $object->errors, 'errors');
 			}
+
+			if (!$error) {
+				$newremaintopay = $object->getRemainToPay(0);
+				if ($newremaintopay == 0) {
+					$object->setPaid($user);
+				}
+			}
 		}
-		// We use the credit to reduce remain to pay
+		// We use the credit note to reduce remain to pay
 		if (GETPOSTINT("remise_id_for_payment") > 0) {
 			require_once DOL_DOCUMENT_ROOT.'/core/class/discount.class.php';
 			$discount = new DiscountAbsolute($db);
@@ -686,7 +693,7 @@ if (empty($reshook)) {
 			//var_dump($object->getRemainToPay(0));
 			//var_dump($discount->amount_ttc);exit;
 			$remaintopay = $object->getRemainToPay(0);
-			if (price2num($discount->amount_ttc) > price2num($remaintopay)) {
+			if (price2num($discount->total_ttc) > price2num($remaintopay)) {
 				// TODO Split the discount in 2 automatically
 				$error++;
 				setEventMessages($langs->trans("ErrorDiscountLargerThanRemainToPaySplitItBefore"), null, 'errors');
@@ -962,7 +969,7 @@ if (empty($reshook)) {
 			setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Reason")), null, 'errors');
 		}
 	} elseif ($action == 'confirm_converttoreduc' && $confirm == 'yes' && $usercancreate) {
-		// Convert to reduce
+		// Convert to discount
 		$object->fetch($id);
 		$object->fetch_thirdparty();
 		//$object->fetch_lines();	// Already done into fetch
@@ -4897,7 +4904,7 @@ if ($action == 'create') {
 			$numref = $object->getNextNumRef($soc);
 			// $object->date=$savdate;
 		} else {
-			$numref = $object->ref;
+			$numref = (string) $object->ref;
 		}
 
 		$text = $langs->trans('ConfirmValidateBill', $numref);
@@ -6750,7 +6757,7 @@ if ($action == 'create') {
 
 		// Generated documents
 		$filename = dol_sanitizeFileName($object->ref);
-		$filedir = $conf->invoice->multidir_output[$object->entity].'/'.dol_sanitizeFileName($object->ref);
+		$filedir = $conf->invoice->multidir_output[$object->entity ?? $conf->entity].'/'.dol_sanitizeFileName($object->ref);
 		$urlsource = $_SERVER['PHP_SELF'].'?facid='.$object->id;
 		$genallowed = $usercanread;
 		$delallowed = $usercancreate;
@@ -6827,7 +6834,7 @@ if ($action == 'create') {
 	// Presend form
 	$modelmail = 'facture_send';
 	$defaulttopic = 'SendBillRef';
-	$diroutput = $conf->invoice->multidir_output[$object->entity];
+	$diroutput = $conf->invoice->multidir_output[$object->entity ?? $conf->entity];
 	$trackid = 'inv'.$object->id;
 
 	include DOL_DOCUMENT_ROOT.'/core/tpl/card_presend.tpl.php';
