@@ -252,7 +252,6 @@ print "</tr>";
 
 $functions = array();
 $name      = "xDebug";
-
 print "<tr>";
 print "<td>".$name."</td>";
 print getResultColumn($name, $activatedExtensions, $loadedExtensions, $functions);
