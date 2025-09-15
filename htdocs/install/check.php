@@ -244,12 +244,12 @@ if (!class_exists('ZipArchive')) {
 if (!empty($extensionok)) {
 	//print '<img src="../theme/eldy/img/tick.png" alt="Ok" class="valignmiddle pictofixedwidth"> ';
 	print img_picto('', 'tick', 'class="pictofixedwidth"');
-	print $langs->trans("PHPSupport", implode(', ', $extensionok))."<br>\n";
+	print $langs->trans("PHPSupport", '<b>'.implode(', ', $extensionok).'</b>')."<br>\n";
 }
 if (!empty($extensionko)) {
 	//print '<img src="../theme/eldy/img/warning.png" alt="Error" class="valignmiddle pictofixedwidth"> ';
 	print img_picto('', 'warning', 'class="pictofixedwidth error"');
-	print $langs->trans("ErrorPHPDoesNotSupport", implode(', ', $extensionko))."<br>\n";
+	print $langs->trans("ErrorPHPDoesNotSupport", '<b>'.implode(', ', $extensionko).'</b>')."<br>\n";
 }
 
 
