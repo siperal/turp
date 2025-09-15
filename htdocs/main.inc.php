@@ -72,13 +72,15 @@ if (!empty($_SERVER['DOCUMENT_ROOT']) && substr($_SERVER['DOCUMENT_ROOT'], -6) !
 
 // Include the conf.php and functions.lib.php and security.lib.php. This defined the constants like DOL_DOCUMENT_ROOT, DOL_DATA_ROOT, DOL_URL_ROOT...
 require_once 'filefunc.inc.php';
-
 /**
  * @var Conf $conf
  * @var DoliDB $db
  * @var HookManager $hookmanager
  * @var Translate $langs
  * @var User $user
+ *
+ * @var ?string $php_session_save_handler
+ * @var ?string $dolibarr_main_force_https
  */
 
 // If there is a POST parameter to tell to save automatically some POST parameters into cookies, we do it.

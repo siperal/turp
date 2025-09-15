@@ -57,7 +57,6 @@ top_httphead();
 
 	?>
 	<link rel="stylesheet" href="<?php print $context->rootUrl.'css/style.css.php'; ?>">
-	<link rel="stylesheet" href="<?php print $context->rootUrl.'css/themes/custom.css.php'; ?>">
 	<?php
 	if (getDolGlobalString('WEBPORTAL_CUSTOM_CSS')) {
 		print '<link rel="stylesheet" type="text/css" href="'.$context->rootUrl.'css/themes/custom.css.php?revision='.getDolGlobalInt('WEBPORTAL_PARAMS_REV').'">'."\n";
