@@ -110,12 +110,6 @@ print "***** ".$script_file." (".$version.") pid=".dol_getmypid()." - userlogin=
 $ini_path = php_ini_loaded_file();
 print 'TZ server = '.getServerTimeZoneString()." - set in PHP ini ".$ini_path."\n";
 
-// Check module cron is activated
-if (!isModEnabled('cron')) {
-	print "Error: module Scheduled jobs (cron) not activated\n";
-	exit(1);
-}
-
 // Check security key
 if ($key != getDolGlobalString('CRON_KEY')) {
 	print "Error: securitykey provided ".substr($key, 0, 5)."... does not match securitykey in setup.\n";
@@ -240,6 +234,13 @@ if (is_array($object->lines) && (count($object->lines) > 0)) {
 			$conf->entity = (empty($line->entity) ? 1 : $line->entity);
 			$conf->setValues($db); // This make also the $mc->setValues($conf); that reload $mc->sharings
 			$mysoc->setMysoc($conf);
+
+			// Check module cron is activated
+			if (!isModEnabled('cron')) {
+				print "Canceled - Module Scheduled jobs (cron) not activated into entity ".$line->entity."\n";
+				dol_syslog("cron_run_jobs.php: Canceled - Module Scheduled jobs (cron) not activated into entity ".$line->entity, LOG_INFO);
+				continue;
+			}
 
 			// Force recheck that user is ok for the entity to process and reload permission for entity
 			if ($conf->entity != $user->entity) {
