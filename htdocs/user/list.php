@@ -196,7 +196,7 @@ if (GETPOSTISSET('formfilteraction')) {
 } elseif (getDolGlobalString('MAIN_SEARCH_CAT_OR_BY_DEFAULT')) {
 	$searchCategoryUserOperator = getDolGlobalString('MAIN_SEARCH_CAT_OR_BY_DEFAULT');
 }
-$searchCategoryUserList = GETPOST('search_category_user_list', 'array');
+$searchCategoryUserList = GETPOST('search_category_user_list', 'array:int');
 $catid = GETPOSTINT('catid');
 if (!empty($catid) && empty($searchCategoryUserList)) {
 	$searchCategoryUserList = array($catid);

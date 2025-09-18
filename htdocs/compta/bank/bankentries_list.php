@@ -247,7 +247,7 @@ if (empty($reshook)) {
 	include DOL_DOCUMENT_ROOT.'/core/actions_massactions.inc.php';
 }
 
-$rowids = GETPOST('rowid', 'array');
+$rowids = GETPOST('rowid', 'array:int');
 
 // Conciliation
 if ((GETPOST('confirm_savestatement', 'alpha') || GETPOST('confirm_reconcile', 'alpha'))
@@ -262,7 +262,7 @@ if ((GETPOST('confirm_savestatement', 'alpha') || GETPOST('confirm_reconcile', '
 	if ($num_releve) {
 		$bankline = new AccountLine($db);
 
-		$rowids = GETPOST('rowid', 'array');
+		$rowids = GETPOST('rowid', 'array:int');
 
 		if (!empty($rowids) && is_array($rowids)) {
 			foreach ($rowids as $row) {

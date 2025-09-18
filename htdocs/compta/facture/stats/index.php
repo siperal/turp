@@ -70,8 +70,8 @@ $categ_id = GETPOSTINT('categ_id');
 
 $userid = GETPOSTINT('userid');
 $socid = GETPOSTINT('socid');
-$select_categ_categ_id = GETPOST('select_categ_categ_id', 'array');
-$select_categ_invoice_id=GETPOST('select_categ_invoice_id', 'array');
+$select_categ_categ_id = GETPOST('select_categ_categ_id', 'array:int');
+$select_categ_invoice_id=GETPOST('select_categ_invoice_id', 'array:int');
 // Security check
 if ($user->socid > 0) {
 	$action = '';
