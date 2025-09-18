@@ -78,10 +78,10 @@ return static function (RectorConfig $rectorConfig): void {
 	//Not yet ready: $rectorconfig->rule(Rector\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRector::class);
 	$rectorConfig->rule(Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector::class);
 
-	$rectorConfig->rule(Dolibarr\Rector\Renaming\EmptyGlobalToFunction::class);
-	$rectorConfig->rule(Dolibarr\Rector\Renaming\EmptyUserRightsToFunction::class);
+	//$rectorConfig->rule(Dolibarr\Rector\Renaming\EmptyGlobalToFunction::class);
+	//$rectorConfig->rule(Dolibarr\Rector\Renaming\EmptyUserRightsToFunction::class);
 	$rectorConfig->rule(Dolibarr\Rector\Renaming\GlobalToFunction::class);
-	$rectorConfig->rule(Dolibarr\Rector\Renaming\UserRightsToFunction::class);
+	//$rectorConfig->rule(Dolibarr\Rector\Renaming\UserRightsToFunction::class);
 	//$rectorConfig->rule(Dolibarr\Rector\Renaming\UsePositiveExit::class);
 
 
