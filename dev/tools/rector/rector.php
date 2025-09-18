@@ -18,7 +18,7 @@
 /**
  *   	\file       dev/tools/rector/rector.php
  *		\ingroup    core
- *		\brief      Toolt to run rector
+ *		\brief      Tool to run rector
  *
  *		cd dev/tools/rector
  *		./vendor/bin/rector process [--dry-run] [--clear-cache] ../../../htdocs/core/
