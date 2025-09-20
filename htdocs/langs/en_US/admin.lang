@@ -2717,3 +2717,4 @@ MainErrorAddingSecurityPolicy=An error occurred when trying to add a Content Sec
 SecurityForConnection=Credentials for connexion
 AddCredential=Add a credential
 API_ENABLE_COUNT_CALLS=Enable counting of API calls (slower). The value of API count is visible on the user page.
+MCPServer=MCP Server
