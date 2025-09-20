@@ -8074,12 +8074,13 @@ class Form
 	/**
 	 * selectTypeDuration
 	 *
-	 * @param string $prefix Prefix
-	 * @param string $selected Selected duration type
-	 * @param string[] $excludetypes Array of duration types to exclude. Example array('y', 'm')
-	 * @return  string                    HTML select string
+	 * @param 	string 		$prefix 		Prefix
+	 * @param 	string 		$selected 		Selected duration type
+	 * @param 	string[] 	$excludetypes 	Array of duration types to exclude. Example array('y', 'm')
+	 * @param 	string 		$morecss 		Additional css on select
+	 * @return 	string      				HTML select string
 	 */
-	public function selectTypeDuration($prefix, $selected = 'i', $excludetypes = array())
+	public function selectTypeDuration($prefix, $selected = 'i', $excludetypes = array(), $morecss = 'minwidth75 maxwidth100')
 	{
 		global $langs;
 
@@ -8097,7 +8098,7 @@ class Form
 			unset($TDurationTypes[$value]);
 		}
 
-		$retstring = '<select class="flat minwidth75 maxwidth100" id="select_' . $prefix . 'type_duration" name="' . $prefix . 'type_duration">';
+		$retstring = '<select class="flat'.($morecss ? ' '.$morecss : '').'" id="select_' . $prefix . 'type_duration" name="' . $prefix . 'type_duration">';
 		foreach ($TDurationTypes as $key => $typeduration) {
 			$retstring .= '<option value="' . $key . '"';
 			if ($key == $selected) {
@@ -12416,9 +12417,10 @@ class Form
 	 * @param	int<0,1>	$default		1=Show also Default mail template
 	 * @param	int<0,1>	$addjscombo		Add js combobox
 	 * @param   string      $selected       Selected model mail
+	 * @param   string      $morecss        More css added to the select component
 	 * @return	string						HTML select string
 	 */
-	public function selectModelMail($prefix, $modelType = '', $default = 0, $addjscombo = 0, $selected = '')
+	public function selectModelMail($prefix, $modelType = '', $default = 0, $addjscombo = 0, $selected = '', $morecss = '')
 	{
 		global $langs, $user;
 
@@ -12439,7 +12441,7 @@ class Form
 			}
 		}
 
-		$retstring .= '<select class="flat" id="select_' . $prefix . 'model_mail" name="' . $prefix . 'model_mail">';
+		$retstring .= '<select class="flat'.($morecss ? ' '.$morecss : '').'" id="select_' . $prefix . 'model_mail" name="' . $prefix . 'model_mail">';
 
 		foreach ($TModels as $id_model => $label_model) {
 			$retstring .= '<option value="' . $id_model . '"';

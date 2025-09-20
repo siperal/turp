@@ -25,12 +25,6 @@
 
 // Load Dolibarr environment
 require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/agenda.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.form.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formactions.class.php';
-require_once DOL_DOCUMENT_ROOT.'/cron/class/cronjob.class.php';
-
 /**
  * @var Conf $conf
  * @var DoliDB $db
@@ -38,6 +32,11 @@ require_once DOL_DOCUMENT_ROOT.'/cron/class/cronjob.class.php';
  * @var Translate $langs
  * @var User $user
  */
+require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/core/lib/agenda.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/core/class/html.form.class.php';
+require_once DOL_DOCUMENT_ROOT.'/core/class/html.formactions.class.php';
+require_once DOL_DOCUMENT_ROOT.'/cron/class/cronjob.class.php';
 
 if (!$user->admin) {
 	accessforbidden();
@@ -315,13 +314,13 @@ if (getDolGlobalString('AGENDA_REMINDER_EMAIL')) {
 	print $langs->trans('AGENDA_DEFAULT_REMINDER_OFFSET', $langs->transnoentities("Module2300Name"));
 	print '</td>'."\n";
 	print '<td class="center">&nbsp;</td>'."\n";
-	print '<td class="right nowraponall">'."\n";
+	print '<td class="right nowraponall minwidth75imp">'."\n";
 	if (!isModEnabled('cron')) {
 		print '<span class="opacitymedium">'.$langs->trans("WarningModuleNotActive", $langs->transnoentitiesnoconv("Module2300Name")).'</span>';
 	} else {
 		print '<input class="width50" type="number" name="AGENDA_DEFAULT_REMINDER_OFFSET" value="'.(GETPOSTISSET('AGENDA_DEFAULT_REMINDER_OFFSET') ? GETPOSTINT('AGENDA_DEFAULT_REMINDER_OFFSET') : getDolGlobalInt('AGENDA_DEFAULT_REMINDER_OFFSET', 30)).'"> ';
 		$selected = (GETPOSTISSET('AGENDA_DEFAULT_REMINDER_OFFSET_UNIT_type_duration') ? GETPOST('AGENDA_DEFAULT_REMINDER_OFFSET_UNIT_type_duration') : getDolGlobalString('AGENDA_DEFAULT_REMINDER_OFFSET_UNIT', 'i'));
-		print $form->selectTypeDuration('AGENDA_DEFAULT_REMINDER_OFFSET_UNIT_', $selected, array('y', 'm'));
+		print $form->selectTypeDuration('AGENDA_DEFAULT_REMINDER_OFFSET_UNIT_', $selected, array('y', 'm'), 'width150 maxwidth150');
 	}
 }
 
@@ -337,7 +336,7 @@ if (getDolGlobalString('AGENDA_REMINDER_EMAIL')) {
 		print '<span class="opacitymedium">'.$langs->trans("WarningModuleNotActive", $langs->transnoentitiesnoconv("Module2300Name")).'</span>';
 	} else {
 		$selected = (GETPOSTISSET('AGENDA_DEFAULT_REMINDER_EMAIL_MODELmodel_mail') ? GETPOST('AGENDA_DEFAULT_REMINDER_EMAIL_MODELmodel_mail') : getDolGlobalInt('AGENDA_DEFAULT_REMINDER_EMAIL_MODEL', 0));
-		print $form->selectModelMail('AGENDA_DEFAULT_REMINDER_EMAIL_MODEL', 'actioncomm_send', 1, 1, $selected);
+		print $form->selectModelMail('AGENDA_DEFAULT_REMINDER_EMAIL_MODEL', 'actioncomm_send', 1, 1, $selected, 'minwidth150 width300 flat onrightofpage');
 	}
 }
 print '</td></tr>'."\n";
