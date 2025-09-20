@@ -220,7 +220,9 @@ if (!defined('NOREQUIREUSER')) {
 /*
  * Create the global $hookmanager object
  */
-$hookmanager = new HookManager($db);
+if (!defined('NOHOOKMANAGER')) {
+	$hookmanager = new HookManager($db);
+}
 
 
 /*
