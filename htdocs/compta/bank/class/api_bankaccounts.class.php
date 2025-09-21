@@ -639,7 +639,7 @@ class BankAccounts extends DolibarrApi
 	 * Get the detail of a given line of the bank account.
 	 *
 	 * @param 	int 			$line_id 	ID of the account line
-	 * @return	array|mixed					Data without useless information. Note: If we use here AccountLine as return type, we got error if xdebug is on, due to infinite loop parsing of doc by Restler)
+	 * @return	array|mixed					Data without useless information. Note: If we use here AccountLine as return type, we got error if xdebug is on, due to infinite loop parsing of doc by Restler, we can disable this we commenting line 228 to 323 in CommonObject)
 	 * @url GET /lines/{line_id}
 	 *
 	 * @throws RestException
