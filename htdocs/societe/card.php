@@ -42,6 +42,14 @@
 
 // Load Dolibarr environment
 require '../main.inc.php';
+/**
+ * @var Conf $conf
+ * @var DoliDB $db
+ * @var HookManager $hookmanager
+ * @var Societe $mysoc
+ * @var Translate $langs
+ * @var User $user
+ */
 require_once DOL_DOCUMENT_ROOT.'/core/lib/company.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/images.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
@@ -67,14 +75,6 @@ if (isModEnabled('accounting')) {
 if (isModEnabled('eventorganization')) {
 	require_once DOL_DOCUMENT_ROOT.'/eventorganization/class/conferenceorboothattendee.class.php';
 }
-/**
- * @var Conf $conf
- * @var DoliDB $db
- * @var HookManager $hookmanager
- * @var Societe $mysoc
- * @var Translate $langs
- * @var User $user
- */
 
 $u = '';
 $p = '';
@@ -333,6 +333,7 @@ if (empty($reshook)) {
 
 				$object->name = dolGetFirstLastname(GETPOST('firstname', 'alphanohtml'), GETPOST('name', 'alphanohtml'));
 				$object->civility_id		= GETPOST('civility_id', 'alphanohtml'); // Note: civility id is a code, not an int
+				$object->civility_code		= GETPOST('civility_id', 'alphanohtml'); // Note: civility id is a code, not an int
 				// Add non official properties
 				$object->name_bis			= GETPOST('name', 'alphanohtml');
 				$object->firstname			= GETPOST('firstname', 'alphanohtml');
