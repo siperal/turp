@@ -176,7 +176,7 @@ $fieldstosearchall = array();
 // 	$fieldstosearchall = array_merge($fieldstosearchall, empty($hookmanager->resArray['fieldstosearchall']) ? array() : $hookmanager->resArray['fieldstosearchall']);
 // }
 
-// Definition of array of fields for columns
+// Definition of array of fields for columns from ->fields
 $tableprefix = 't';
 $arrayfields = array();
 foreach ($object->fields as $key => $val) {
