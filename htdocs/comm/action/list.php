@@ -31,14 +31,6 @@
 
 // Load Dolibarr environment
 require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
-require_once DOL_DOCUMENT_ROOT.'/comm/action/class/actioncomm.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/agenda.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
-
-include_once DOL_DOCUMENT_ROOT.'/core/class/html.formactions.class.php';
-
 /**
  * @var Conf $conf
  * @var DoliDB $db
@@ -46,6 +38,13 @@ include_once DOL_DOCUMENT_ROOT.'/core/class/html.formactions.class.php';
  * @var Translate $langs
  * @var User $user
  */
+require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
+require_once DOL_DOCUMENT_ROOT.'/comm/action/class/actioncomm.class.php';
+require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/core/lib/agenda.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
+
+include_once DOL_DOCUMENT_ROOT.'/core/class/html.formactions.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("users", "companies", "agenda", "commercial", "other", "orders", "bills"));
@@ -181,26 +180,15 @@ foreach ($object->fields as $key => $val) {
 	}
 }
 
+// Extra fields
+include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_list_array_fields.tpl.php';
+
 // Complete arrayfields with special fields
 $arrayfields = array_merge($arrayfields, array(
 	'owner' => array('label' => "Owner", 'checked' => '1', 'position' => 46),
 	'c.libelle' => array('label' => "Type", 'checked' => '1', 'position' => 47),
 	's.nom' => array('label' => "ThirdParty", 'checked' => '1', 'position' => 54),
 ));
-/*
-$arrayfields = array_merge($arrayfields, array(
-	'owner' => array('label' => "Owner", 'checked' => '1'),
-	'c.libelle' => array('label' => "Type", 'checked' => '1'),
-	's.nom' => array('label' => "ThirdParty", 'checked' => '1'),
-	'a.fk_contact' => array('label' => "Contact", 'checked' => '0'),
-	'a.fk_element' => array('label' => "LinkedObject", 'checked' => '1', 'enabled' => (getDolGlobalString('AGENDA_SHOW_LINKED_OBJECT'))),
-	'a.datec' => array('label' => 'DateCreation', 'checked' => '0', 'position' => 510),
-	'a.tms' => array('label' => 'DateModification', 'checked' => '0', 'position' => 520),
-	'a.percent' => array('label' => "Status", 'checked' => '1', 'position' => 1000)
-);
-*/
-// Extra fields
-include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_list_array_fields.tpl.php';
 
 $object->fields = dol_sort_array($object->fields, 'position');
 $arrayfields = dol_sort_array($arrayfields, 'position');
