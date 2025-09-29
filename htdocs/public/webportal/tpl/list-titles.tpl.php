@@ -8,6 +8,7 @@ if (empty($context) || !is_object($context)) {
 	exit(1);
 }
 '@phan-var-force Context $context';
+'@phan-var-force Controller $this';
 
 /**
  * @var Conf				$conf

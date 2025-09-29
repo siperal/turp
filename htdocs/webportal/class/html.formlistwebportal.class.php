@@ -116,7 +116,7 @@ class FormListWebPortal
 	public $sortorder = '';
 
 	/**
-	 * @var array<string,array{type?:string,label:string,checked:int<0,1>,visible:int<0,1>,enabled:int<0,1>,position:int,help:string}>	Array of fields
+	 * @var array<string,array{type:string,alias:string,label:string,checked:int<0,1>,visible:int<0,1>,enabled:bool|int<0,1>,position:int,help:string,searchmulti:int<0,1>}>	Array of fields
 	 */
 	public $arrayfields = array();
 	/**
@@ -128,7 +128,7 @@ class FormListWebPortal
 	 */
 	public $search_all = '';
 	/**
-	 * @var array Fields for search all
+	 * @var array<string,string> Fields for search all
 	 */
 	public $fields_to_search_all = array();
 	/**
@@ -221,7 +221,7 @@ class FormListWebPortal
 		if (!$this->sortorder) {
 			$this->sortorder = 'DESC';
 		}
-		$this->emptyValueKey = ($elementEn == 'order' ? -5 : -1);
+		$this->emptyValueKey = ($elementEn == 'order' ? "-5" : "-1");
 
 		// Sort object fields
 		if (is_object($this->object)) {
@@ -277,8 +277,8 @@ class FormListWebPortal
 			}
 		}
 		$this->arrayfields['remain_to_pay'] = array('type' => 'price', 'label' => 'RemainderToPay', 'checked' => 1, 'enabled' => $this->element == 'invoice' && isModEnabled('facture'), 'visible' => 1, 'position' => 10000, 'help' => '',);
-		$this->arrayfields['download_link'] = array('label' => 'File', 'checked' => 1, 'enabled' => ($this->element == 'propal' && isModEnabled('propal')) || ($this->element == 'order' && isModEnabled('commande')) || ($this->element == 'invoice' && isModEnabled('facture')), 'visible' => 1, 'position' => 10001, 'help' => '',);
-		$this->arrayfields['signature_link'] = array('label' => 'Signature', 'checked' => 1, 'enabled' => $this->element == 'propal' && isModEnabled('propal') && getDolGlobalString("PROPOSAL_ALLOW_ONLINESIGN") != 0, 'visible' => 1, 'position' => 10002, 'help' => '',);
+		$this->arrayfields['download_link'] = array('type' => '', 'label' => 'File', 'checked' => 1, 'enabled' => ($this->element == 'propal' && isModEnabled('propal')) || ($this->element == 'order' && isModEnabled('commande')) || ($this->element == 'invoice' && isModEnabled('facture')), 'visible' => 1, 'position' => 10001, 'help' => '',);
+		$this->arrayfields['signature_link'] = array('type' => '', 'label' => 'Signature', 'checked' => 1, 'enabled' => $this->element == 'propal' && isModEnabled('propal') && getDolGlobalString("PROPOSAL_ALLOW_ONLINESIGN") != 0, 'visible' => 1, 'position' => 10002, 'help' => '',);
 
 		if (method_exists($this->controller, 'listSetArrayFields')) {
 			$this->controller->listSetArrayFields();
@@ -527,7 +527,7 @@ class FormListWebPortal
 		$context = Context::getInstance();
 
 		$this->params = '&amp;contextpage=' . urlencode($this->contextpage);
-		$this->params .= '&amp;limit=' . urlencode($this->limit);
+		$this->params .= '&amp;limit=' . $this->limit;
 		foreach ($this->search as $key => $val) {
 			if (is_array($val)) {
 				foreach ($val as $skey) {

@@ -8,6 +8,7 @@ if (empty($context) || !is_object($context)) {
 	exit(1);
 }
 '@phan-var-force Context $context';
+'@phan-var-force Controller $this';
 
 /**
  * @var Conf				$conf
@@ -17,7 +18,7 @@ if (empty($context) || !is_object($context)) {
  * @var Controller 			$this
  * @var FormListWebPortal 	$formList
  */
-$formList = $this->formList;
+$formList = &$this->formList;
 
 $parameters = array();
 $reshook = $hookmanager->executeHooks('printFieldListFooter', $parameters, $context); // Note that $action and $object may have been modified by hook
