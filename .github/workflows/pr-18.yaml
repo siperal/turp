@@ -34,7 +34,7 @@ jobs:
     - name: Assign reviewer
       env:
         GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-        url: ${{ github.event.pull_request.html_url }}
+        url: ${{ github.event.pull_request_target.html_url }}
       run: |
         gh pr edit "$url" --add-reviewer rycks
         gh pr edit "$url" --add-reviewer lvessiller-opendsi
