@@ -44,8 +44,18 @@ include_once 'inc.php';
  * @var string $dolibarr_main_db_user
  * @var string $dolibarr_main_db_pass
  * @var string $dolibarr_main_db_encrypted_pass
+ * @var	string $dolibarr_main_document_root
+ * @var string $dolibarr_main_db_type
+ * @var int $dolibarr_main_db_encryption
+ * @var string $dolibarr_main_db_cryptkey
  * @var string $force_install_nophpinfo
+ * @var string $lockfile
+ * @var string $lockfile2
  */
+'
+@phan-var-force string $lockfile
+@phan-var-force string $lockfile2
+';
 
 $err = 0;
 $allowinstall = 0;
@@ -113,7 +123,7 @@ if (versioncompare(versionphparray(), $arrayphpminversionerror) < 0) {        //
 	//print '<img src="../theme/eldy/img/tick.png" alt="Ok" class="valignmiddle pictofixedwidth"> ';
 	print $langs->trans("PHPVersion")." ".versiontostring(versionphparray());
 }
-if (empty($force_install_nophpinfo)) {
+if (empty($force_install_nophpinfo) && (!file_exists($lockfile) && !file_exists($lockfile2))) {		// Do not show sensible information in update process, only in install process.
 	print ' (<a href="phpinfo.php" target="_blank" rel="noopener noreferrer">';
 	$conf->use_javascript_ajax = 1;		// We suppose javascript is on for install process
 	print dolButtonToOpenUrlInDialogPopup('phpinfo', $langs->trans("MoreInformation"), $langs->trans("MoreInformation"), '/install/phpinfo.php', '', '');
@@ -286,7 +296,6 @@ if ($memmaxorig != '') {
 	}
 }
 
-
 // If that config file is present and filled
 clearstatcache();
 if (is_readable($conffile) && filesize($conffile) > 8) {
@@ -327,7 +336,6 @@ if (is_readable($conffile) && filesize($conffile) > 8) {
 	// First install: no upgrade necessary/required
 	$allowupgrade = false;
 }
-
 
 
 // File is missing and cannot be created
