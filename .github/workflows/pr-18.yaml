@@ -16,6 +16,11 @@ on:
     branches:
       - "18.0"
 
+
+permissions:
+  pull-requests: write
+
+  
 jobs:
   pr18:
     runs-on: ubuntu-latest
