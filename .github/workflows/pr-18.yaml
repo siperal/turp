@@ -48,4 +48,4 @@ jobs:
         gh pr edit "${{env.url}}" --add-reviewer rycks
         gh pr edit "${{env.url}}" --add-reviewer lvessiller-opendsi
         #gh pr edit "${{env.url}}" --add-reviewer eldy
-        gh pr edit "${{env.url}}" --add-label "Assigned to v18 maintenance Team"
+        gh pr edit "${{env.url}}" --add-label "Issue for v18 maintenance Team"
