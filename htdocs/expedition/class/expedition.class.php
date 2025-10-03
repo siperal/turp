@@ -1117,8 +1117,6 @@ class Expedition extends CommonObject
 	public function create_delivery($user)
 	{
 		// phpcs:enable
-		global $conf;
-
 		if (getDolGlobalInt('MAIN_SUBMODULE_DELIVERY')) {
 			if ($this->status == self::STATUS_VALIDATED || $this->status == self::STATUS_CLOSED) {
 				// Expedition validated
@@ -1151,7 +1149,7 @@ class Expedition extends CommonObject
 	 */
 	public function addline($entrepot_id, $id, $qty, $array_options = [], $fk_product = 0, $fk_parent = 0)
 	{
-		global $conf, $langs;
+		global $langs;
 
 		$num = count($this->lines);
 		$line = new ExpeditionLigne($this->db);
@@ -1233,7 +1231,6 @@ class Expedition extends CommonObject
 							$this->error = $langs->trans('ErrorStockIsNotEnoughToAddProductOnShipment', $product->ref);
 							$this->errorhidden = 'ErrorStockIsNotEnoughToAddProductOnShipment';
 
-							$this->db->rollback();
 							return -3;
 						}
 					}
@@ -1270,7 +1267,7 @@ class Expedition extends CommonObject
 	public function addline_batch($dbatch, $array_options = [], $origin_line = null)
 	{
 		// phpcs:enable
-		global $conf, $langs;
+		global $langs;
 
 		$num = count($this->lines);
 		$linebatch = null;
@@ -1304,7 +1301,6 @@ class Expedition extends CommonObject
 							$langs->load("errors");
 							$this->errors[] = $langs->trans('ErrorStockIsNotEnoughToAddProductOnShipment', $prod_batch->fk_product);
 							dol_syslog(get_class($this)."::addline_batch error=Product ".$prod_batch->batch.": ".$this->errorsToString(), LOG_ERR);
-							$this->db->rollback();
 							return -1;
 						}
 					}
