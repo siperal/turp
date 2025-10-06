@@ -1650,6 +1650,46 @@ function dol_buildpath($path, $type = 0, $returnemptyifnotfound = 0)
 }
 
 /**
+ * Return path of url.
+ *
+ * @param	string							$url				Relative path to file
+ * @param	array<string,int|float|string>	$params     		params for the http query
+ * @param	bool							$addtoken			does we need to add token
+ * @return string												path
+ */
+function dolBuildUrl($url, $params = [], $addtoken = false)
+{
+	global $db, $hookmanager;
+
+	if (!is_object($hookmanager)) {
+		include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
+		$hookmanager = new HookManager($db);
+	}
+	if ((!isset($params['mainmenu']) || empty($params['mainmenu'])) && GETPOSTISSET('mainmenu')) {
+		$params = array_merge($params, ['mainmenu' => (GETPOST('mainmenu', 'restricthtml'))]);
+	}
+	if ((!isset($params['leftmenu'])/*  || empty($params['leftmenu']) */) && GETPOSTISSET('leftmenu')) { // do not fill leftmenu if we have leftmenu=
+		$params = array_merge($params, ['leftmenu' => (GETPOST('leftmenu', 'restricthtml'))]);
+	}
+	$parameters = [
+		'path' => &$url,
+		'params' => &$params,
+		'addtoken' => &$addtoken,
+	];
+	$hookmanager->executeHooks('buildurl', $parameters);
+	if ($addtoken) {
+		$params = array_merge($params, ['token' => newToken()]);
+	}
+	// TODO TO REMOVE
+	$params = array_merge($params, ['debug' => 'debug']);
+	if ($params) {
+		$url .= '?' . http_build_query($params);
+	}
+
+	return $url;
+}
+
+/**
  *	Get properties for an object - including magic properties when requested
  *
  *	Only returns properties that exist
@@ -7414,11 +7454,18 @@ function print_barre_liste($title, $page, $file, $options = '', $sortfield = '',
 	// Right
 	print '<td class="nobordernopadding valignmiddle right col-right">';
 	print '<input type="hidden" name="pageplusoneold" value="' . ((int) $page + 1) . '">';
+	$query = [];
+	parse_str($options, $query);
 	if ($sortfield) {
-		$options .= "&sortfield=" . urlencode($sortfield);
+		$query += ['sortfield' => $sortfield];
 	}
 	if ($sortorder) {
-		$options .= "&sortorder=" . urlencode($sortorder);
+		$query += ['sortorder' => $sortorder];
+	}
+
+	$options = '&'.http_build_query($query);
+	if ($page) {
+		$query = array_merge($query, ['page' => $page]);
 	}
 	// Show navigation bar
 	$pagelist = '';
@@ -7439,11 +7486,13 @@ function print_barre_liste($title, $page, $file, $options = '', $sortfield = '',
 
 			if ($cpt >= 1) {
 				if (empty($pagenavastextinput)) {
-					$pagelist .= '<li class="pagination"><a class="reposition" href="' . $file . '?page=0' . $options . '">1</a></li>';
+					$query['page'] = 0;
+					$pagelist .= '<li class="pagination"><a class="reposition" href="' . dolBuildUrl($file, $query) . '">1</a></li>';
 					if ($cpt > 2) {
 						$pagelist .= '<li class="pagination"><span class="inactive">...</span></li>';
 					} elseif ($cpt == 2) {
-						$pagelist .= '<li class="pagination"><a class="reposition" href="' . $file . '?page=1' . $options . '">2</a></li>';
+						$query['page'] = 0;
+						$pagelist .= '<li class="pagination"><a class="reposition" href="' . dolBuildUrl($file, $query) . '">2</a></li>';
 					}
 				}
 			}
@@ -7458,7 +7507,8 @@ function print_barre_liste($title, $page, $file, $options = '', $sortfield = '',
 					if ($cpt == $page) {
 						$pagelist .= '<li class="pagination"><span class="active">' . ($page + 1) . '</span></li>';
 					} else {
-						$pagelist .= '<li class="pagination"><a class="reposition" href="' . $file . '?page=' . $cpt . $options . '">' . ($cpt + 1) . '</a></li>';
+						$query['page'] = $cpt;
+						$pagelist .= '<li class="pagination"><a class="reposition" href="' . dolBuildUrl($file, $query) . '">' . ($cpt + 1) . '</a></li>';
 					}
 				}
 				$cpt++;
@@ -7469,13 +7519,16 @@ function print_barre_liste($title, $page, $file, $options = '', $sortfield = '',
 					if ($cpt < $nbpages - 2) {
 						$pagelist .= '<li class="pagination"><span class="inactive">...</span></li>';
 					} elseif ($cpt == $nbpages - 2) {
-						$pagelist .= '<li class="pagination"><a class="reposition" href="' . $file . '?page=' . ($nbpages - 2) . $options . '">' . ($nbpages - 1) . '</a></li>';
+						$query['page'] = ($nbpages - 2);
+						$pagelist .= '<li class="pagination"><a class="reposition" href="' . dolBuildUrl($file, $query) . '">' . ($nbpages - 1) . '</a></li>';
 					}
-					$pagelist .= '<li class="pagination"><a class="reposition" href="' . $file . '?page=' . ($nbpages - 1) . $options . '">' . $nbpages . '</a></li>';
+					$query['page'] = ($nbpages - 1);
+					$pagelist .= '<li class="pagination"><a class="reposition" href="' . dolBuildUrl($file, $query) . '">' . $nbpages . '</a></li>';
 				}
 			} else {
 				//var_dump($page.' '.$cpt.' '.$nbpages);
-				$pagelist .= '<li class="pagination paginationlastpage"><a class="reposition" href="' . $file . '?page=' . ($nbpages - 1) . $options . '">' . $nbpages . '</a></li>';
+				$query['page'] = ($nbpages - 1);
+				$pagelist .= '<li class="pagination paginationlastpage"><a class="reposition" href="' . dolBuildUrl($file, $query) . '">' . $nbpages . '</a></li>';
 			}
 		} else {
 			$pagelist .= '<li class="pagination"><span class="active">' . ($page + 1) . "</li>";
@@ -7494,7 +7547,7 @@ function print_barre_liste($title, $page, $file, $options = '', $sortfield = '',
 	print '</td>';
 	print '</tr>';
 
-	print '</table>' . "\n";
+	print "</table>\n";
 
 	// Center
 	if ($morehtmlcenter && !empty($conf->dol_optimize_smallscreen)) {
@@ -7585,10 +7638,10 @@ function print_fleche_navigation($page, $file, $options = '', $nextpage = 0, $be
 				print '<!-- JS CODE TO ENABLE select limit to launch submit of page -->
 						<script>
 						jQuery(document).ready(function () {
-					  		jQuery(".selectlimit").change(function() {
+							jQuery(".selectlimit").change(function() {
 								console.log("We change limit so we submit the form");
 								$(this).parents(\'form:first\').submit();
-					  		});
+							});
 						});
 						</script>
 					';
