@@ -235,6 +235,7 @@ print $langs->trans("SubscriptionOk");
 
 print "\n</div>\n";
 
+$suffix = '';
 
 htmlPrintOnlineFooter($mysoc, $langs, 0, $suffix);
 
