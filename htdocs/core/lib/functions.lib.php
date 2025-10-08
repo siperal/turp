@@ -3082,14 +3082,14 @@ function dol_get_fiche_head($links = array(), $active = '', $title = '', $notab 
 
 			if (isset($links[$i][2]) && $links[$i][2] == 'image') {
 				if (!empty($links[$i][0])) {
-					$outmore_content .= '<a class="tabimage'.($morecss ? ' '.$morecss : '').'" href="'.$links[$i][0].'">'.$links[$i][1].'</a>'."\n";
+					$outmore_content .= '<a class="tabimage' . ($morecss ? ' ' . $morecss : '') . '" href="' . $links[$i][0] . '">' . $links[$i][1] . '</a>' . "\n";
 				} else {
-					$outmore_content .= '<span class="tabspan">'.$links[$i][1].'</span>'."\n";
+					$outmore_content .= '<span class="tabspan">' . $links[$i][1] . '</span>' . "\n";
 				}
 			} elseif (!empty($links[$i][1])) {
-				$outmore_content .= '<a'.(!empty($links[$i][2]) ? ' id="'.$links[$i][2].'"' : '').' class="wordwrap inline-block'.($morecss ? ' '.$morecss : '').'" href="'.$links[$i][0].'">';
+				$outmore_content .= '<a' . (!empty($links[$i][2]) ? ' id="' . $links[$i][2] . '"' : '') . ' class="wordwrap inline-block' . ($morecss ? ' ' . $morecss : '') . '" href="' . $links[$i][0] . '">';
 				$outmore_content .= preg_replace('/([a-z])\|([a-z])/i', '\\1 | \\2', $links[$i][1]); // Replace x|y with x | y to allow wrap on long composed texts.
-				$outmore_content .= '</a>'."\n";
+				$outmore_content .= '</a>' . "\n";
 			}
 			if ($outmore_content !== '') {
 				$outmore .= '<div class="popuptab wordwrap" style="display:inherit;">' . $outmore_content . '</div>';
@@ -3142,9 +3142,9 @@ function dol_get_fiche_head($links = array(), $active = '', $title = '', $notab 
 	}
 
 	if (!$notab || $notab == -1 || $notab == -2 || $notab == -3 || $notab == -4) {
-		$out .= "\n".'<div id="dragDropAreaTabBar" class="tabBar'.($notab == -1 ? '' : ($notab == -2 ? ' tabBarNoTop' : ((($notab == -3 || $notab == -4) ? ' noborderbottom' : '').($notab == -4 ? '' : ' tabBarWithBottom'))));
-		$out .= ($morecssdiv ? ' '.$morecssdiv : '');
-		$out .= '">'."\n";
+		$out .= "\n" . '<div id="dragDropAreaTabBar" class="tabBar' . ($notab == -1 ? '' : ($notab == -2 ? ' tabBarNoTop' : ((($notab == -3 || $notab == -4) ? ' noborderbottom' : '') . ($notab == -4 ? '' : ' tabBarWithBottom'))));
+		$out .= ($morecssdiv ? ' ' . $morecssdiv : '');
+		$out .= '">' . "\n";
 	}
 	if (!empty($dragdropfile)) {
 		include_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
@@ -5002,7 +5002,7 @@ function dolGetCountryCodeFromIp($ip)
 		//$datafile='/usr/share/GeoIP/GeoIP.dat';    Note that this must be downloaded datafile (not same than datafile provided with ubuntu packages)
 		if ($datafile) {
 			try {
-				include_once DOL_DOCUMENT_ROOT.'/core/class/dolgeoip.class.php';
+				include_once DOL_DOCUMENT_ROOT . '/core/class/dolgeoip.class.php';
 				$geoip = new DolGeoIP('country', $datafile);
 				//print 'ip='.$ip.' databaseType='.$geoip->gi->databaseType." GEOIP_CITY_EDITION_REV1=".GEOIP_CITY_EDITION_REV1."\n";
 				$countrycode = $geoip->getCountryCodeFromIP($ip);
@@ -7461,7 +7461,7 @@ function print_barre_liste($title, $page, $file, $options = '', $sortfield = '',
 		$query += ['sortorder' => $sortorder];
 	}
 
-	$options = '&'.http_build_query($query);
+	$options = '&' . http_build_query($query);
 	if ($page) {
 		$query = array_merge($query, ['page' => $page]);
 	}
@@ -8581,7 +8581,7 @@ function get_default_tva(Societe $thirdparty_seller, Societe $thirdparty_buyer, 
 	$buyer_country_code = $thirdparty_buyer->country_code;
 	$buyer_in_cee = isInEEC($thirdparty_buyer);
 
-	dol_syslog("get_default_tva: seller use vat=".$seller_use_vat.", seller country=".$seller_country_code.", seller in cee=".((string) (int) $seller_in_cee).", buyer vat number=".$thirdparty_buyer->tva_intra." buyer country=".$buyer_country_code.", buyer state=".$thirdparty_buyer->state_id." buyer in cee=".((string) (int) $buyer_in_cee).", idprod=".$idprod.", idprodfournprice=".$idprodfournprice.", SERVICE_ARE_ECOMMERCE_200238EC=".getDolGlobalString('SERVICE_ARE_ECOMMERCE_200238EC'));
+	dol_syslog("get_default_tva: seller use vat=" . $seller_use_vat . ", seller country=" . $seller_country_code . ", seller in cee=" . ((string) (int) $seller_in_cee) . ", buyer vat number=" . $thirdparty_buyer->tva_intra . " buyer country=" . $buyer_country_code . ", buyer state=" . $thirdparty_buyer->state_id . " buyer in cee=" . ((string) (int) $buyer_in_cee) . ", idprod=" . $idprod . ", idprodfournprice=" . $idprodfournprice . ", SERVICE_ARE_ECOMMERCE_200238EC=" . getDolGlobalString('SERVICE_ARE_ECOMMERCE_200238EC'));
 
 	// If services are eServices according to EU Council Directive 2002/38/EC (http://ec.europa.eu/taxation_customs/taxation/vat/traders/e-commerce/article_1610_en.htm)
 	// we use the buyer VAT.
@@ -11440,7 +11440,7 @@ function dol_sort_array(&$array, $index, $order = 'asc', $natsort = 0, $case_sen
 					// Add other keys
 					if (!empty($tmpmultikey[1])) {
 						$newindex = $tmpmultikey[1];
-						$temp[$key] .= '__'.(empty($array[$key]->$newindex) ? 0 : $array[$key]->$newindex);
+						$temp[$key] .= '__' . (empty($array[$key]->$newindex) ? 0 : $array[$key]->$newindex);
 					}
 				} else {
 					// @phan-suppress-next-line PhanTypeArraySuspiciousNullable,PhanTypeArraySuspicious,PhanTypeMismatchDimFetch
@@ -11448,11 +11448,11 @@ function dol_sort_array(&$array, $index, $order = 'asc', $natsort = 0, $case_sen
 					// Add other keys
 					if (!empty($tmpmultikey[1])) {
 						$newindex = $tmpmultikey[1];
-						$temp[$key] .= '__'.(empty($array[$key][$newindex]) ? 0 : $array[$key][$newindex]);
+						$temp[$key] .= '__' . (empty($array[$key][$newindex]) ? 0 : $array[$key][$newindex]);
 					}
 				}
 				if ($natsort == -1) {
-					$temp[$key] = '___'.$temp[$key];        // We add a string at begin of value to force an alpha order when using asort.
+					$temp[$key] = '___' . $temp[$key];        // We add a string at begin of value to force an alpha order when using asort.
 				}
 			}
 			if (empty($natsort) || $natsort == -1) {
@@ -11743,14 +11743,14 @@ function dol_eval_new($s)
 {
 	// Only this global variables can be read by eval function and returned to caller
 	global $conf,	// Read of const is done with getDolGlobalString() but we need $conf->currency for example
-	$db, $langs, $user, $website, $websitepage,
-	$action, $mainmenu, $leftmenu,
-	$mysoc,
-	$objectoffield,	// To allow the use of $objectoffield in computed fields
+		$db, $langs, $user, $website, $websitepage,
+		$action, $mainmenu, $leftmenu,
+		$mysoc,
+		$objectoffield,	// To allow the use of $objectoffield in computed fields
 
-	// Old variables used
-	$object,
-	$obj; // To get $obj used into list when dol_eval() is used for computed fields and $obj is not yet $object
+		// Old variables used
+		$object,
+		$obj; // To get $obj used into list when dol_eval() is used for computed fields and $obj is not yet $object
 
 	// PHP < 7.4.0
 	defined('T_COALESCE_EQUAL') || define('T_COALESCE_EQUAL', PHP_INT_MAX);
@@ -13270,7 +13270,7 @@ function natural_search($fields, $value, $mode = 0, $nofirstand = 0)
 						$tmps = '';
 
 						if ($isSellist) {
-							$newres .= $field." IN (SELECT t.".$key." FROM ".$db->prefix().$table." AS t WHERE t.".$label." LIKE '%".$db->escape($tmpcrit2)."%')";
+							$newres .= $field . " IN (SELECT t." . $key . " FROM " . $db->prefix() . $table . " AS t WHERE t." . $label . " LIKE '%" . $db->escape($tmpcrit2) . "%')";
 						} else {
 							if (preg_match('/^!/', $tmpcrit)) {
 								$tmps .= $db->sanitize($field) . " NOT LIKE "; // ! as exclude character
@@ -15915,7 +15915,13 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 			$sql .= ", m.lastname, m.firstname";
 		} elseif (is_object($filterobj) && in_array(get_class($filterobj), array('Commande', 'CommandeFournisseur', 'Product', 'Ticket', 'BOM', 'Contrat', 'Facture', 'FactureFournisseur', 'Propal', 'Expedition'))) {
 			$sql .= ", o.ref";
+		} else {
+			if (is_object($filterobj) && !empty($filterobj->table_element) && !empty($filterobj->element) && !empty($filterobj->id) && array_key_exists('ref', $filterobj->fields)) {
+				$sql .= ", o.ref";
+			}
 		}
+
+
 		$sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm as a";
 		$sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as u on u.rowid = a.fk_user_action";
 		$sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_actioncomm as c ON a.fk_action = c.id";
@@ -15957,6 +15963,10 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 			$sql .= ", " . MAIN_DB_PREFIX . "expedition as o";
 		} elseif (is_object($filterobj) && get_class($filterobj) == 'Propal') {
 			$sql .= ", " . MAIN_DB_PREFIX . "propal as o";
+		} else {
+			if (is_object($filterobj) && !empty($filterobj->table_element) && !empty($filterobj->element) && !empty($filterobj->id) && array_key_exists('ref', $filterobj->fields)) {
+				$sql .= ", " . MAIN_DB_PREFIX . $filterobj->table_element . " as o";
+			}
 		}
 		$sql .= " WHERE a.entity IN (" . getEntity('agenda') . ")";
 		if (!$force_filter_contact) {
@@ -16023,6 +16033,14 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 				$sql .= " AND a.fk_element = o.rowid";
 				if ($filterobj->id) {
 					$sql .= " AND a.fk_element = " . ((int) $filterobj->id) . " AND a.elementtype = 'invoice_supplier'";
+				}
+			} else {
+				if (is_object($filterobj) && !empty($filterobj->element) && !empty($filterobj->id) && array_key_exists('ref', $filterobj->fields)) {
+					$sql .= " AND a.fk_element = o.rowid";
+					$sql .= " AND a.elementtype = '" . $db->escape($filterobj->element) . "'";
+					if ($filterobj->id) {
+						$sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+					}
 				}
 			}
 		} else {
