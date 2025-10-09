@@ -1864,6 +1864,7 @@ class Adherent extends CommonObject
 		$subscription->datef = $datefin; // End data of new subscription
 		$subscription->amount = $amount;
 		$subscription->note_public = $label;
+		$subscription->note_private = '';
 		$subscription->fk_type = $fk_type;
 		$subscription->ref_ext = $ref_ext;
 
