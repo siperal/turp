@@ -33,7 +33,7 @@ abstract class AbstractDocumentController extends Controller
 	 * @param   array<string, callable>              $linkBuilder        An array of functions to build URLs ('dir' and 'file').
 	 * @return  void
 	 */
-	protected function displayFileBrowser($title, $itemList, $emptyMessage, array $linkBuilder)
+	protected function displayDocumentTable($title, $itemList, $emptyMessage, array $linkBuilder)
 	{
 		global $langs;
 
