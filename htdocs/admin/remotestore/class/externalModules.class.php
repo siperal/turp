@@ -428,7 +428,7 @@ class ExternalModules
 
 				if ($product['source'] === 'githubcommunity') {
 					$download_link = '<a class="paddingleft paddingright" target="_blank" title="'.$langs->trans("Sources").'"  href="'.$product["link"].'">';
-					$download_link .= img_picto('', 'file-code', 'class="size2x paddingright"');
+					$download_link .= img_picto('', 'file-code', 'class="size2x paddingright colorgrey"');
 					$download_link .= '</a>';
 
 					$urlview = $product["dolistore-download"];		// In a future, we will have the download to the zip file
@@ -474,7 +474,7 @@ class ExternalModules
 					$compatible = '';
 				} else {
 					// never compatible, module expired
-					$version = '<span class="warning">'.$langs->trans(
+					$version = '<span class="warning hideonsmartphone">'.$langs->trans(
 						'NotCompatible',
 						$dolibarrversiontouse,
 						$product["dolibarr_min"],
@@ -506,31 +506,71 @@ class ExternalModules
 
 			// Output the line
 			$html .= '<tr class="app oddeven nohover '.dol_escape_htmltag($compatible).'">';
+
+			// Logo
 			$html .= '<td class="center width150"><div class="newAppParent">';
 			$html .= $newapp.$images;	// No dol_escape_htmltag, it is already escape html
 			$html .= '</div></td>';
-			$html .= '<td class="margeCote"><h2 class="appTitle">';
+
+			// Description
+			$html .= '<td class="margeCote minwidth500imp"><h2 class="appTitle">';
 			$html .= dolPrintHTML(dol_string_nohtmltag($product["label"]));
-			$html .= '<br><small>';
-			$html .= $version;			// No dol_escape_htmltag, it is already escape html
-			$html .= '</small></h2>';
-			$html .= '<small> ';
-			if (empty($product['tms'])) {
-				$html .= '<span class="opacitymedium">'.$langs->trans("DateCreation").': '.$langs->trans("Unknown").'</span>';
-			} else {
-				$html .= '<span class="opacitymedium">'.dol_print_date(dol_stringtotime($product['tms']), 'day').'</span>';
+			if (!empty($product['author']) && $product['author'] != 'unkownauthor') {
+				$html .= '<small> &nbsp; - &nbsp; '.img_picto('', 'company', 'class="pictofixedwidth"');
+				if (!empty($product['author_url'])) {
+					$html .= '<a href="'.$product['author_url'].'" target="_blank">'.$product['author'].'</a>';
+				} else {
+					$html .= $product['author'];
+				}
+				$html .= '</small>';
 			}
-			$html .= ' - '.$langs->trans('Ref').' '.dolPrintHTML($product["ref"]);
+			$html .= '<br><small>';
+			$html .= $version;			// Version Dolibarr. No dol_escape_htmltag, it is already escape html
+			$html .= '</small>';
+			$html .= '</h2>';
+
+			$html .= '<small class="appDateCreation appRef"> ';
+			if (empty($product['tms'])) {
+				$html .= img_picto($langs->trans('DateCreation'), 'calendar', 'class="pictofixedwidth"').'<span class="opacitymedium"><span class="hideonsmartphone">'.$langs->trans("DateCreation").': </span>';
+				$html .= (!empty($product['datec']) ? dol_print_date(dol_stringtotime($product['datec']), 'day') : $langs->trans("Unknown")).'</span>';
+			} else {
+				$html .= img_picto($langs->trans('DateModification'), 'calendar', 'class="pictofixedwidth"').'<span class="opacitymedium">'.dol_print_date(dol_stringtotime($product['tms']), 'day').'</span>';
+			}
+			$html .= ' &nbsp; '.$langs->trans('Ref').' '.dolPrintHTML(preg_replace('/@.*$/', '', $product["ref"]));
 			//$html .= ' - '.dol_escape_htmltag($langs->trans('Id')).': '.((int) $product["id"]);
 			$html .= '</small><br>';
-			$html .= '<small>'.$langs->trans('Source').': '.$product["source"].'</small><br>';
-			$html .= '<br>'.dolPrintHTML(dol_string_nohtmltag($product["description"]));
+			//$html .= '<div class="appSource valignmiddle inline-block">'.$langs->trans('Source').' &nbsp; </div>';
+			$html .= '<div class="appSource valignmiddle inline-block">';
+			if ($product["source"] == 'dolistore') {
+				//$html .= img_picto('DoliStore', 'shop', 'class="pictofixedwidth"');
+				$html .= '<img border="0" title="'.dolPrintHTML($langs->trans('Source').": DoliStore").'" class="imgautosize imgmaxwidth100 valignmiddle" style="height: 14px" src="'.DOL_URL_ROOT.'/theme/dolistore_squarred.svg">';
+			} elseif ($product["source"] == 'githubcommunity') {
+				$html .= img_picto($langs->trans('Source').': GitHub community repo', 'group', 'class="pictofixedwidth valignmiddle"');
+			} else {
+				$html .= img_picto($langs->trans('Source').': '.$langs->trans('Other'), 'generic', 'class="pictofixedwidth"');
+			}
+			//$html .= $product["source"];
+			$html .= '</div> &nbsp;';
+			if (!empty($product['phpmin']) && $product['phpmin'] != 'unknown') {
+				$html .= ' <span class="badge-secondary small" style="padding: 3px; border-radius: 5px">PHP min '.$product['phpmin'].'</span>';
+			}
+			if (!empty($product['phpmax']) && $product['phpmax'] != 'unknown') {
+				$html .= ' <span class="badge-secondary small" style="padding: 3px; border-radius: 5px">PHP max '.$product['phpmax'].'</span>';
+			}
+			$html .= '<br>';
+
+			$html .= '<br>';
+			$html .= '<div class="storedesc">'.dolPrintHTML(dol_string_nohtmltag($product["description"])).'</div>';
 			$html .= '</td>';
-			// do not load if display none
+
+			// Price - do not load if display none
 			$html .= '<td class="margeCote center amount">';
 			$html .= $price;
 			$html .= '</td>';
+
+			// Links
 			$html .= '<td class="margeCote nowraponall">'.$download_link.'</td>';
+
 			$html .= '</tr>';
 		}
 
@@ -930,6 +970,8 @@ class ExternalModules
 					'tms' => (!empty($package['last_updated_at']) && is_string($package['last_updated_at']))
 						? date('Y-m-d H:i:s', strtotime($package['last_updated_at']))
 						: '',
+					'author' => array_key_exists('author', $package) ? $package['author'] : '',
+					'author_url' => array_key_exists('author_url', $package) ? $package['author_url'] : '',
 					'price_ttc' => 0,
 					'dolibarr_min' => !empty($package['dolibarrmin'])
 						? $package['dolibarrmin']
@@ -983,6 +1025,8 @@ class ExternalModules
 					'description' => $package['description'],
 					'datec' => $package['datec'],
 					'tms' => $package['tms'],
+					'author' => array_key_exists('author', $package) ? $package['author'] : '',
+					'author_url' => array_key_exists('author_url', $package) ? $package['author_url'] : '',
 					'price_ttc' => $package['price_ttc'],
 					'dolibarr_min' => $package['dolibarr_min'],
 					'dolibarr_max' => $package['dolibarr_max'],
