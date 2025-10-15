@@ -217,7 +217,7 @@ if (empty($reshook)) {
 			$sql .= " FROM llx_usergroup_rights as gr";
 			$sql .= " WHERE EXISTS (SELECT gu.rowid FROM llx_usergroup_user as gu WHERE gu.fk_user = ".((int) $id);
 			$sql .= " AND gu.fk_usergroup = gr.fk_usergroup))";
-			
+	
 			$resql = $db->query($sql);
 			while ($obj = $db->fetch_object($resql)) {
 				$rigthsarray []= $obj->id;
