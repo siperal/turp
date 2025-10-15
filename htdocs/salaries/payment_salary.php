@@ -315,6 +315,8 @@ if ($action == 'create') {
 		$totalrecu += $objp->amount;
 		$i++;
 	}
+
+	/*
 	if ($i > 1) {
 		// Print total
 		print '<tr class="oddeven">';
@@ -325,6 +327,7 @@ if ($action == 'create') {
 		print '<td align="center">&nbsp;</td>';
 		print "</tr>\n";
 	}
+	*/
 
 	print "</table>";
 
