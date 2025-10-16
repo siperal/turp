@@ -371,7 +371,7 @@ class ExternalModules
 				$this->numberTotalOfProducts += $dolistoreProductsTotal;
 			}
 		}
-		var_dump($dolistoreProducts);
+
 		// Fetch the products from the github repo
 
 		$fileProducts = array();
