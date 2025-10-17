@@ -74,6 +74,38 @@ function accounting_prepare_head(AccountingAccount $object)
 }
 
 /**
+ *	Prepare array with list of tabs for accounting transaction
+ *
+ *	@param	BookKeeping	$object		Bookkeeping
+ *	@param	string		$mode		Mode _tmp if operation are drafted
+ *	@param	string		$type		Type of list "sub" (for subsidiary list) or not
+ *	@param	string		$backtopage Back to page (return on ledger by default)
+ *	@return	array<array{0:string,1:string,2:string}>	Array of tabs to show
+ */
+function accounting_transaction_prepare_head(BookKeeping $object, $mode = '', $type = '', $backtopage = '/accountancy/bookkeeping/listbyaccount.php')
+{
+	global $langs, $conf;
+
+	$h = 0;
+	$head = array();
+
+	$head[$h][0] = dolBuildUrl(DOL_URL_ROOT.'/accountancy/bookkeeping/card.php', ['piece_num' => $object->piece_num, 'mode' => $mode, 'type' => $type, 'backtopage' => $backtopage]);
+	$head[$h][1] = $langs->trans("Transaction");
+	$head[$h][2] = 'transaction';
+	$h++;
+
+	// Show more tabs from modules
+	// Entries must be declared in modules descriptor with line
+	// $this->tabs = array('entity:+tabname:Title:@mymodule:/mymodule/mypage.php?id=__ID__'); to add new tab
+	// $this->tabs = array('entity:-tabname); to remove a tab
+	complete_head_from_modules($conf, $langs, $object, $head, $h, 'accounting_transaction');
+
+	complete_head_from_modules($conf, $langs, $object, $head, $h, 'accounting_transaction', 'remove');
+
+	return $head;
+}
+
+/**
  * Return accounting account without zero on the right
  *
  * @param 	string	$account		Accounting account
