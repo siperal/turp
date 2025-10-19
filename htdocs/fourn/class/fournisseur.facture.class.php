@@ -786,7 +786,7 @@ class FactureFournisseur extends CommonInvoice
 					$result_insert = $this->addline(
 						$_facrec->lines[$i]->desc ? $_facrec->lines[$i]->desc : $_facrec->lines[$i]->description,
 						$_facrec->lines[$i]->pu_ht,
-						(float) $tva_tx,
+						$tva_tx,
 						$localtax1_tx,
 						$localtax2_tx,
 						$_facrec->lines[$i]->qty,
