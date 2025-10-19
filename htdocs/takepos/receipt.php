@@ -175,6 +175,24 @@ if (getDolGlobalString('TAKEPOS_HEADER') || getDolGlobalString($constFreeText)) 
 }
 ?>
 </p>
+
+<?php
+if ($object->status == Facture::STATUS_DRAFT) {
+	$canprintifnotvalidate = true;
+	$arrayOfCountryWithPrintingOnBrowserMandatory = array('FR');
+	if (in_array($mysoc->country_code, $arrayOfCountryWithPrintingOnBrowserMandatory) && isModEnabled('blockedlog')) {
+		//$customprinterallowed = false;	// Custom printer are allowed but information in template are mandatory
+		$canprintifnotvalidate = false;
+		//$orderprinterallowed = false;
+	}
+
+	if (!$canprintifnotvalidate) {
+		print "Error: Printing ticket is not allowed when invoice is not validated/paid.";
+		exit;
+	}
+}
+?>
+
 <p class="right">
 <?php
 print $langs->trans('Date')." ".dol_print_date($object->date, 'day').'<br>';
@@ -182,6 +200,8 @@ if (getDolGlobalString('TAKEPOS_RECEIPT_NAME')) {
 	print getDolGlobalString('TAKEPOS_RECEIPT_NAME') . " ";
 }
 if ($object->status == Facture::STATUS_DRAFT) {
+	// Printing ticket is not allowed if invoice not yet validate.
+	// This may happen if a feature to validate invoice and print it before paying is implemented.
 	print str_replace(")", "", str_replace("-", " ".$langs->trans('Place')." ", str_replace("(PROV-POS", $langs->trans("Terminal")." ", $object->ref)));
 } else {
 	print $object->ref;
@@ -197,7 +217,7 @@ if (getDolGlobalString('TAKEPOS_SHOW_CUSTOMER')) {
 		print "<br>".$langs->trans("Customer").': '.$soc->name;
 	}
 }
-if (getDolGlobalString('TAKEPOS_SHOW_DATE_OF_PRINING')) {
+if (!getDolGlobalString('TAKEPOS_HIDE_DATE_OF_PRINTING')) {
 	print "<br>".$langs->trans("DateOfPrinting").': '.dol_print_date(dol_now(), 'dayhour', 'tzuserrel').'<br>';
 }
 ?>
