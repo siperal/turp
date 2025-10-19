@@ -1454,7 +1454,7 @@ class Contrat extends CommonObject
 	 *  @param	string		$desc            	Description of line
 	 *  @param  float		$pu_ht              Unit price net
 	 *  @param  float	 	$qty             	Quantity
-	 *  @param  float		$txtva           	Vat rate
+	 *  @param  string		$txtva           	Vat rate. Can be '19.6' or '19.6 (CODE)'
 	 *  @param  float		$txlocaltax1        Local tax 1 rate
 	 *  @param  float		$txlocaltax2        Local tax 2 rate
 	 *  @param  int			$fk_product      	Id produit
@@ -1473,7 +1473,7 @@ class Contrat extends CommonObject
 	 */
 	public function addline($desc, $pu_ht, $qty, $txtva, $txlocaltax1, $txlocaltax2, $fk_product, $remise_percent, $date_start, $date_end, $price_base_type = 'HT', $pu_ttc = 0.0, $info_bits = 0, $fk_fournprice = null, $pa_ht = 0, $array_options = array(), $fk_unit = null, $rang = 0)
 	{
-		global $user, $langs, $conf, $mysoc;
+		global $user, $langs, $mysoc;
 		$error = 0;
 
 		dol_syslog(get_class($this)."::addline $desc, $pu_ht, $qty, $txtva, $txlocaltax1, $txlocaltax2, $fk_product, $remise_percent, $date_start, $date_end, $price_base_type, $pu_ttc, $info_bits, $rang");
