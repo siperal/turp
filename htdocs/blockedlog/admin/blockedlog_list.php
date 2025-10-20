@@ -694,7 +694,7 @@ if (is_array($blocks)) {
 			print '<td class="right nowraponall">'.price($block->amounts).'</td>';
 
 			// Details link
-			print '<td class="center"><a href="#" data-blockid="'.$block->id.'" rel="show-info">'.img_picto($langs->trans('ShowDetails'), 'note', 'class="size15x"').'</a></td>';
+			print '<td class="center"><a href="#" data-blockid="'.$block->id.'" rel="show-info">'.img_picto($langs->trans('ShowDetails'), 'note', 'class="size15x"').'</span></td>';
 
 			// Fingerprint
 			print '<td class="nowraponall">';
@@ -778,7 +778,7 @@ jQuery(document).ready(function () {
 	}).css("z-index: 5000");
 
 	$("a[rel=show-info]").click(function() {
-	    console.log("We click on tooltip, we open popup and get content using an ajax call");
+	    console.log("We click on tooltip a[rel=show-info], we open popup and get content using an ajax call");
 
 		var fk_block = $(this).attr("data-blockid");
 
@@ -794,6 +794,7 @@ jQuery(document).ready(function () {
 		var mydialog = jQuery("#dialogforpopup");
 		mydialog.dialog({autoOpen: false, modal: true, height: (window.innerHeight - 150), width: \'80%\', title: \''.dol_escape_js($langs->trans("UnlaterableDataOfEvent")).'\',});
 		mydialog.dialog("open");
+		return false;
 	});
 })
 </script>'."\n";
