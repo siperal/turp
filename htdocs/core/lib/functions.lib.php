@@ -8273,7 +8273,7 @@ function get_default_tva(Societe $thirdparty_seller, Societe $thirdparty_buyer, 
 	if (getDolGlobalString('SERVICE_ARE_ECOMMERCE_200238EC')) {
 		if ($seller_in_cee && $buyer_in_cee) {
 			$isacompany = $thirdparty_buyer->isACompany();
-			if ($isacompany && getDolGlobalString('MAIN_USE_VAT_COMPANIES_IN_EEC_WITH_INVALID_VAT_ID_ARE_INDIVIDUAL')) {
+			if ($isacompany && !getDolGlobalString('MAIN_USE_VAT_ZERO_FOR_COMPANIES_IN_EEC_EVEN_IF_VAT_ID_UNKNOWN')) {
 				require_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
 				if (!isValidVATID($thirdparty_buyer)) {
 					$isacompany = 0;
@@ -8342,7 +8342,7 @@ function get_default_tva(Societe $thirdparty_seller, Societe $thirdparty_buyer, 
 	// If (seller and buyer in European Community) and (buyer = company) then VAT by default=0. End of rule
 	if (($seller_in_cee && $buyer_in_cee)) {
 		$isacompany = $thirdparty_buyer->isACompany();
-		if ($isacompany && getDolGlobalString('MAIN_USE_VAT_COMPANIES_IN_EEC_WITH_INVALID_VAT_ID_ARE_INDIVIDUAL')) {
+		if ($isacompany && !getDolGlobalString('MAIN_USE_VAT_ZERO_FOR_COMPANIES_IN_EEC_EVEN_IF_VAT_ID_UNKNOWN')) {
 			require_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
 			if (!isValidVATID($thirdparty_buyer)) {
 				$isacompany = 0;
