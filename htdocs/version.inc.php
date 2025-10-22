@@ -50,6 +50,7 @@ if (!defined('CERTIF_LNE')) {
 
 /**
  * Return if the version is a candidate version to get the LNE certification and if the prerequisites are OK.
+ * This function can be used to avoid to show the mandatory information "Certified LNE" on tickets when it is not true.
  *
  * @return boolean		True or false
  */
