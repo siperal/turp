@@ -1474,7 +1474,7 @@ class pdf_octopus extends ModelePDFFactures
 			$posy = $pdf->GetY();
 		}
 
-		$showvatmention += pdfLegalMention($pdf, $outputlangs, $this->emetteur, $default_font_size, $posy, $this);
+		$showvatmention += pdfCertifMention($pdf, $outputlangs, $this->emetteur, $default_font_size, $posy, $this);
 
 		if ($showvatmention) {
 			$posy += 3;

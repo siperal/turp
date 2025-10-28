@@ -847,7 +847,7 @@ function pdf_watermark(&$pdf, $outputlangs, $h, $w, $unit, $text)
 
 
 /**
- *      Add legal mention
+ *      Add legal certificate mention
  *
  *      @param	TCPDF      			$pdf            	Object PDF
  *      @param  Translate			$outputlangs		Object lang
@@ -857,25 +857,11 @@ function pdf_watermark(&$pdf, $outputlangs, $h, $w, $unit, $text)
  *      @param  CommonDocGenerator	$pdftemplate    	PDF template
  *      @return	int                                 	0 if nothing done, 1 if a mention was printed
  */
-function pdfLegalMention(&$pdf, $outputlangs, $seller, $default_font_size, &$posy, $pdftemplate)
+function pdfCertifMention(&$pdf, $outputlangs, $seller, $default_font_size, &$posy, $pdftemplate)
 {
 	include_once DOL_DOCUMENT_ROOT.'/blockedlog/lib/blockedlog.lib.php';
 
-	$result = 0;
-
-	if (in_array($seller->country_code, array('FR')) && isALNEQualifiedVersion()) {	// If necessary, we could replace with "if isALNERunningVersion()"
-		$outputlangs->load("blockedlog");
-		$blockedlog_mention = $outputlangs->trans("InvoiceGeneratedWithLNECertifiedPOSSystem");
-		if ($blockedlog_mention) {
-			$pdf->SetFont('', '', $default_font_size - 2);
-			$pdf->SetXY($pdftemplate->marge_gauche, $posy);
-			$pdf->MultiCell(100, 3, $blockedlog_mention, 0, 'L', false);
-			$posy = $pdf->GetY();
-			$result = 1;
-		}
-	}
-
-	return $result;
+	return pdfCertifMentionblockedLog($pdf, $outputlangs, $seller, $default_font_size, $posy, $pdftemplate);
 }
 
 
