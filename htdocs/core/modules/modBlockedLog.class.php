@@ -209,7 +209,7 @@ class modBlockedLog extends DolibarrModules
 	 */
 	public function remove($options = '')
 	{
-		global $conf, $user;
+		global $conf, $langs, $user;
 
 		$sql = array();
 
@@ -233,6 +233,8 @@ class modBlockedLog extends DolibarrModules
 
 		if ($b->alreadyUsed(1)) {
 			$res = $b->create($user, '0000000000'); // If already used for something else than SET or UNSET, we log with error
+			//$this->error = $langs->trans('DisablingBlockedLogIsNotallowedOnceUsedExceptOnFullreset', $langs->transnoentitiesnoconv('BlockedLog'));
+			return 0;
 		} else {
 			$res = $b->create($user);
 		}

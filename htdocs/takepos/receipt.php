@@ -63,6 +63,7 @@ if (!isset($action)) {
  * @var User $user
  */
 include_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture.class.php';
+include_once DOL_DOCUMENT_ROOT.'/blockedlog/lib/blockedlog.lib.php';
 
 $langs->loadLangs(array("main", "bills", "cashdesk", "companies"));
 
@@ -166,7 +167,14 @@ if (isALNERunningVersion()) {
 </style>
 <center>
 <div style="font-size: 1.5em">
-<?php echo '<b>'.$mysoc->name.'</b>'; ?>
+<?php
+echo '<b>'.$mysoc->name.'</b>';
+
+if (GETPOST('specimen')) {
+	print '<br>';
+	print '!!!!! SPECIMEN !!!!!';
+}
+?>
 </div>
 </center>
 <br>
@@ -191,14 +199,12 @@ if (getDolGlobalString('TAKEPOS_HEADER') || getDolGlobalString($constFreeText)) 
 <?php
 if ($object->status == Facture::STATUS_DRAFT) {
 	$canprintifnotvalidate = true;
-	$arrayOfCountryWithPrintingOnBrowserMandatory = array('FR');
-	if (in_array($mysoc->country_code, $arrayOfCountryWithPrintingOnBrowserMandatory) && isModEnabled('blockedlog')) {
-		//$customprinterallowed = false;	// Custom printer are allowed but information in template are mandatory
+	if (isALNERunningVersion()) {
 		$canprintifnotvalidate = false;
 		//$orderprinterallowed = false;
 	}
 
-	if (!$canprintifnotvalidate && empty($facid)) {
+	if (!$canprintifnotvalidate && empty($facid) && !GETPOST('specimen')) {
 		print "Error: Printing ticket is not allowed when invoice is not validated/paid.";
 		exit;
 	}
@@ -207,7 +213,7 @@ if ($object->status == Facture::STATUS_DRAFT) {
 
 <p class="right">
 <?php
-print $langs->trans('Date')." ".dol_print_date($object->date, 'day').'<br>';
+print $langs->trans('Date')." ".dol_print_date($object->date ? $object->date : dol_now(), 'day').'<br>';
 if (getDolGlobalString('TAKEPOS_RECEIPT_NAME')) {
 	print getDolGlobalString('TAKEPOS_RECEIPT_NAME') . " ";
 } else {
@@ -217,14 +223,14 @@ if ($object->status == Facture::STATUS_DRAFT || empty($facid) || GETPOST('specim
 	// Printing ticket is not allowed if invoice not yet validate.
 	// Reaching this code may happen for specimen or if a feature to validate invoice and print it before paying is implemented.
 	if (empty($facid) || GETPOST('specimen')) {
-		print 'Specimen';
+		print '99999';
 	} else {
 		print $object->ref;
 	}
 } else {
 	print $object->ref;
 }
-print '<br>'.$langs->trans("Terminal").' '.$object->pos_source;
+print '<br>'.$langs->trans("Terminal").' '.(GETPOST('specimen') ? '99' : $object->pos_source);
 if (getDolGlobalString('TAKEPOS_SHOW_CUSTOMER')) {
 	if ($object->socid != getDolGlobalInt('CASHDESK_ID_THIRDPARTY'.$_SESSION["takeposterminal"])) {
 		$soc = new Societe($db);
