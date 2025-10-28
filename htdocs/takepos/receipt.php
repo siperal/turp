@@ -29,7 +29,11 @@
  *	\brief      Page to show a receipt.
  */
 
+
 // Include main (when file in included into send.php, $action is set and main was already loaded)
+/**
+ * @var string $action
+ */
 if (!isset($action)) {
 	//if (! defined('NOREQUIREUSER'))	define('NOREQUIREUSER', '1');	// Not disabled cause need to load personalized language
 	//if (! defined('NOREQUIREDB'))		define('NOREQUIREDB', '1');		// Not disabled cause need to load personalized language
@@ -50,7 +54,6 @@ if (!isset($action)) {
 
 	require '../main.inc.php'; // If this file is called from send.php avoid load again
 }
-include_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture.class.php';
 /**
  * @var Conf $conf
  * @var DoliDB $db
@@ -59,6 +62,7 @@ include_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture.class.php';
  * @var Translate $langs
  * @var User $user
  */
+include_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture.class.php';
 
 $langs->loadLangs(array("main", "bills", "cashdesk", "companies"));
 
@@ -72,6 +76,7 @@ $gift = GETPOSTINT('gift');
 if (!$user->hasRight('takepos', 'run')) {
 	accessforbidden();
 }
+
 
 /*
  * Actions
@@ -102,7 +107,7 @@ $object->fetch($facid);
 
 print '<body>';
 
-// Record entry in blocked logs
+// Record entry in blocked logs each time we print a receipt
 // DOL_DOCUMENT_ROOT.'/blockedlog/ajax/block-add.php?id='.$object->id.'&element='.$object->element.'&action=DOC_PREVIEW&token='.newToken();
 print "
 <script>
@@ -119,13 +124,20 @@ jQuery(document).ready(function () {
 });
 </script>";
 
-// Call to external receipt modules if exist
-$parameters = array();
-$hookmanager->initHooks(array('takeposfrontend'));
-$reshook = $hookmanager->executeHooks('TakeposReceipt', $parameters, $object);
-if (!empty($hookmanager->resPrint)) {
-	print $hookmanager->resPrint;
-	return;	// Receipt page can be called by the takepos/send.php page that use ob_start/end so we must use return and not exit to stop page
+// Call to external receipt modules factory if it exists and if we can (not allowed in some cases)
+if (isALNERunningVersion()) {
+	// If LNE version, we force format. Custom templates is not allowed
+
+	$conf->global->TAKEPOS_SHOW_HT_RECEIPT = 1;
+	$conf->global->TAKEPOS_TICKET_VAT_GROUPPED = 1;
+} else {
+	$parameters = array();
+	$hookmanager->initHooks(array('takeposfrontend'));
+	$reshook = $hookmanager->executeHooks('TakeposReceipt', $parameters, $object);
+	if (!empty($hookmanager->resPrint)) {
+		print $hookmanager->resPrint;
+		return;	// Receipt page can be called by the takepos/send.php page that use ob_start/end so we must use return and not exit to stop page
+	}
 }
 
 // IMPORTANT: This file is sended to 'Takepos Printing' application. Keep basic file. No external files as css, js... If you need images use absolute path.
@@ -367,9 +379,14 @@ if (isModEnabled('multicurrency') && !empty($_SESSION["takeposcustomercurrency"]
 	echo '</td></tr>';
 }
 
+// We force the feature when LNE is on, whatever is setup. When a payment is done, we always want to see it on receipt.
+if (isALNERunningVersion()) {
+	$conf->global->TAKEPOS_PRINT_PAYMENT_METHOD = 1;
+}
+
 if (getDolGlobalString('TAKEPOS_PRINT_PAYMENT_METHOD')) {
 	if (empty($facid)) {
-		// Case of specimen
+		// Case of a specimen, we output demo data
 		echo '<tr>';
 		echo '<td class="right">';
 		echo $langs->transnoentitiesnoconv("PaymentTypeShortLIQ");
