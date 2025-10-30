@@ -210,6 +210,9 @@ class Contracts extends DolibarrApi
 		if (!DolibarrApiAccess::$user->hasRight('contrat', 'creer')) {
 			throw new RestException(403, "Insufficient rights");
 		}
+		if (!DolibarrApiAccess::$user->hasRight('societe', 'client', 'voir')) {
+			throw new RestException(403, 'Access not allowed for login '.DolibarrApiAccess::$user->login.'. No read permission on thirdparties.');
+		}
 		// Check mandatory fields
 		$result = $this->_validate($request_data);
 
@@ -673,7 +676,9 @@ class Contracts extends DolibarrApi
 		if (!DolibarrApiAccess::$user->hasRight('contrat', 'creer')) {
 			throw new RestException(403);
 		}
-
+		if (!DolibarrApiAccess::$user->hasRight('societe', 'client', 'voir')) {
+			throw new RestException(403, 'Access not allowed for login '.DolibarrApiAccess::$user->login.'. No read permission on thirdparties.');
+		}
 		$result = $this->contract->fetch($id);
 		if (!$result) {
 			throw new RestException(404, 'Contrat not found');
