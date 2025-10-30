@@ -105,7 +105,7 @@ class modSalaries extends DolibarrModules
 		$this->rights[$r][5] = '';
 
 		$r++;
-		$this->rights[$r][0] = 511;
+		$this->rights[$r][0] = 512;
 		$this->rights[$r][1] = 'Read employee salaries and payments (yours and your subordinates)';
 		$this->rights[$r][2] = 'r';
 		$this->rights[$r][3] = 0;
