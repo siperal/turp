@@ -21,6 +21,7 @@
 use Luracast\Restler\RestException;
 
 require_once DOL_DOCUMENT_ROOT.'/contrat/class/contrat.class.php';
+require_once DOL_DOCUMENT_ROOT.'/societe/class/api_thirdparties.class.php';
 
 /**
  * API class for contracts
@@ -208,11 +209,15 @@ class Contracts extends DolibarrApi
 	public function post($request_data = null)
 	{
 		if (!DolibarrApiAccess::$user->hasRight('contrat', 'creer')) {
-			throw new RestException(403, "Insufficient rights");
+			throw new RestException(403, "Missing permission: Create/modify contracts/subscriptions");
 		}
-		if (!DolibarrApiAccess::$user->hasRight('societe', 'client', 'voir')) {
-			throw new RestException(403, 'Access not allowed for login '.DolibarrApiAccess::$user->login.'. No read permission on all thirdparties.');
-		}
+
+		$socid = (int) $request_data['socid'];
+		$thirdparties = new Thirdparties($this->db);
+		$thirdparty_result = $thirdparties->get((int) $socid);
+		// if there is no such thirdparty, then $thirdparties->get((int) $socid); returns 404 "Not Found: Thirdparty not found"
+		// if this user does not have access to this thirdparty, then $thirdparties->get((int) $socid); returns 403 Forbidden: Access not allowed for login ***** on this thirdparty"
+
 		// Check mandatory fields
 		$result = $this->_validate($request_data);
 
@@ -681,6 +686,7 @@ class Contracts extends DolibarrApi
 			throw new RestException(404, 'Contrat not found');
 		}
 
+		$socid = $this->contract->socid;
 		$deny_access = true;
 		$why_deny_access = '';
 		if (DolibarrApiAccess::$user->hasRight('societe', 'lire')) {
@@ -688,10 +694,10 @@ class Contracts extends DolibarrApi
 				$deny_access = false;
 			} else {
 				$why_deny_access = 'Extend access to all third parties';
-				if (DolibarrApi::_checkAccessToResource('societe', $this->contract->socid)) {
+				if (DolibarrApi::_checkAccessToResource('societe', $socid)) {
 					$deny_access = false;
 				} else {
-					$why_deny_access = $why_deny_access.' and NOT sales representative for this thirdparty='.$this->contract->socid;
+					$why_deny_access = $why_deny_access.' and NOT sales representative for this thirdparty='.$socid;
 				}
 			}
 		} else {
