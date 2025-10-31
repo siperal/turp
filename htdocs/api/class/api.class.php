@@ -60,8 +60,14 @@ class DolibarrApi
 		$this->db = $db;
 		$production_mode = getDolGlobalBool('API_PRODUCTION_MODE');
 
-		if ($production_mode && getDolGlobalString('MAIN_API_DEBUG')) {
-			dol_syslog("Debug API construct::cacheDirectory=".Defaults::$cacheDirectory, LOG_DEBUG, 0, '_api');
+		if ($production_mode) {
+			// Create the directory Defaults::$cacheDirectory if it does not exists. If dir does not exists, using production_mode generates an error 500.
+			if (!dol_is_dir(Defaults::$cacheDirectory)) {
+				dol_mkdir(Defaults::$cacheDirectory, DOL_DATA_ROOT);
+			}
+			if (getDolGlobalString('MAIN_API_DEBUG')) {
+				dol_syslog("Debug API construct::cacheDirectory=".Defaults::$cacheDirectory, LOG_DEBUG, 0, '_api');
+			}
 		}
 
 		$this->r = new Restler($production_mode, $refreshCache);
