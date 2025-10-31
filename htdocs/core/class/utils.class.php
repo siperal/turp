@@ -224,6 +224,7 @@ class Utils
 			dol_mkdir($conf->api->dir_temp);
 		}
 		dol_mkdir($conf->user->dir_temp);
+		// TODO We should also recreate API dir x/user/temp and x/api/temp with x = all values of existing entities when multicompany is on.
 
 		//return $count;
 		return 0; // This function can be called by cron so must return 0 if OK
