@@ -62,6 +62,7 @@ class DolibarrApi
 
 		if ($production_mode) {
 			// Create the directory Defaults::$cacheDirectory if it does not exists. If dir does not exists, using production_mode generates an error 500.
+			include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 			if (!dol_is_dir(Defaults::$cacheDirectory)) {
 				dol_mkdir(Defaults::$cacheDirectory, DOL_DATA_ROOT);
 			}
