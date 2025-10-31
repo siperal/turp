@@ -676,12 +676,29 @@ class Contracts extends DolibarrApi
 		if (!DolibarrApiAccess::$user->hasRight('contrat', 'creer')) {
 			throw new RestException(403);
 		}
-		if (!DolibarrApiAccess::$user->hasRight('societe', 'client', 'voir')) {
-			throw new RestException(403, 'Access not allowed for login '.DolibarrApiAccess::$user->login.'. No read permission on all thirdparties.');
-		}
 		$result = $this->contract->fetch($id);
 		if (!$result) {
 			throw new RestException(404, 'Contrat not found');
+		}
+
+		$deny_access = true;
+		$why_deny_access = '';
+		if (DolibarrApiAccess::$user->hasRight('societe', 'lire')) {
+			if (DolibarrApiAccess::$user->hasRight('societe', 'client', 'voir')) {
+				$deny_access = false;
+			} else {
+				$why_deny_access = 'Extend access to all third parties';
+				if (DolibarrApi::_checkAccessToResource('societe', $this->contract->socid)) {
+					$deny_access = false;
+				} else {
+					$why_deny_access = $why_deny_access.' and NOT sales representative for this thirdparty='.$this->contract->socid;
+				}
+			}
+		} else {
+			$why_deny_access = 'Read third parties linked to user';
+		}
+		if ($deny_access) {
+			throw new RestException(403, 'Access not allowed for login '.DolibarrApiAccess::$user->login.' - missing permissions: '.$why_deny_access);
 		}
 
 		if (!DolibarrApi::_checkAccessToResource('contrat', $this->contract->id)) {
