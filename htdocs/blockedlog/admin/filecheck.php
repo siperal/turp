@@ -115,7 +115,7 @@ if (empty($xmlremote) && getDolGlobalString($param)) {
 if (empty($xmlremote)) {
 	$xmlremote = 'https://www.dolibarr.org/files/stable/signatures/filelist-'.DOL_VERSION.'.xml';
 }
-if ($xmlremote && !preg_match('/^https?:\/\//', $xmlremote)) {
+if (!preg_match('/^https?:\/\//', $xmlremote)) {
 	$langs->load("errors");
 	setEventMessages($langs->trans("ErrorURLMustStartWithHttp", $xmlremote), null, 'errors');
 	$error++;
