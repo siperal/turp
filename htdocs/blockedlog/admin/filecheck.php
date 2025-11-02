@@ -130,7 +130,6 @@ $enableremotecheck = true;
 if (preg_match('/beta|alpha|rc/i', DOL_VERSION) || getDolGlobalString('MAIN_ALLOW_INTEGRITY_CHECK_ON_UNSTABLE')) {
 	$enableremotecheck = false;
 }
-$enableremotecheck = true;
 
 print '<form name="check" action="'.dolBuildUrl($_SERVER["PHP_SELF"]).'">';
 print '<input type="hidden" name="token" value="'.newToken().'">';
