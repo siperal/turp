@@ -1233,7 +1233,7 @@ if ($action == 'create') {
 	print '<table class="border centpercent">';
 
 	// Ref
-	print '<tr><td class="titlefieldcreate fieldrequired">'.$langs->trans('Ref').'</td><td>';
+	print '<tr><td class="titlefield fieldrequired">'.$langs->trans('Ref').'</td><td>';
 	if (!empty($modCodeContract->code_auto)) {
 		$tmpcode = $langs->trans("Draft");
 	} else {
