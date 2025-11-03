@@ -4854,8 +4854,6 @@ function dol_print_phone($phone, $countrycode = '', $contactid = 0, $socid = 0, 
 		if ($withpicto) {
 			if ($withpicto == 'fax') {
 				$picto = 'phoning_fax';
-			} elseif ($withpicto == 'phone') {
-				$picto = 'phoning';
 			} elseif ($withpicto == 'mobile') {
 				$picto = 'phoning_mobile';
 			} else {
