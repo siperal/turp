@@ -22,7 +22,7 @@ $formList = &$this->formList;
 
 ?>
 
-<form method="POST" id="searchFormList" action="<?php print $context->getControllerUrl($context->controller) ?>">
+<form method="POST" id="searchFormList" action="<?php print $context->getControllerUrl($context->controller, '', false) ?>">
 	<?php print $context->getFormToken() ?>
 	<input type="hidden" name="formfilteraction" id="formfilteraction" value="list">
 	<input type="hidden" name="action" value="list">
