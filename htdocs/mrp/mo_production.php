@@ -816,9 +816,14 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 			print '<div class="center'.(in_array($action, array('consumeorproduce', 'consumeandproduceall')) ? ' formconsumeproduce' : '').'">';
 			print '<div class="opacitymedium hideonsmartphone paddingbottom">'.$langs->trans("ConfirmProductionDesc", $langs->transnoentitiesnoconv("Confirm")).'<br></div>';
-			print '<span class="fieldrequired">'.$langs->trans("InventoryCode").':</span> <input type="text" class="minwidth150 maxwidth200" name="inventorycode" value="'.$defaultstockmovementcode.'"> &nbsp; ';
+			print '<span class="paddingright">'.$langs->trans("InventoryCode").':</span>';
 			print '<span class="clearbothonsmartphone"></span>';
-			print $langs->trans("MovementLabel").': <input type="text" class="minwidth300" name="inventorylabel" value="'.$defaultstockmovementlabel.'"><br><br>';
+			print '<input type="text" class="minwidth125 maxwidth150" name="inventorycode" value="'.$defaultstockmovementcode.'">';
+			print '<span class="hideonsmartphone">&nbsp; &nbsp;</span>';
+			print '<span class="clearbothonsmartphone"></span>';
+			print '<span class="paddingright">'.$langs->trans("MovementLabel").':</span>';
+			print '<span class="clearbothonsmartphone"></span>';
+			print '<input type="text" class="minwidth300" name="inventorylabel" value="'.$defaultstockmovementlabel.'"><br><br>';
 			print '<input type="checkbox" id="autoclose" name="autoclose" value="1"'.(GETPOSTISSET('inventorylabel') ? (GETPOST('autoclose') ? ' checked="checked"' : '') : ' checked="checked"').'> <label for="autoclose">'.$langs->trans("AutoCloseMO").'</label><br>';
 			print '<input type="submit" class="button" value="'.$langs->trans("Confirm").'" name="confirm">';
 			print ' &nbsp; ';
