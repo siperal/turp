@@ -51,10 +51,10 @@ abstract class AbstractListController extends Controller
 	/**
 	 * Called before print value for list
 	 *
-	 * @param	string		$field_key		Field key
-	 * @param	array		$field_spec		Field specification
-	 * @param	stdClass	$record			Contain data of object from database
-	 * @return	string						HTML input
+	 * @param	string					$field_key		Field key
+	 * @param	array<string,mixed>		$field_spec		Field specification
+	 * @param	stdClass				$record			Contain data of object from database
+	 * @return	string									HTML input
 	 */
 	public function listPrintValueBefore($field_key, $field_spec, &$record)
 	{
@@ -64,11 +64,11 @@ abstract class AbstractListController extends Controller
 	/**
 	 * Called after print value for list
 	 *
-	 * @param	string		$field_key		Field key
-	 * @param	array		$field_spec		Field specification
-	 * @param	stdClass	$record			Contain data of object from database
-	 * @param	string		$out			Current HTML input
-	 * @return	string						HTML input
+	 * @param	string					$field_key		Field key
+	 * @param	array<string,mixed>		$field_spec		Field specification
+	 * @param	stdClass				$record			Contain data of object from database
+	 * @param	string					$out			Current HTML input
+	 * @return	string									HTML input
 	 */
 	public function listPrintValueAfter($field_key, $field_spec, &$record, $out)
 	{
