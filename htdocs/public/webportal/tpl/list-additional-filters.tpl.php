@@ -8,15 +8,15 @@ if (empty($context) || !is_object($context)) {
 	exit(1);
 }
 '@phan-var-force Context $context';
-'@phan-var-force Controller $this';
+'@phan-var-force AbstractListController $this';
 
 /**
- * @var Conf				$conf
- * @var HookManager			$hookmanager
- * @var Translate			$langs
- * @var Context				$context
- * @var Controller 			$this
- * @var FormListWebPortal 	$formList
+ * @var Conf					$conf
+ * @var HookManager				$hookmanager
+ * @var Translate				$langs
+ * @var Context					$context
+ * @var AbstractListController 	$this
+ * @var FormListWebPortal 		$formList
  */
 $formList = &$this->formList;
 
