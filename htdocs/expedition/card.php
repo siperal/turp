@@ -1909,7 +1909,7 @@ if ($action == 'create') {
 									$disabled = '';
 								}
 								print '<input class="qtyl right" name="qtyl'.$indiceAsked.'_'.$subj.'" id="qtyl'.$indiceAsked.'_'.$subj.'" type="text" size="4" value="0"'.($disabled ? ' '.$disabled : '').'> ';
-								if (empty($disabled) && !getDolGlobalInt('STOCK_DISALLOW_NEGATIVE_TRANSFER')) {
+								if (empty($disabled) && (!getDolGlobalInt('STOCK_DISALLOW_NEGATIVE_TRANSFER') || $product->stockable_product == Product::DISABLED_STOCK)) {
 									print '<input name="ent1' . $indiceAsked . '_' . $subj . '" type="hidden" value="' . $warehouse_selected_id . '">';
 								}
 							} elseif ($line->product_type == Product::TYPE_SERVICE && getDolGlobalString('SHIPMENT_SUPPORTS_SERVICES')) {
@@ -1921,7 +1921,7 @@ if ($action == 'create') {
 									$disabled = 'disabled="disabled"';
 								}
 								print '<input class="qtyl right" name="qtyl'.$indiceAsked.'_'.$subj.'" id="qtyl'.$indiceAsked.'_'.$subj.'" type="text" size="4" value="'.$quantityToBeDelivered.'"'.($disabled ? ' '.$disabled : '').'> ';
-								if (empty($disabled) && !getDolGlobalInt('STOCK_DISALLOW_NEGATIVE_TRANSFER')) {
+								if (empty($disabled)) {
 									print '<input name="ent1' . $indiceAsked . '_' . $subj . '" type="hidden" value="' . $warehouse_selected_id . '">';
 								}
 							} else {
