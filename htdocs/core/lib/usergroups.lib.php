@@ -634,7 +634,7 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
 
 	if ($foruserprofile) {
 	} else {
-		if (getDolGlobalString('THEME_ELDY_USEBORDERONTABLE')) {
+		if (getDolGlobalString('THEME_ELDY_USEBORDERONTABLE') || getDolGlobalString('THEME_SHOW_BORDER_ON_INPUT')) {
 			$listofborderradius = array(
 				0 => $langs->transnoentitiesnoconv("No"),
 				4 => $langs->transnoentitiesnoconv("Size").' 4',
