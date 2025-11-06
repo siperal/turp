@@ -30,6 +30,11 @@ require_once __DIR__ . '/../class/controller.class.php';
 abstract class AbstractListController extends Controller
 {
 	/**
+	 * @var FormListWebPortal Form for list
+	 */
+	public $formList;
+
+	/**
 	 * Set array fields
 	 *
 	 * @return	void
