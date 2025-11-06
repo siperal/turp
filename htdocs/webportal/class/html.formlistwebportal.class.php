@@ -410,7 +410,7 @@ class FormListWebPortal
 						continue;
 					}
 					$field_spec = $this->object->fields[$key];
-					// @phan-suppress-next-line PhanPluginUnknownArrayMethodParamType
+					//  @phpstan-ignore-next-line
 					$alias = $field_spec['alias'] ?? 't.';
 					$mode_search = (($this->object->isInt($field_spec) || $this->object->isFloat($field_spec)) ? 1 : 0);
 					if ((strpos($field_spec['type'], 'integer:') === 0) || (strpos($field_spec['type'], 'sellist:') === 0) || !empty($field_spec['arrayofkeyval'])) {
@@ -425,7 +425,7 @@ class FormListWebPortal
 							$val = '';
 						}
 					}
-					// @phan-suppress-next-line PhanPluginUnknownArrayMethodParamType
+					//  @phpstan-ignore-next-line
 					if (empty($field_spec['searchmulti'])) {
 						if (!is_array($val) && $val != '') {
 							$this->sql_body .= natural_search($alias . $this->db->escape($key), $val, (($key == 'status') ? 2 : $mode_search));
@@ -439,7 +439,7 @@ class FormListWebPortal
 					$columnName = preg_replace('/(_dtstart|_dtend)$/', '', $key);
 					if (array_key_exists($columnName, $this->object->fields)) {
 						$field_spec = $this->object->fields[$columnName];
-						// @phan-suppress-next-line PhanPluginUnknownArrayMethodParamType
+						//  @phpstan-ignore-next-line
 						$alias = $field_spec['alias'] ?? 't.';
 						if (preg_match('/^(date|timestamp|datetime)/', $field_spec['type'])) {
 							if (preg_match('/_dtstart$/', $key)) {
