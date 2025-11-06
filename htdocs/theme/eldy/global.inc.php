@@ -433,7 +433,7 @@ input[type=checkbox], input[type=radio] {
 	margin-top: 5px;
 }
 input {
-	padding: 4px;
+	padding: 5px;
 	padding-left: 5px;
 }
 .liste_titre input {
