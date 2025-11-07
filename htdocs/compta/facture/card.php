@@ -6345,7 +6345,7 @@ if ($action == 'create') {
 			print '</tr>';
 
 			// Remainder to pay back Multicurrency
-			if (($object->multicurrency_code && $object->multicurrency_code != $conf->currency) || $object->multicurrency_tx != 1) {
+			if (isModEnabled('multicurrency') && (($object->multicurrency_code && $object->multicurrency_code != $conf->currency) || $object->multicurrency_tx != 1)) {
 				print '<tr>';
 				print '<td colspan="'.($nbcols+1).'" class="right">';
 				print '<span class="opacitymedium">'.$langs->trans('RemainderToPayBackMulticurrency');
