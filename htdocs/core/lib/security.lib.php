@@ -877,7 +877,7 @@ function checkUserAccessToObject($user, array $featuresarray, $object = 0, $tabl
 		if ($feature == 'project') {
 			$feature = 'projet';
 		}
-		if ($feature == 'projet' && !empty($feature2) && is_array($feature2) && in_array(array('project_task', 'projet_task'), $feature2)) {
+		if ($feature == 'projet' && !empty($feature2) && is_array($feature2) && !empty(array_intersect(array('project_task', 'projet_task'), $feature2))) {
 			$feature = 'project_task';
 		}
 		if ($feature == 'task' || $feature == 'projet_task') {
