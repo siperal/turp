@@ -2165,12 +2165,12 @@ maxscreenheightless200 {
 }
 
 select.widthcentpercentminusx, span.widthcentpercentminusx:not(.select2-selection):not(.select2-dropdown), input.widthcentpercentminusx {
-	width: calc(100% - 52px) !important;
+	width: calc(100% - 54px) !important;
 	display: inline-block;
 	min-width: 100px;
 }
 select.widthcentpercentminusxx, span.widthcentpercentminusxx:not(.select2-selection):not(.select2-dropdown), input.widthcentpercentminusxx {
-	width: calc(100% - 70px) !important;
+	width: calc(100% - 76px) !important;
 	display: inline-block;
 	min-width: 100px;
 }
@@ -2228,12 +2228,12 @@ datalist {
 	}
 
 	select.widthcentpercentminusx, span.widthcentpercentminusx:not(.select2-selection), input.widthcentpercentminusx {
-		width: calc(100% - 52px) !important;
+		width: calc(100% - 54px) !important;
 		display: inline-block;
 		min-width: 100px;
 	}
 	select.widthcentpercentminusxx, span.widthcentpercentminusxx:not(.select2-selection), input.widthcentpercentminusxx {
-		width: calc(100% - 70px) !important;
+		width: calc(100% - 76px) !important;
 		display: inline-block;
 		min-width: 100px;
 	}

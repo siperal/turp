@@ -2300,7 +2300,7 @@ select.widthcentpercentminusx, span.widthcentpercentminusx:not(.select2-selectio
 	min-width: 100px;
 }
 select.widthcentpercentminusxx, span.widthcentpercentminusxx:not(.select2-selection), input.widthcentpercentminusxx {
-	width: calc(100% - 70px) !important;
+	width: calc(100% - 76px) !important;
 	display: inline-block;
 	min-width: 100px;
 }
@@ -2334,11 +2334,11 @@ select.widthcentpercentminusxx, span.widthcentpercentminusxx:not(.select2-select
 	.margintoponsmartphone { margin-top: 6px; }
 
 	select.minwidth100imp, select.minwidth100, select.minwidth200, select.minwidth200imp, select.minwidth300 {
-		width: calc(100% - 40px) !important;
+		width: calc(100% - 44px) !important;
 		display: inline-block;
 	}
 	select.widthcentpercentminusxx, span.widthcentpercentminusxx:not(.select2-selection), input.widthcentpercentminusxx {
-		width: calc(100% - 70px) !important;
+		width: calc(100% - 76px) !important;
 		display: inline-block;
 		min-width: 100px;
 	}
