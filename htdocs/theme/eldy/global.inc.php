@@ -511,7 +511,7 @@ section.setupsection:hover {
 div.tabBar textarea:focus:not(.textarea-ai_feature):not(.cke_source) {
 	border: 1px solid #aaa !important;
 }
-input:focus:not(.inputsearch_dropdownselectedfields):not(.button):not(.buttonwebsite):not(.buttonreset):not(.select2-search__field):not(#top-bookmark-search-input):not(.search_component_input):not(.input-nobottom),
+input:focus:not(.noborderfocus):not(.inputsearch_dropdownselectedfields):not(.button):not(.buttonwebsite):not(.buttonreset):not(.select2-search__field):not(#top-bookmark-search-input):not(.search_component_input):not(.input-nobottom),
  select:focus, .select2-container--open [aria-expanded="false"].select2-selection--single,
  .select2-container--focus span.selection span.select2-selection:not(.massactionselect) {
 <?php if (getDolGlobalString('THEME_SHOW_BORDER_ON_INPUT')) { ?>
@@ -7402,6 +7402,7 @@ input.select2-input {
 	box-shadow: none !important;
 	border-radius: 3px;
 }
+<?php if (!getDolGlobalString('THEME_SHOW_BORDER_ON_INPUT')) { ?>
 .select2-container--focus .select2-container--default .select2-selection--single {
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
@@ -7419,6 +7420,9 @@ input.select2-input {
 	border-left: none;
 	border-right: none;
 	border-radius: 3px;
+}
+<?php } ?>
+.select2-container--default .select2-selection--multiple {
 	background: var(--inputbackgroundcolor);
 	line-height: normal;
 }

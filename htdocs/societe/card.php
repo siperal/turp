@@ -1712,10 +1712,10 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 				print '</tr>';
 			}
 
+			$colspan = ($conf->browser->layout == 'phone' ? 2 : 4);
+
 			// Social networks
 			if (isModEnabled('socialnetworks')) {
-				$colspan = ($conf->browser->layout == 'phone' ? 2 : 4);
-
 				$object->showSocialNetwork($socialnetworks, $colspan);
 
 				print '<tr><td'.($colspan ? ' colspan="'.$colspan.'"' : '').'><hr></td></tr>';
@@ -1822,6 +1822,10 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 				print '<input id="localtax2assuj_value" name="localtax2assuj_value" type="checkbox" ' . (isset($conf->global->THIRDPARTY_DEFAULT_USELOCALTAX2) ? 'checked="checked"' : '') . ' value="1">';
 				print '</td></tr>';
 			}
+
+
+			print '<tr><td'.($colspan ? ' colspan="'.$colspan.'"' : '').'><hr></td></tr>';
+
 
 			// Type - Workforce/Staff
 			print '<tr><td>'.$form->editfieldkey('ThirdPartyType', 'typent_id', '', $object, 0).'</td><td class="maxwidthonsmartphone"'.(($conf->browser->layout == 'phone' || getDolGlobalString('SOCIETE_DISABLE_WORKFORCE')) ? ' colspan="3"' : '').'>'."\n";
@@ -2678,6 +2682,10 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 				print $s;
 				print '</td>';
 				print '</tr>';
+
+				$colspan = 4;
+
+				print '<tr><td'.($colspan ? ' colspan="'.$colspan.'"' : '').'><hr></td></tr>';
 
 				// Type - Workforce/Staff
 				print '<tr><td>'.$form->editfieldkey('ThirdPartyType', 'typent_id', '', $object, 0).'</td><td class="maxwidthonsmartphone"'.(($conf->browser->layout == 'phone' || getDolGlobalString('SOCIETE_DISABLE_WORKFORCE')) ? ' colspan="3"' : '').'>';
