@@ -120,8 +120,8 @@ foreach ($dirModCaptcha as $dirroot) {
 		closedir($handle);
 	}
 }
-asort($arrayhandler);
-
+dol_sort_array($arrayhandler, 'position');
+var_dump($arrayhandler);
 
 
 print '<form action="'.$_SERVER["PHP_SELF"].'" method="POST">';
@@ -134,6 +134,7 @@ print dol_get_fiche_head($head, 'captcha', '', -1);
 
 print '<br>';
 
+print '<div class="div-table-responsive">';
 print '<table class="noborder centpercent">';
 print '<tr class="liste_titre">';
 print '<td>'.$langs->trans("Captcha").'</td>';
@@ -223,6 +224,8 @@ if (isModEnabled('recruitment')) {
 print '</td></tr>';
 
 print '</table>';
+print '</div>';
+
 // Set if a captcha is used on at least one place
 $showavailablecaptcha = 0;
 if (getDolGlobalString('MAIN_SECURITY_ENABLECAPTCHA')) {
@@ -249,6 +252,7 @@ if ($showavailablecaptcha) {
 	print '<br>';
 
 	// List of all available captcha
+	print '<div class="div-table-responsive">';
 	print '<table class="noborder centpercent">';
 	print '<tr class="liste_titre">';
 	print '<td colspan="2">'.$langs->trans("Captcha").'</td>';
@@ -289,7 +293,7 @@ if ($showavailablecaptcha) {
 	}
 
 	print '</table>';
-
+	print '</div>';
 	//print $form->buttonsSaveCancel("Modify", '');
 }
 
