@@ -3133,9 +3133,9 @@ function printCodeForPing($constanttosavelastko, $constanttosavefirstok, $arrayo
 
 	// Disable ping if $constanttosavelastpingko is set and is recent (this month)
 	if (getDolGlobalString($constanttosavelastko) && substr(getDolGlobalString($constanttosavelastko), 0, 6) == dol_print_date(dol_now(), '%Y%m') && !$forceping) {
-		print "\n<!-- NO JS CODE TO ENABLE the a call for ".$constanttosavelastko.". An error already occurred this month (".$constanttosavelastko." is set), we will re-try next month. -->\n";
+		print "\n<!-- NO JS CODE TO ENABLE the call for ".$constanttosavefirstok.". An error already occurred this month (".$constanttosavelastko." is set), we will re-try next month. -->\n";
 	} else {
-		print "\n".'<!-- Includes JS to make ajax call for '.$constanttosavelastko.'. forceping='.$forceping.' '.$constanttosavefirstok.'='.getDolGlobalString($constanttosavefirstok).' '.$constanttosavelastko.'='.getDolGlobalString($constanttosavelastko).' -->'."\n";
+		print "\n".'<!-- Includes JS to make ajax call for '.$constanttosavefirstok.'. forceping='.$forceping.' '.$constanttosavefirstok.'='.getDolGlobalString($constanttosavefirstok).' '.$constanttosavelastko.'='.getDolGlobalString($constanttosavelastko).' -->'."\n";
 		print "<!-- JS CODE TO ENABLE the call -->\n";
 		$url_for_ping = getDolGlobalString('MAIN_URL_FOR_PING', "https://ping.dolibarr.org/");
 		// Try to guess the distrib used
