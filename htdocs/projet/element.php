@@ -1671,7 +1671,7 @@ foreach ($listofreferent as $key => $value) {
 						if (isModEnabled('salaries')) {
 							// TODO Permission to read daily rate to show value
 							$total_ht_by_line = price2num($tmpprojtime['amount'], 'MT');
-							if ($tmpprojtime['nblinesnull'] > 0) {
+							if (isset($tmpprojtime['nblinesnull']) && ($tmpprojtime['nblinesnull'] > 0)) {
 								$langs->load("errors");
 								$warning = $langs->trans("WarningSomeLinesWithNullHourlyRate", $conf->currency);
 							}
@@ -1708,7 +1708,7 @@ foreach ($listofreferent as $key => $value) {
 					if ($warning) {
 						print ' '.img_warning($warning);
 					}
-					if ($tmpprojtime['nblinesnull'] > 0) {
+					if (isset($tmpprojtime['nblinesnull']) && ($tmpprojtime['nblinesnull'] > 0)) {
 						if ($tmpprojtime['nbuserthmnull'] > 0) {
 							$title = $langs->trans("EnterUsersHourlyRateFirst");
 							print ' '.img_picto($title, "sync", '', 0, 0, 0, '', 'opacitymedium');
@@ -1776,7 +1776,7 @@ foreach ($listofreferent as $key => $value) {
 					if ($warning) {
 						print ' '.img_warning($warning);
 					}
-					if ($tmpprojtime['nblinesnull'] > 0) {
+					if (isset($tmpprojtime['nblinesnull']) && ($tmpprojtime['nblinesnull'] > 0)) {
 						if ($tmpprojtime['nbuserthmnull'] > 0) {
 							$title = $langs->trans("EnterUsersHourlyRateFirst");
 							print ' '.img_picto($title, "sync", '', 0, 0, 0, '', 'opacitymedium');
