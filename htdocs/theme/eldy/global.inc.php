@@ -2059,7 +2059,7 @@ maxscreenheightless200 {
 @media only screen and (min-width: <?php echo getDolGlobalString('THEME_ELDY_WITDHOFFSET_FOR_REDUC3', round($nbtopmenuentries * 47, 0) + 130); ?>px)	/* reduction 3 */
 {
 	.width20  { width: 20px; }
-	.width25  { width: 25px; }
+	.width25  { width: 28px; }
 	.width50  { width: 50px; }
 	.width75  { width: 75px; }
 	.width100 { width: 100px; }
@@ -2083,7 +2083,7 @@ maxscreenheightless200 {
 }
 .widthauto { width: auto; }
 .width20  { width: 20px; }
-.width25  { width: 25px; }
+.width25  { width: 28px; }
 .width40  { width: 40px; }
 .width50  { width: 50px; }
 .width75  { width: 75px; }
