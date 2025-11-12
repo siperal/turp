@@ -9147,7 +9147,7 @@ table.jPicker {
 
 @media only screen and (max-width: 768px)
 {
-	.body {
+	body {
 		font-size: 0.91em;
 	}
 	.pictofixedwidth {
