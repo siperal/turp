@@ -744,6 +744,7 @@ Refresh=Refresh
 BackToList=Back to list
 BackToTree=Back to tree
 GoBack=Go back
+Back=Back
 CanBeModifiedIfOk=Can be modified if valid
 CanBeModifiedIfKo=Can be modified if not valid
 ValueIsValid=Value is valid
