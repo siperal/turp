@@ -1235,7 +1235,7 @@ if ($action == 'create' && $permissiontoadd) {
 		print $langs->trans("Weight");
 		print '</td><td colspan="3">';
 		print img_picto('', 'fa-balance-scale', 'class="pictofixedwidth"');
-		print '<input name="weight" size="4" value="'.GETPOSTINT('weight').'"> ';
+		print '<input name="weight" size="4" value="'.GETPOST('weight').'"> ';
 		$text = $formproduct->selectMeasuringUnits("weight_units", "weight", (string) GETPOSTINT('weight_units'), 0, 2);
 		$htmltext = $langs->trans("KeepEmptyForAutoCalculation");
 		print $form->textwithpicto($text, $htmltext);
@@ -1246,9 +1246,9 @@ if ($action == 'create' && $permissiontoadd) {
 		print $langs->trans("Width").' x '.$langs->trans("Height").' x '.$langs->trans("Depth");
 		print ' </td><td colspan="3">';
 		print img_picto('', 'fa-ruler', 'class="pictofixedwidth"');
-		print '<input name="sizeW" size="4" value="'.GETPOSTINT('sizeW').'">';
-		print ' x <input name="sizeH" size="4" value="'.GETPOSTINT('sizeH').'">';
-		print ' x <input name="sizeS" size="4" value="'.GETPOSTINT('sizeS').'">';
+		print '<input name="sizeW" size="4" value="'.GETPOST('sizeW').'">';
+		print ' x <input name="sizeH" size="4" value="'.GETPOST('sizeH').'">';
+		print ' x <input name="sizeS" size="4" value="'.GETPOST('sizeS').'">';
 		print ' ';
 		$text = $formproduct->selectMeasuringUnits("size_units", "size", (string) GETPOSTINT('size_units'), 0, 2);
 		$htmltext = $langs->trans("KeepEmptyForAutoCalculation");
