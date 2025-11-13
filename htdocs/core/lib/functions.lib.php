@@ -137,6 +137,7 @@ function getMultidirOutput($object, $module = '', $forobject = 0, $mode = 'outpu
 {
 	global $conf;
 
+	$subdirectory = '';
 	if (!is_object($object) && empty($module)) {
 		return null;
 	}
@@ -151,6 +152,15 @@ function getMultidirOutput($object, $module = '', $forobject = 0, $mode = 'outpu
 		$module = 'supplier_invoice';
 	} elseif ($module == 'order_supplier') {
 		$module = 'supplier_order';
+	} elseif ($module == 'recruitmentjobposition') {
+		$module = 'recruitment';
+		$subdirectory = '/recruitmentjobposition';
+	} elseif ($module == 'recruitmentcandidature') {
+		$module = 'recruitment';
+		$subdirectory = '/recruitmentcandidature';
+	} elseif ($module == 'knowledgerecord') {
+		$module = 'knowledgemanagement';
+		$subdirectory = '/knowledgerecord';
 	}
 
 	// Get the relative path of directory
@@ -158,7 +168,7 @@ function getMultidirOutput($object, $module = '', $forobject = 0, $mode = 'outpu
 		if (isset($conf->$module) && property_exists($conf->$module, 'multidir_output')) {
 			$s = '';
 			if ($mode != 'outputrel') {
-				$s = $conf->$module->multidir_output[(empty($object->entity) ? $conf->entity : $object->entity)];
+				$s = $conf->$module->multidir_output[(empty($object->entity) ? $conf->entity : $object->entity)] . $subdirectory;
 			}
 			if ($forobject && $object->id > 0) {
 				$s .= ($mode != 'outputrel' ? '/' : '') . get_exdir(0, 0, 0, 0, $object);
@@ -167,7 +177,7 @@ function getMultidirOutput($object, $module = '', $forobject = 0, $mode = 'outpu
 		} elseif (isset($conf->$module) && property_exists($conf->$module, 'dir_output')) {
 			$s = '';
 			if ($mode != 'outputrel') {
-				$s = $conf->$module->dir_output;
+				$s = $conf->$module->dir_output . $subdirectory;
 			}
 			if ($forobject && $object->id > 0) {
 				$s .= ($mode != 'outputrel' ? '/' : '') . get_exdir(0, 0, 0, 0, $object);
@@ -3760,7 +3770,7 @@ function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = 
 	}
 
 	// Clean parameters
-	$to_gmt = false;
+	$to_gmt = false;	// false if we want date in server timezone, true if we want to add offset
 	$offsettz = $offsetdst = 0;
 	if ($tzoutput) {
 		$to_gmt = true; // For backward compatibility
@@ -3904,10 +3914,13 @@ function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = 
 		// Date is a timestamps
 		if ($time < 100000000000) {	// Protection against bad date values
 			$dtts = new DateTime();
-			if ($to_gmt) {
+			//var_dump($tzoutput.' '.$offsettzstring.' '.$offsettz.$offsetdst.' x '.$to_gmt);
+			if ($to_gmt) {	// to_gmt means "not in php server timezone" (if tzoutput = 'gmt', offsets should be 0 but if = 'tzuser...', offsets may be defined
+				$timetouse = (int) $time + $offsettz + $offsetdst; // TODO We could be able to disable use of offsettz and offsetdst to use only offsettzstring.
+
 				$tzo = new DateTimeZone('UTC');	// when to_gmt is true, base for offsettz and offsetdst (so timetouse) is UTC
 				$dtts->setTimezone($tzo);	// important: must be before the setTimestamp
-				$dtts->setTimestamp((int) $time);
+				$dtts->setTimestamp($timetouse);
 			} else {
 				$timetouse = (int) $time + $offsettz + $offsetdst; // TODO We could be able to disable use of offsettz and offsetdst to use only offsettzstring.
 
@@ -5408,7 +5421,8 @@ function getPictoForType($key, $morecss = '')
  *                                  				Example: picto.png                  if picto.png is stored into htdocs/theme/mytheme/img
  *                                  				Example: picto.png@mymodule         if picto.png is stored into htdocs/mymodule/img
  *                                  				Example: /mydir/mysubdir/picto.png  if picto.png is stored into htdocs/mydir/mysubdir (pictoisfullpath must be set to 1)
- *                                                  Example: fontawesome_envelope-open-text_fas_red_1em if you want to use fontaweseome icons: fontawesome_<icon-name>_<style>_<color>_<size> (only icon-name is mandatory)
+ *                                                  Example: fa-value			 		if you want to use fontaweseome icons: fa-<icon-name>
+ *                                                  Example: fa-value_fas_color_1em 	if you want to use fontaweseome icons: fa-<icon-name>_<style>_<color>_<size> (only icon-name is mandatory, color can be 'red' or '#FF0000')
  *	@param		string		$moreatt				Add more attribute on img tag (For example 'class="pictofixedwidth"')
  *	@param		int<0,1>    $pictoisfullpath		If true or 1, image path is a full path, 0 if not
  *	@param		int			$srconly				Return only content of the src attribute of img.
@@ -5555,7 +5569,7 @@ function img_picto($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $srco
 			if (in_array($pictowithouttext, array('dollyrevert', 'member', 'members', 'contract', 'group', 'resource', 'shipment', 'reception'))) {
 				$morecss .= ' em092';
 			}
-			if (in_array($pictowithouttext, array('conferenceorbooth', 'collab', 'eventorganization', 'holiday', 'info', 'info_black', 'project', 'workstation'))) {
+			if (in_array($pictowithouttext, array('conferenceorbooth', 'eventorganization', 'holiday', 'info', 'info_black', 'project', 'workstation'))) {
 				$morecss .= ' em088';
 			}
 			if (in_array($pictowithouttext, array('asset', 'intervention', 'payment', 'loan', 'partnership', 'stock', 'technic'))) {
@@ -5615,13 +5629,12 @@ function img_picto($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $srco
 				'billa' => 'infobox-commande',
 				'billr' => 'infobox-commande',
 				'billd' => 'infobox-commande',
-				'bookcal' => 'infobox-action',
+				'bookcal' => 'infobox-portal',
 				'margin' => 'infobox-bank_account',
 				'conferenceorbooth' => 'infobox-project',
-				'cash-register' => 'infobox-bank_account',
+				'cash-register' => 'infobox-portal',
 				'contract' => 'infobox-contrat',
 				'check' => 'font-status4',
-				'collab' => 'infobox-action',
 				'conversation' => 'infobox-contrat',
 				'donation' => 'infobox-commande',
 				'dolly' => 'infobox-commande',
@@ -5632,6 +5645,7 @@ function img_picto($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $srco
 				'group' => 'infobox-adherent',
 				'intervention' => 'infobox-contrat',
 				'incoterm' => 'infobox-supplier_proposal',
+				'intracommreport' => 'infobox-bank_account',
 				'currency' => 'infobox-bank_account',
 				'multicurrency' => 'infobox-bank_account',
 				'members' => 'infobox-adherent',
@@ -5652,10 +5666,10 @@ function img_picto($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $srco
 				'info_black' => 'purple',
 				'invoice' => 'infobox-commande',
 				'knowledgemanagement' => 'infobox-contrat rotate90',
-				'loan' => 'infobox-bank_account',
+				'loan' => 'infobox-commande',
 				'payment' => 'infobox-bank_account',
 				'payment_vat' => 'infobox-bank_account',
-				'poll' => 'infobox-adherent',
+				'poll' => 'infobox-portal',
 				'pos' => 'infobox-bank_account',
 				'project' => 'infobox-project',
 				'projecttask' => 'infobox-project',
@@ -5666,9 +5680,10 @@ function img_picto($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $srco
 				'recruitmentjobposition' => 'infobox-adherent',
 				'recruitmentcandidature' => 'infobox-adherent',
 				'resource' => 'infobox-action',
-				'salary' => 'infobox-bank_account',
+				'salary' => 'infobox-commande',
 				'shapes' => 'infobox-adherent',
 				'shipment' => 'infobox-commande',
+				'store' => 'infobox-portal',
 				'stripe' => 'infobox-bank_account',
 				'supplier_invoice' => 'infobox-order_supplier',
 				'supplier_invoicea' => 'infobox-order_supplier',
@@ -5683,6 +5698,7 @@ function img_picto($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $srco
 				'trip' => 'infobox-expensereport',
 				'title_agenda' => 'infobox-action',
 				'vat' => 'infobox-bank_account',
+				'webportal' => 'infobox-portal',
 				//'title_setup'=>'infobox-action', 'tools'=>'infobox-action',
 				'list-alt' => 'imgforviewmode',
 				'calendar' => 'imgforviewmode',
@@ -5874,7 +5890,7 @@ function getImgPictoConv($mode = 'fa')
 			'chevron-double-right' => 'angle-double-right',
 			'chevron-double-down' => 'angle-double-down',
 			'chevron-double-top' => 'angle-double-up',
-			'donation' => 'file-alt',
+			'donation' => 'gift',
 			'dynamicprice' => 'hand-holding-usd',
 			'setup' => 'cog',
 			'companies' => 'building',
@@ -6637,7 +6653,9 @@ function info_admin($text, $infoonimgalt = 0, $nodiv = 0, $admin = '1', $morecss
 		if ($picto == 'warning') {
 			$fa = 'exclamation-triangle';
 		}
-		$result = ($nodiv ? '' : '<div class="wordbreak ' . $class . ($morecss ? ' ' . $morecss : '') . ($textfordropdown ? ' hidden' : '') . '">') . '<span class="fa fa-' . $fa . '" title="' . dol_escape_htmltag((string) $admin ? $langs->trans('InfoAdmin') : $langs->trans('Note')) . '"></span> ';
+		$result = ($nodiv ? '' : '<div class="wordbreak ' . $class . ($morecss ? ' ' . $morecss : '') . ($textfordropdown ? ' hidden' : '') . '">');
+		$result .= img_picto((string) $admin ? $langs->trans('InfoAdmin') : $langs->trans('Note'), $fa);
+		$result .= ' ';
 		$result .= dol_escape_htmltag($text, 1, 0, 'div,span,b,br,a');
 		$result .= ($nodiv ? '' : '</div>');
 

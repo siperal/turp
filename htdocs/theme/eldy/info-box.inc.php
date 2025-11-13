@@ -375,8 +375,9 @@ if (GETPOSTISSET('THEME_SATURATE_RATIO')) {
 }
 
 .spannature {
-	padding-top: 5px !important;
+	padding-top: 6px !important;
 	padding-bottom: 6px !important;
+	vertical-align: middle;
 }
 
 .nonature-back {
@@ -480,6 +481,9 @@ a.vmenu span, span.vmenu, span.vmenu span {
 }
 .infobox-holiday{
 	color: #755114;
+}
+.infobox-portal {
+	color: #304;
 }
 
 
