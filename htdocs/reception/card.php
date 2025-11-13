@@ -313,10 +313,10 @@ if (empty($reshook)) {
 		$object->origin = $origin;
 		$object->origin_id = $origin_id;
 		$object->fk_project = GETPOSTINT('projectid');
-		$object->weight = GETPOSTINT('weight') == '' ? null : GETPOSTINT('weight');
-		$object->trueHeight = GETPOSTINT('trueHeight') == '' ? null : GETPOSTINT('trueHeight');
-		$object->trueWidth = GETPOSTINT('trueWidth') == '' ? null : GETPOSTINT('trueWidth');
-		$object->trueDepth = GETPOSTINT('trueDepth') == '' ? null : GETPOSTINT('trueDepth');
+		$object->weight = GETPOST('weight') == '' ? null : GETPOSTINT('weight');
+		$object->trueHeight = GETPOST('trueHeight') == '' ? null : GETPOSTINT('trueHeight');
+		$object->trueWidth = GETPOST('trueWidth') == '' ? null : GETPOSTINT('trueWidth');
+		$object->trueDepth = GETPOST('trueDepth') == '' ? null : GETPOSTINT('trueDepth');
 		$object->size_units = GETPOSTINT('size_units');
 		$object->weight_units = GETPOSTINT('weight_units');
 
@@ -561,18 +561,18 @@ if (empty($reshook)) {
 			$object->tracking_url = trim(GETPOST('tracking_url', 'restricthtml'));
 		}
 		if ($action == 'settrueWeight') {			// Test on permission already done
-			$object->trueWeight = GETPOSTINT('trueWeight');
-			$object->weight_units = GETPOSTINT('weight_units');
+			$object->trueWeight = GETPOST('trueWeight');
+			$object->weight_units = GETPOST('weight_units');
 		}
 		if ($action == 'settrueWidth') {			// Test on permission already done
-			$object->trueWidth = GETPOSTINT('trueWidth');
+			$object->trueWidth = GETPOST('trueWidth');
 		}
 		if ($action == 'settrueHeight') {			// Test on permission already done
-			$object->trueHeight = GETPOSTINT('trueHeight');
-			$object->size_units = GETPOSTINT('size_units');
+			$object->trueHeight = GETPOST('trueHeight');
+			$object->size_units = GETPOST('size_units');
 		}
 		if ($action == 'settrueDepth') {			// Test on permission already done
-			$object->trueDepth = GETPOSTINT('trueDepth');
+			$object->trueDepth = GETPOST('trueDepth');
 		}
 		if ($action == 'setshipping_method_id') {	// Test on permission already done
 			$object->shipping_method_id = GETPOSTINT('shipping_method_id');
