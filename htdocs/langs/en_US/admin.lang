@@ -1,5 +1,5 @@
 # Dolibarr language file - Source file is en_US - admin
-BoldRefAndPeriodOnPDF=Print the product item's reference and period in the PDF
+BoldRefAndPeriodOnPDF=Put in bold the text of the product reference and period in the PDF
 BoldLabelOnPDF=Print the product item's label in bold in the PDF
 Foundation=Foundation
 Version=Version
