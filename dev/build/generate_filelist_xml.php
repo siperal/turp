@@ -129,7 +129,10 @@ if ($tmpver[0] == 'auto') {
 	if (!empty($tmpver[1]) && $tmpver[0] == 'auto') {
 		$checklock .= '-'.$tmpver[1];
 	}
+}
 
+$checklockmajorversion = '';
+if ($checklock) {
 	$checklockmajorversion = preg_replace('/-.*$/', '', $checklock);
 	$checklockmajorversion = preg_replace('/\..*/', '', $checklockmajorversion);
 	$checklockmajorversion .= '.0.0';
@@ -140,7 +143,7 @@ if ($release) {
 		$tmpverbis = explode('-', $release, 2);
 		if (empty($tmpverbis[1])) {
 			if (DOL_VERSION != $tmpverbis[0] && $savrelease != 'auto') {
-				print 'Error:  When parameter "includecustom" is not set and there is no suffix in release parameter, version declared into filefunc.in.php ('.DOL_VERSION.') must be exact same value than "release" parameter ('.$tmpverbis[0].')'."\n";
+				print 'Error:  When parameter "includecustom" is not set and there is no suffix in release parameter, version declared into filefunc.in.php ('.DOL_VERSION.') must be exactly the same value than "release" parameter ('.$tmpverbis[0].')'."\n";
 				print "Usage:  ".$script_file." release=auto[-mybuild]|x.y.z[-mybuild] [includecustom=1] [includeconstant=CC:MY_CONF_NAME:value]\n";
 				print "\n";
 				exit(3);
@@ -185,7 +188,7 @@ if ($release) {
 }
 if ($checklock) {
 	print "Working on files into               : ".DOL_DOCUMENT_ROOT."\n";
-	print "Version to check in lockedfiles.txt : ".$checklock."\n";
+	print "Version to check in lockedfiles.txt : ".$checklockmajorversion."\n";
 	print "Check source                        : ".$checksource."\n";
 }
 
