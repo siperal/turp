@@ -414,14 +414,7 @@ print $s;
 print "<br>\n";
 print "</div>\n";
 
-/*
-$htmltext = $langs->trans("UnalterableLogTool1");
-if ($mysoc->country_code == 'FR') {
-	$htmltext .= ' '.$langs->trans("UnalterableLogTool1FR");
-}
-$htmltext .= "<br>";
-*/
-
+$htmltext = '';
 $htmltext .= $langs->trans("UnalterableLogTool2", $langs->transnoentitiesnoconv("Archives"))."<br>";
 $htmltext .= $langs->trans("UnalterableLogTool3")."<br>";
 
@@ -706,7 +699,7 @@ if (is_array($blocks)) {
 				$totalvatamount[$block->action][$block->ref_object] = $total_vat;
 				$totalamount[$block->action][$block->ref_object] = $total_ttc;
 			} else {
-				$total_ttc = $block->amount;
+				$total_ttc = $block->amounts;
 			}
 
 			if (empty($total_ttc)) {
