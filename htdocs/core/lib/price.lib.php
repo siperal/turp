@@ -461,7 +461,7 @@ function calcul_price_total($qty, $pu, $remise_percent_ligne, $txtva, $uselocalt
 	$tmpobject = null; $tmpaction = null;
 	$reshook = $hookmanager->executeHooks('calcul_price_total', $parameters, $tmpobject, $tmpaction);
 	if ($reshook > 0 && !empty($hookmanager->resArray['result'])) {
-		return $hookmanager->resArray['result'];
+		$result = $hookmanager->resArray['result'];
 	}
 
 	return $result;
