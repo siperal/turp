@@ -47,11 +47,6 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'banks', 'bills', 'blockedlog', 'other'));
 
-// Access Control
-if ((!$user->admin && !$user->hasRight('blockedlog', 'read')) || empty($conf->blockedlog->enabled)) {
-	accessforbidden();
-}
-
 // Get Parameters
 $action      = GETPOST('action', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : getDolDefaultContextPage(__FILE__); // To manage different context of search
@@ -113,6 +108,11 @@ if (empty($sortorder)) {
 
 $block_static = new BlockedLog($db);
 $block_static->loadTrackedEvents();
+
+// Access Control
+if ((!$user->admin && !$user->hasRight('blockedlog', 'read')) || !isModEnabled('blockedlog')) {
+	accessforbidden();
+}
 
 $result = restrictedArea($user, 'blockedlog', 0, '');
 
