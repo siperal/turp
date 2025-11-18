@@ -741,7 +741,9 @@ if (is_array($blocks)) {
 			// Note
 			if (!$checkresult[$block->id] || ($loweridinerror && $block->id >= $loweridinerror)) {	// If error
 				if ($checkresult[$block->id]) {
-					print $form->textwithpicto('', $langs->trans('OkCheckFingerprintValidityButChainIsKo'));
+					if (getDolGlobalString("BLOCKEDLOG_DEBUG")) {
+						print $form->textwithpicto('', $langs->trans('OkCheckFingerprintValidityButChainIsKo'));
+					}
 				}
 			}
 
@@ -753,7 +755,7 @@ if (is_array($blocks)) {
 			print '</td>';
 
 			// Link to debug information object
-			if (getDolGlobalString('MAIN_FEATURES_LEVEL') > 0) {	// If in experimental or develop mode, we add some debug information. It may help developers to find origin of bugs.
+			if (getDolGlobalString("BLOCKEDLOG_DEBUG")) {	// If in experimental or develop mode, we add some debug information. It may help developers to find origin of bugs.
 				print '<td class="tdoverflowmax150"'.(preg_match('/<a/', $object_link) ? '' : 'title="'.dol_escape_htmltag(dol_string_nohtmltag($object_link.($object_link_title ? ' - '.$object_link_title : ''))).'"').'>';
 				print '<!-- object_link -->';	// $object_link can be a '<a href' link or a text
 				print $object_link;
