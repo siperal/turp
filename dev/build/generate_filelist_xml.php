@@ -26,6 +26,7 @@
 if (!defined('NOREQUIREDB')) {
 	define('NOREQUIREDB', '1');	// Do not create database handler $db
 }
+define('NOREQUIREVIRTUALURL', 1);
 
 $sapi_type = php_sapi_name();
 $script_file = basename(__FILE__);
@@ -37,10 +38,7 @@ if (substr($sapi_type, 0, 3) == 'cgi') {
 	exit(1);
 }
 
-
 define('DOL_DOCUMENT_ROOT', dirname(dirname($path)).'/htdocs');
-define('NOREQUIREDB', 1);
-define('NOREQUIREVIRTUALURL', 1);
 
 require_once $path."../../htdocs/master.inc.php";
 require_once DOL_DOCUMENT_ROOT."/core/lib/files.lib.php";
