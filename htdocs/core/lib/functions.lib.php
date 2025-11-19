@@ -12093,7 +12093,7 @@ function dol_eval_standard($s, $hideerrors = 1, $onlysimplestring = '1')
 			$matches = array();
 			preg_match_all($pattern, $s, $matches);
 
-			if (!empty($matches)) {
+			if (count($matches)) {
 				foreach ($matches[1] as $m) {
 					$m = trim($m);
 					if (empty($m)) {
