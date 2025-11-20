@@ -880,6 +880,14 @@ class pdf_crabe extends ModelePDFFactures
 					$pdf->AliasNbPages();  // @phan-suppress-current-line PhanUndeclaredMethod
 				}
 
+				if (getDolGlobalString('INVOICE_ADD_SWISS_QR_CODE') == 'bottom') {
+					$result = $this->addBottomQRInvoice($pdf, $object, $outputlangs);
+					if (!$result) {
+						$pdf->Close();
+						return 0;
+					}
+				}
+
 				// Add terms to sale
 				if (getDolGlobalInt('MAIN_PDF_ADD_TERMSOFSALE_INVOICE')) {
 					$termsofsalefilename = getDolGlobalString('MAIN_INFO_INVOICE_TERMSOFSALE');
@@ -901,13 +909,7 @@ class pdf_crabe extends ModelePDFFactures
 						}
 					}
 				}
-				if (getDolGlobalString('INVOICE_ADD_SWISS_QR_CODE') == 'bottom') {
-					$result = $this->addBottomQRInvoice($pdf, $object, $outputlangs);
-					if (!$result) {
-						$pdf->Close();
-						return 0;
-					}
-				}
+
 				$pdf->Close();
 
 				$pdf->Output($file, 'F');
