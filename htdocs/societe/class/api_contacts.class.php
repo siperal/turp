@@ -343,6 +343,16 @@ class Contacts extends DolibarrApi
 		// Check mandatory fields
 		$result = $this->_validate($request_data);
 
+		// External api user does not know internal country ID
+		if (!isset($request_data['country_id']) && isset($request_data['country_code'])) {
+			$field = strlen($request_data['country_code']) > 2 ? 'code_iso' : 'code';
+			$id = dol_getIdFromCode($this->db, $request_data['country_code'], "c_country", $field, "rowid");
+			if ($id < 0) {
+				throw new RestException(404, 'Country code not found in database: ' . $this->db->error);
+			}
+			$request_data['country_id'] = $id;
+		}
+
 		foreach ($request_data as $field => $value) {
 			if ($field === 'caller') {
 				// Add a mention of caller so on trigger called after action, we can filter to avoid a loop if we try to sync back again with the caller
