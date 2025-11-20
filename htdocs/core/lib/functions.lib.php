@@ -11867,7 +11867,8 @@ function dol_eval_standard($s, $hideerrors = 1, $onlysimplestring = '1')
 {
 	// Only this global variables can be read by eval function and returned to caller
 	// The less we have, the better it is.
-	// $conf is excluded. We can read $conf->global->xxx properties with getDolGlobalString(), $conf->currency with getDolCurrency(), $conf->entity with getDolEntity()
+
+	global $conf;	// TODO Remove this to exclude $conf. We can read $conf->module->enabled with isModEnabled(), $conf->global->xxx properties with getDolGlobalString(), $conf->currency with getDolCurrency(), $conf->entity with getDolEntity()
 	global $db, $langs, $user, $website, $websitepage;
 	global $action, $mainmenu, $leftmenu;
 	global $mysoc;
@@ -11987,7 +11988,9 @@ function dol_eval_standard($s, $hideerrors = 1, $onlysimplestring = '1')
 		$scheck = $s;
 		while ($scheck && $savescheck != $scheck) {
 			$savescheck = $scheck;
+			$scheck = preg_replace('/\$conf->[a-z]+->enabled/', '__VARCONFENABLED__', $scheck);		// Remove this once $user->module->enabled has been replaced everywhere with isModEnabled.
 			$scheck = preg_replace('/\$user->hasRight/', '__VARUSERHASRIGHT__', $scheck);
+			$scheck = preg_replace('/\$user->rights/', '__VARUSERHASRIGHT__', $scheck);		// Remove this once $user->rights->xxx is removed everywhere.
 			$scheck = preg_replace('/\(\$db\)/', '__VARDB__', $scheck);
 			$scheck = preg_replace('/\$langs/', '__VARLANGSTRANS__', $scheck);
 			$scheck = preg_replace('/\$mysoc/', '__VARMYSOC__', $scheck);
