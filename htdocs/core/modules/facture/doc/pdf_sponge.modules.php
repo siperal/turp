@@ -1095,11 +1095,11 @@ class pdf_sponge extends ModelePDFFactures
 					$pdf->AliasNbPages();  // @phan-suppress-current-line PhanUndeclaredMethod
 				}
 				// Add terms to sale
-				if (!empty($mysoc->termsofsale) && getDolGlobalInt('MAIN_PDF_ADD_TERMSOFSALE_INVOICE')) {
+				if (getDolGlobalInt('MAIN_PDF_ADD_TERMSOFSALE_INVOICE')) {
 					$termsofsalefilename = getDolGlobalString('MAIN_INFO_INVOICE_TERMSOFSALE');
-					$termsofsale = $conf->mycompany->dir_output.'/'.$termsofsalefilename;
-					if (!empty($conf->mycompany->multidir_output[$object->entity ?? $conf->entity])) {
-						$termsofsale = $conf->mycompany->multidir_output[$object->entity ?? $conf->entity].'/'.$mysoc->termsofsale;
+					$termsofsale = $conf->invoice->dir_output.'/'.$termsofsalefilename;
+					if (!empty($conf->invoice->multidir_output[$object->entity ?? $conf->entity])) {
+						$termsofsale = $conf->invoice->multidir_output[$object->entity ?? $conf->entity].'/'.$termsofsalefilename;
 					}
 					if (file_exists($termsofsale) && is_readable($termsofsale)) {
 						$pagecount = $pdf->setSourceFile($termsofsale);
