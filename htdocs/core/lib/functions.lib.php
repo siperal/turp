@@ -394,6 +394,7 @@ define(
 
 /**
  * Is Dolibarr module enabled
+ * Note: "isModEnabled('delivery_note')" must be replacedwith "isModEnabled('shipping') && getDolGlobalString('MAIN_SUBMODULE_EXPEDITION')"
  *
  * @param 	string 	$module 	Module name to check
  * @return 	boolean				True if module is enabled
@@ -411,16 +412,6 @@ function isModEnabled($module)
 		$arrayconv['supplier_order'] = 'fournisseur';
 		$arrayconv['supplier_invoice'] = 'fournisseur';
 	}
-	// Special case.
-	// @TODO Replace isModEnabled('delivery_note') with
-	// isModEnabled('shipping') && getDolGlobalString('MAIN_SUBMODULE_EXPEDITION')
-	if ($module == 'delivery_note') {
-		if (!getDolGlobalString('MAIN_SUBMODULE_EXPEDITION')) {
-			return false;
-		} else {
-			$module = 'shipping';
-		}
-	}
 
 	$module_alt = $module;
 	if (!empty($arrayconv[$module])) {
@@ -432,7 +423,6 @@ function isModEnabled($module)
 	}
 
 	return !empty($conf->modules[$module]) || !empty($conf->modules[$module_alt]) || !empty($conf->modules[$module_bis]);
-	//return !empty($conf->$module->enabled);
 }
 
 /**
