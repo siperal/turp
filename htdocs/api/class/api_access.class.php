@@ -135,12 +135,13 @@ class DolibarrApiAccess implements iAuthenticate
 			$token_rowid = 0;
 
 			if (!getDolGlobalString('API_IN_TOKEN_TABLE')) {
-				$sql = "SELECT u.login, u.datec, u.api_key as use_api, u.entity, u.api_key as api_key, u.entity as token_entity, 0 as token_rowid";
-				$sql .= " u.tms as date_modification, u.entity";
+				$sql = "SELECT u.login, u.datec, u.api_key as use_api, u.entity, u.api_key as api_key, u.entity as token_entity, 0 as token_rowid,";
+				$sql .= " u.tms as date_modification";
 				$sql .= " FROM ".MAIN_DB_PREFIX."user as u";
 				$sql .= " WHERE u.api_key = '".$this->db->escape($api_key)."' OR u.api_key = '".$this->db->escape(dolEncrypt($api_key, '', '', 'dolibarr'))."'";
 			} else {
-				$sql = "SELECT u.login, u.datec, u.api_key as use_api, u.entity, oat.tokenstring as api_key, oat.entity as token_entity, rowid as token_rowid";
+				$sql = "SELECT u.login, u.datec, u.api_key as use_api, u.entity, oat.tokenstring as api_key, oat.entity as token_entity, rowid as token_rowid,";
+				$sql .= " oat.tms as date_modification";
 				$sql .= " FROM ".MAIN_DB_PREFIX."oauth_token AS oat";
 				$sql .= " JOIN ".MAIN_DB_PREFIX."user AS u ON u.rowid = oat.fk_user";
 				$sql .= " WHERE (oat.tokenstring = '".$this->db->escape($api_key)."'";
