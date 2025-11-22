@@ -3794,24 +3794,25 @@ function dol_strftime($fmt, $ts = false, $is_gmt = false)
  *	Output date in a string format according to outputlangs (or langs if not defined).
  * 	Return charset is always UTF-8, except if encodetoouput is defined. In this case charset is output charset
  *
- *	@param	null|int|string	$time		GM Timestamps date
- *	@param	string		$format      	Output date format (tag of strftime function)
- *										"%d %b %Y",
- *										"%d/%m/%Y %H:%M",
- *										"%d/%m/%Y %H:%M:%S",
- *                                      "%B"=Long text of month, "%A"=Long text of day, "%b"=Short text of month, "%a"=Short text of day
- *										"day", "daytext", "dayhour", "dayhourldap", "dayhourtext", "dayrfc", "dayhourrfc", "...inputnoreduce", "...reduceformat"
- * 	@param	string|bool	$tzoutput		true or 'gmt' => string is for Greenwich location
- * 										false or 'tzserver' => output string is for local PHP server TZ usage
- * 										'tzuser' => output string is for user TZ (current browser TZ with current dst) => In a future, we should have same behaviour than 'tzuserrel'
- *                                      'tzuserrel' => output string is for user TZ (current browser TZ with dst or not, depending on date position)
- *	@param	?Translate	$outputlangs	Object lang that contains language for text translation.
- *  @param  boolean		$encodetooutput false=no convert into output pagecode
- * 	@return string      				Formatted date or '' if time is null
+ *	@param	null|int|string	$time			GM Timestamps date
+ *	@param	string			$format      	Output date format (tag of strftime function)
+ *											"%d %b %Y",
+ *											"%d/%m/%Y %H:%M",
+ *											"%d/%m/%Y %H:%M:%S",
+ *                              	        "%B"=Long text of month, "%A"=Long text of day, "%b"=Short text of month, "%a"=Short text of day
+ *											"day", "daytext", "dayhour", "dayhourldap", "dayhourtext", "dayrfc", "dayhourrfc", "...inputnoreduce", "...reduceformat"
+ * 	@param	string|bool		$tzoutput		true or 'gmt' => string is for Greenwich location
+ * 											false or 'tzserver' => output string is for local PHP server TZ usage
+ * 											'tzuser' => output string is for user TZ (current browser TZ with current dst) => In a future, we should have same behaviour than 'tzuserrel'
+ *                                  	    'tzuserrel' => output string is for user TZ (current browser TZ with dst or not, depending on date position)
+ *	@param	?Translate		$outputlangs	Object lang that contains language for text translation.
+ *  @param  boolean			$encodetooutput Use true to convert/encode string into the HTML rendering pagecode (false=keep UTF8 by default)
+ *  @param	int				$decorate		Use 1 to apply a HTML css style to decorate the date
+ * 	@return string      					Formatted date or '' if time is null
  *
  *  @see        dol_mktime(), dol_stringtotime(), dol_getdate(), selectDate()
  */
-function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = null, $encodetooutput = false)
+function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = null, $encodetooutput = false, $decorate = 0)
 {
 	global $conf, $langs;
 
@@ -4051,6 +4052,11 @@ function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = 
 
 		$ret = str_replace('__A__', $dayweek, $ret);
 		$ret = str_replace('__a__', dol_substr($dayweek, 0, 3), $ret);
+	}
+
+	if ($decorate) {
+		$ret = preg_replace('/(\d\d:\d\d [AP]M)$/', '<span class="opacitymedium">\1</span>', $ret);
+		$ret = preg_replace('/(\d\d:\d\d)$/', '<span class="opacitymedium">\1</span>', $ret);
 	}
 
 	return $ret;
