@@ -1052,6 +1052,9 @@ function checkUserAccessToObject($user, array $featuresarray, $object = 0, $tabl
 				if ($user->socid != $objectid) {
 					return false;
 				}
+			} elseif (isModEnabled('societe') && !($user->hasRight('societe', 'lire') && !$user->hasRight('societe', 'client', 'voir'))) {
+				dol_syslog("security.lib.php::checkUserAccessToObject True: (isModEnabled('societe') && !(user->hasRight('societe', 'lire') && !user->hasRight('societe', 'client', 'voir')))", LOG_DEBUG);
+				return false;
 			} elseif (isModEnabled("societe") && ($user->hasRight('societe', 'lire') && !$user->hasRight('societe', 'client', 'voir'))) {
 				// If internal user: Check permission for internal users that are restricted on their objects
 				$sql = "SELECT COUNT(sc.fk_soc) as nb";
