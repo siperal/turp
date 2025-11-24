@@ -26,7 +26,7 @@
  */
 
 define("NOLOGIN", 1); // This means this output page does not require to be logged.
-
+define("NOCSRFCHECK", 1);
 // Load Dolibarr environment
 require '../main.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
