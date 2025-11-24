@@ -121,6 +121,7 @@ $hookmanager->initHooks(array('customreport')); // Note that conf->hooks_modules
 
 $title = '';
 $picto = '';
+$errormessage = null;
 $head = array();
 $ObjectClassName = '';
 // Objects available by default
