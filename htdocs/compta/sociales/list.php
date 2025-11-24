@@ -31,13 +31,6 @@
 
 // Load Dolibarr environment
 require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/compta/sociales/class/chargesociales.class.php';
-require_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formsocialcontrib.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/projet/class/project.class.php';
-
 /**
  * @var Conf $conf
  * @var DoliDB $db
@@ -45,6 +38,12 @@ require_once DOL_DOCUMENT_ROOT.'/projet/class/project.class.php';
  * @var Translate $langs
  * @var User $user
  */
+require_once DOL_DOCUMENT_ROOT.'/compta/sociales/class/chargesociales.class.php';
+require_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';
+require_once DOL_DOCUMENT_ROOT.'/core/class/html.formsocialcontrib.class.php';
+require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
+require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/projet/class/project.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('compta', 'banks', 'bills', 'hrm', 'projects'));
@@ -103,15 +102,13 @@ if (!$sortorder) {
 	$sortorder = "DESC";
 }
 
-$filtre = GETPOSTINT("filtre");
-
 $arrayfields = array(
 	'cs.rowid'		=> array('label' => "Ref", 'checked' => '1', 'position' => 10),
 	'cs.libelle'	=> array('label' => "Label", 'checked' => '1', 'position' => 20),
 	'cs.fk_type'	=> array('label' => "Type", 'checked' => '1', 'position' => 30),
 	'cs.date_ech'	=> array('label' => "Date", 'checked' => '1', 'position' => 40),
 	'cs.periode'	=> array('label' => "PeriodEndDate", 'checked' => '1', 'position' => 50),
-	'p.ref'			=> array('label' => "ProjectRef", 'checked' => '1', 'position' => 60, 'enabled' => (string) (int) (isModEnabled('project'))),
+	'p.ref'			=> array('label' => "ProjectRef", 'checked' => '-1', 'position' => 60, 'enabled' => (string) (int) (isModEnabled('project'))),
 	'cs.fk_user'	=> array('label' => "Employee", 'checked' => '1', 'position' => 70),
 	'cs.fk_mode_reglement'	=> array('checked' => '-1', 'position' => 80, 'label' => "DefaultPaymentMode"),
 	'cs.amount'		=> array('label' => "Amount", 'checked' => '1', 'position' => 100),
