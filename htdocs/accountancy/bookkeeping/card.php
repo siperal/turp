@@ -50,7 +50,7 @@ require_once DOL_DOCUMENT_ROOT.'/accountancy/class/lettering.class.php';
 $langs->loadLangs(array("accountancy", "bills", "compta"));
 
 $action = GETPOST('action', 'aZ09');
-$cancel = GETPOST('cancel');
+$cancel = GETPOST('cancel', 'alpha');
 $confirm = GETPOST('confirm', 'alpha');
 
 $type = GETPOST('type', 'alpha');
