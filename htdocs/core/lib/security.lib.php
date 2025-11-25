@@ -1266,7 +1266,7 @@ function checkUserAccessToObject($user, array $featuresarray, $object = 0, $tabl
 			}
 		}
 	}
-	
+
 	dol_syslog("security.lib.php::checkUserAccessToObject::return True", LOG_DEBUG);
 	return true;
 }
