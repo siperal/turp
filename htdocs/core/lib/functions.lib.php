@@ -14651,7 +14651,7 @@ function getElementProperties($elementType)
 		$classpath = $module . '/class';
 		$classfile = $module;
 		$classname = preg_replace('/det$/', 'Line', $element);
-		if (in_array($module, array('expedition', 'propale', 'facture', 'contrat', 'fichinter', 'commandefournisseur'))) {
+		if (in_array($module, array('expedition', 'propale', 'facture', 'contrat', 'fichinter', 'supplier_order', 'commandefournisseur'))) {
 			$classname = preg_replace('/det$/', 'Ligne', $element);
 		}
 	}
