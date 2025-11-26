@@ -184,7 +184,7 @@ class Expedition extends CommonObject
 	 */
 	public $depth_units;
 	/**
-	 * @var null|int|float|'' A denormalized value
+	 * @var null|string A denormalized value ex '1x2x4'
 	 */
 	public $trueSize;
 
