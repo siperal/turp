@@ -656,7 +656,8 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 			if (!$error) {
 				if (getDolGlobalString('STRIPE_IPN_SEND_EMAIL_ON_DIRECT_DEBIT_CONFIRMATION')) {
 					// If option to send email after confirmation of direct debit is on, we send the email (template must exists
-					$labeltouse = getDolGlobalString('STRIPE_IPN_SEND_EMAIL_ON_DIRECT_DEBIT_CONFIRMATION');		// Example: 'InvoicePaymentSuccess'
+					$labeltouse = getDolGlobalString('STRIPE_IPN_SEND_EMAIL_ON_DIRECT_DEBIT_CONFIRMATION');
+					// Example: $labeltouse = 'InvoicePaymentSuccess'
 
 					$invoice = new Facture($db);
 					$invoice->fetch($invoice_id);
@@ -675,6 +676,10 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 
 					$arraydefaultmessage = $formmail->getEMailTemplate($db, 'facture_send', $user, $outputlangs, 0, 1, $labeltouse);
 
+					$appli = $mysoc->name;
+
+					$subject = '['.$appli.'] Invoice direct debit payment recevied';
+					$msg =  'An invoice direct debit payment for invoice '.$invoice->ref.' has been recevied';
 					if (is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
 						$subject = $arraydefaultmessage->topic;
 						$msg     = $arraydefaultmessage->content;
