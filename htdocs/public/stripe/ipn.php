@@ -713,22 +713,23 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 					$texttosend = make_substitutions($msg, $substitutionarray, $outputlangs);
 
 					// Attach a file ?
-					$file='';
 					$listofpaths=array();
 					$listofnames=array();
 					$listofmimes=array();
-					if (is_object($invoice)) {
-						$invoicediroutput = $conf->invoice->dir_output;
-						$fileparams = dol_most_recent_file($invoicediroutput . '/' . $invoice->ref, preg_quote($invoice->ref, '/').'[^\-]+');
-						$file = $fileparams['fullname'];
-						$file = '';		// Disable attachment of invoice in emails
 
-						if ($file) {
-							$listofpaths=array($file);
-							$listofnames=array(basename($file));
-							$listofmimes=array(dol_mimetype($file));
-						}
+					/*
+					$invoicediroutput = $conf->invoice->dir_output;
+					$fileparams = dol_most_recent_file($invoicediroutput . '/' . $invoice->ref, preg_quote($invoice->ref, '/').'[^\-]+');
+					$file = $fileparams['fullname'];
+					$file = '';		// Disable attachment of invoice in emails
+
+					if ($file) {
+						$listofpaths=array($file);
+						$listofnames=array(basename($file));
+						$listofmimes=array(dol_mimetype($file));
 					}
+					*/
+
 					$from = getDolGlobalString('MAIN_INFO_SOCIETE_MAIL');
 
 					$trackid = 'inv'.$invoice->id;
