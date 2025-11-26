@@ -501,6 +501,7 @@ foreach ($arrayofpermission as $i => $obj) {
 
 	// Permission and tick (2 columns)
 	print '<!-- permsgroupbyentitypluszero -->';
+	// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
 	if (in_array($obj->id, $permsgroupbyentitypluszero)) {
 		// Own permission by group
 		if ($permissiontoedit) {
