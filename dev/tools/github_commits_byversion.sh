@@ -22,10 +22,10 @@ if ! git rev-parse ; then
 	git clone https://github.com/Dolibarr/dolibarr.git
 	cd "${DOL_GIT}" || exit
 else
-    echo "/tmp/git/dolibarr is a git repo."
-    mkdir -p ${DOL_GIT}
+	echo "/tmp/git/dolibarr is a git repo."
+	mkdir -p ${DOL_GIT}
 	if [ -r "${DOL_GIT}" ] ; then
-	    echo git worktree remove "${DOL_GIT}"
+		echo git worktree remove "${DOL_GIT}"
 		git worktree remove "${DOL_GIT}"
 		rm -rf "${DOL_GIT}" >& /dev/null
 	fi
