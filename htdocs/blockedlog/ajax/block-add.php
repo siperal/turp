@@ -48,7 +48,11 @@ require '../../main.inc.php';
 
 $id = GETPOSTINT('id');
 $element = GETPOST('element', 'alpha');
-$action = GETPOST('action', 'aZ09');
+$action = GETPOST('action', 'aZ09');	// Can be DOC_PREVIEW or DOC_DOWNLOAD
+
+if (! in_array($action, array('DOC_PREVIEW', 'DOC_DOWNLOAD'))) {
+	accessforbidden('Bad value for action. Must be DOC_PREVIEW or DOC_DOWNLOAD');
+}
 
 if ($element === 'facture') {
 	restrictedArea($user, 'facture', $id, '', '', 'fk_soc', 'rowid', 0);
@@ -74,6 +78,10 @@ if ($element === 'facture') {	// Test on permission done in top of page
 
 	$facture = new Facture($db);
 	if ($facture->fetch($id) > 0) {
+		$facture->pos_print_counter += 1;
+
+		$facture->update($user, 1);	// We disable trigger here because we already call the trigger $action = DOC_PREVIEW or DOC_DOWNLOAD just after
+
 		$facture->call_trigger($action, $user);
 	}
 
