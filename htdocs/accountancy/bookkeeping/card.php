@@ -1019,7 +1019,7 @@ if ($action == 'create') {
 					$total_debit += $line->debit;
 					$total_credit += $line->credit;
 
-					if ($action == 'update' && $line->id == $id && empty($line->date_validation)) {
+					if ($action == 'update' && $line->id == $id && empty($object->date_validation)) {
 						print '<tr class="oddeven" data-lineid="'.((int) $line->id).'">';
 						print '<!-- td columns in edit mode -->';
 						print '<td>';
