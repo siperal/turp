@@ -213,10 +213,10 @@ if ($result) {
 	$i = 0;
 	while ($i < $num) {
 		$obj = $db->fetch_object($result);
-		if (!isset($permsgroupbyentity[$obj->entity])) {
-			$permsgroupbyentity[$obj->entity] = array();
+		if (!isset($permsgroupbyentity[(int) $obj->entity])) {
+			$permsgroupbyentity[(int) $obj->entity] = array();
 		}
-		array_push($permsgroupbyentity[$obj->entity], $obj->id);
+		array_push($permsgroupbyentity[(int) $obj->entity], (int) $obj->id);
 		$i++;
 	}
 	$db->free($result);
