@@ -9550,8 +9550,18 @@ function dol_htmlwithnojs($stringtoencode, $nouseofiframesandbox = 0, $check = '
 
 			$matches = array();
 			if (preg_match_all($pattern, $out, $matches)) {
-				// URLs are into $matches[1]
-				$urls = $matches[1];
+				// URLs are into $matches[1] or $matches[2]
+				$urls = array();
+				foreach ($matches[1] as $tmpval) {
+					if (!empty($tmpval)) {
+						$urls[] = $tmpval;
+					}
+				}
+				foreach ($matches[2] as $tmpval) {
+					if (!empty($tmpval)) {
+						$urls[] = $tmpval;
+					}
+				}
 
 				// Show URLs
 				$firstexturl = '';
