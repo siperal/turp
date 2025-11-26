@@ -78,9 +78,13 @@ if ($element === 'facture') {	// Test on permission done in top of page
 
 	$facture = new Facture($db);
 	if ($facture->fetch($id) > 0) {
-		$facture->pos_print_counter += 1;
+		// Increase counter by 1
+		$sql = "UPDATE ".MAIN_DB_PREFIX."facture SET pos_print_counter = pos_print_counter + 1";
+		$sql .= " WHERE rowid = ".((int) $facture->id);
+		$db->query($sql);
 
-		$facture->update($user, 1);	// We disable trigger here because we already call the trigger $action = DOC_PREVIEW or DOC_DOWNLOAD just after
+		//$facture->pos_print_counter += 1;
+		//$facture->update($user, 1);	// We disable trigger here because we already call the trigger $action = DOC_PREVIEW or DOC_DOWNLOAD just after
 
 		$facture->call_trigger($action, $user);
 	}
