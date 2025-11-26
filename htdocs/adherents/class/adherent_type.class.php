@@ -696,7 +696,7 @@ class AdherentType extends CommonObject
 				while ($i < $nump) {
 					$obj = $this->db->fetch_object($resql);
 
-					$amountbytype[$obj->rowid] = $obj->amount;
+					$amountbytype[$obj->rowid] = (float) $obj->amount;
 					$i++;
 				}
 			}
