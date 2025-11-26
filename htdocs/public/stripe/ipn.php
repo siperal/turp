@@ -698,6 +698,7 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 						//dol_sort_array($object->linkedObjects['facture'], 'date');
 						foreach ($invoice->linkedObjects['contrat'] as $contract) {
 							/** @var Contrat $contract */
+							'@phan-var-force Contrat $contact';
 							$substitutionarray['__CONTRACT_REF__'] = $contract->ref_customer;
 							$substitutionarray['__REFCLIENT__'] = $contract->ref_customer;	// For backward compatibility
 							$substitutionarray['__REF_CLIENT__'] = $contract->ref_customer;
