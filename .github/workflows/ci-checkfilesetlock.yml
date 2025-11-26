@@ -1,6 +1,6 @@
 ---
 # This is a basic workflow to check the lock on major version (to lock some files on certified versions)
-name: Check lock of major version
+name: Check fileset lock
 
 on: [push, pull_request]
 
