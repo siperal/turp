@@ -582,6 +582,7 @@ class FormCompany extends Form
 			if ($num) {
 				$i = 0;
 				$country = '';
+				/** @var array<string,array{code:string,label:string,label_sort:string,country_code:string,country:string}> $arraydata */
 				$arraydata = array();
 				while ($i < $num) {
 					$obj = $this->db->fetch_object($resql);
