@@ -4568,7 +4568,7 @@ function migrate_productlot_path()
 
 			if ($dir) {
 				$lot->id = $obj->rowid;
-				$lot->ref = $obj->id;		// No ref for the moment
+				$lot->ref = $obj->rowid;		// No ref for the moment
 				$lot->batch = $obj->batch;
 				$lot->entity = $obj->entity;
 				$lot->fk_product = $obj->fk_product;
