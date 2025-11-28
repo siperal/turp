@@ -5691,7 +5691,7 @@ function img_picto($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $srco
 				'accounting_account' => 'infobox-bank_account',
 				'accountline' => 'infobox-bank_account',
 				'accountancy' => 'infobox-bank_account',
-				'admin'=> 'opacitymedium',
+				'admin' => 'opacitymedium',
 				'asset' => 'infobox-bank_account',
 				'bank_account' => 'infobox-bank_account',
 				'bill' => 'infobox-commande',
@@ -8445,7 +8445,8 @@ function get_default_tva(Societe $thirdparty_seller, Societe $thirdparty_buyer, 
 	}
 
 	// If the (seller country = buyer country) then the default VAT = VAT of the product sold. End of rule.
-	if (empty($vatrule) && (($seller_country_code == $buyer_country_code)
+	if (empty($vatrule) && (
+		($seller_country_code == $buyer_country_code)
 		|| (in_array($seller_country_code, array('FR', 'MC')) && in_array($buyer_country_code, array('FR', 'MC')))
 		|| (in_array($seller_country_code, array('MQ', 'GP')) && in_array($buyer_country_code, array('MQ', 'GP')))	// We should be able to manage the case of MQ, GP, ... with a deicated vat rate at previous step.
 	)) { // Warning ->country_code not always defined
@@ -8517,7 +8518,8 @@ function get_default_tva(Societe $thirdparty_seller, Societe $thirdparty_buyer, 
 
 	// Allow an external module to bypass the calculation of prices
 	$parameters = array('vatvalue' => $vatvalue, 'vatrule' => $vatrule);
-	$tmpobject = null; $tmpaction = '';
+	$tmpobject = null;
+	$tmpaction = '';
 	// @phan-suppress-next-line PhanPluginConstantVariableNull
 	$reshook = $hookmanager->executeHooks('get_default_tva', $parameters, $tmpobject, $tmpaction);	// @phan-suppress-current-line PhanPluginConstantVariableNull
 	if ($reshook > 0 && !empty($hookmanager->resArray['vatvalue'])) {

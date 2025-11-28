@@ -1039,18 +1039,6 @@ parameters:
 			path: ../../../htdocs/admin/website.php
 
 		-
-			message: '#^Parameter \#1 \$array of function dol_sort_array contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 1
-			path: ../../../htdocs/admin/workflow.php
-
-		-
-			message: '#^Return type of call to function dol_sort_array contains unresolvable type\.$#'
-			identifier: function.unresolvableReturnType
-			count: 1
-			path: ../../../htdocs/admin/workflow.php
-
-		-
 			message: '#^Loose comparison using \=\= between ''edit'' and ''edit'' will always evaluate to true\.$#'
 			identifier: equal.alwaysTrue
 			count: 1
@@ -1597,21 +1585,9 @@ parameters:
 			path: ../../../htdocs/categories/class/categorie.class.php
 
 		-
-			message: '#^Parameter \#1 \$array of function dol_sort_array contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 1
-			path: ../../../htdocs/categories/class/categorie.class.php
-
-		-
 			message: '#^Property Categorie\:\:\$cats \(array\<int, array\{rowid\: int, id\: int, fk_parent\: int, label\: string, description\: string, color\: string, position\: string, visible\: int, \.\.\.\}\>\) does not accept array\<array\{rowid\: mixed, id\: mixed, fk_parent\: mixed, label\: mixed, description\: mixed, color\: mixed, position\: mixed, visible\: mixed, \.\.\.\}\>\.$#'
 			identifier: assign.propertyType
 			count: 2
-			path: ../../../htdocs/categories/class/categorie.class.php
-
-		-
-			message: '#^Return type of call to function dol_sort_array contains unresolvable type\.$#'
-			identifier: function.unresolvableReturnType
-			count: 1
 			path: ../../../htdocs/categories/class/categorie.class.php
 
 		-
@@ -5647,12 +5623,6 @@ parameters:
 			path: ../../../htdocs/core/class/html.form.class.php
 
 		-
-			message: '#^Parameter \#1 \$array of function dol_sort_array contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 3
-			path: ../../../htdocs/core/class/html.form.class.php
-
-		-
 			message: '#^Parameter \#15 \$excludeids of method Form\:\:select_company\(\) expects array\<string\>, array\<int\> given\.$#'
 			identifier: argument.type
 			count: 1
@@ -5719,12 +5689,6 @@ parameters:
 			path: ../../../htdocs/core/class/html.form.class.php
 
 		-
-			message: '#^Return type of call to function dol_sort_array contains unresolvable type\.$#'
-			identifier: function.unresolvableReturnType
-			count: 3
-			path: ../../../htdocs/core/class/html.form.class.php
-
-		-
 			message: '#^Right side of && is always true\.$#'
 			identifier: booleanAnd.rightAlwaysTrue
 			count: 2
@@ -5761,20 +5725,8 @@ parameters:
 			path: ../../../htdocs/core/class/html.formcompany.class.php
 
 		-
-			message: '#^Parameter \#1 \$array of function dol_sort_array contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 1
-			path: ../../../htdocs/core/class/html.formcompany.class.php
-
-		-
 			message: '#^Parameter \#3 \$selected of method Form\:\:multiselectarray\(\) expects array\<string\>, array\<array\<string, int\>\|int\> given\.$#'
 			identifier: argument.type
-			count: 1
-			path: ../../../htdocs/core/class/html.formcompany.class.php
-
-		-
-			message: '#^Return type of call to function dol_sort_array contains unresolvable type\.$#'
-			identifier: function.unresolvableReturnType
 			count: 1
 			path: ../../../htdocs/core/class/html.formcompany.class.php
 
@@ -10795,18 +10747,6 @@ parameters:
 			path: ../../../htdocs/main.inc.php
 
 		-
-			message: '#^Parameter \#1 \$array of function dol_sort_array contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 1
-			path: ../../../htdocs/margin/agentMargins.php
-
-		-
-			message: '#^Return type of call to function dol_sort_array contains unresolvable type\.$#'
-			identifier: function.unresolvableReturnType
-			count: 1
-			path: ../../../htdocs/margin/agentMargins.php
-
-		-
 			message: '#^Ternary operator condition is always false\.$#'
 			identifier: ternary.alwaysFalse
 			count: 1
@@ -15667,12 +15607,6 @@ parameters:
 			path: ../../../htdocs/user/class/user.class.php
 
 		-
-			message: '#^Parameter \#1 \$array of function dol_sort_array contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 1
-			path: ../../../htdocs/user/class/user.class.php
-
-		-
 			message: '#^Property User\:\:\$rights \(stdClass\) in empty\(\) is not falsy\.$#'
 			identifier: empty.property
 			count: 1
@@ -15724,12 +15658,6 @@ parameters:
 			message: '#^Result of \|\| is always true\.$#'
 			identifier: booleanOr.alwaysTrue
 			count: 4
-			path: ../../../htdocs/user/class/user.class.php
-
-		-
-			message: '#^Return type of call to function dol_sort_array contains unresolvable type\.$#'
-			identifier: function.unresolvableReturnType
-			count: 1
 			path: ../../../htdocs/user/class/user.class.php
 
 		-
