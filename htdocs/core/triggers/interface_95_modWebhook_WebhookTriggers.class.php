@@ -95,7 +95,7 @@ class InterfaceWebhookTriggers extends DolibarrTriggers
 		}
 
 		// Create new instance of db for webhook history save
-		$dbhistory = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $dolibarr_main_db_pass, $conf->db->name, (int) $conf->db->port);
+		$dbhistory = getDoliDBInstance($conf->db->type, $conf->db->host, (string) $conf->db->user, $dolibarr_main_db_pass, $conf->db->name, (int) $conf->db->port);
 
 		$sendmanualtriggers = (!empty($object->context['sendmanualtriggers']) ? $object->context['sendmanualtriggers'] : "");
 		foreach ($target_url as $key => $tmpobject) {
