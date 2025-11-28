@@ -1397,6 +1397,9 @@ td.wordbreak img, td.wordbreakimp img {
 .marginleftlarge {
 	margin-<?php print $left; ?>: 20px !important;
 }
+.marginleftlargeondesktop {
+	margin-<?php print $left; ?>: 20px;
+}
 .paddinglarge {
 	padding: 6px !important;
 }
@@ -1587,8 +1590,12 @@ span.fa.fa-plus-circle.paddingleft {
 	margin-left: 1px;
 }
 .listofinvoicetype {
-	height: 28px;
+	min-height: 1.8em;
 	vertical-align: middle;
+	padding-top: 7px;
+	padding-bottom: 1px;
+	display: flex;
+	align-items: center;
 }
 .divsocialnetwork:not(:last-child) {
 	padding-<?php print $right; ?>: 20px;
@@ -2395,6 +2402,10 @@ select.widthcentpercentminusxx, span.widthcentpercentminusxx:not(.select2-select
 		font-size: <?php print is_numeric($fontsize) ? ($fontsize).'px' : $fontsize; ?> !important;
 	}
 
+	.marginleftlargeondesktop {
+		margin-<?php print $left; ?>: 0;
+	}
+
 	.login_vertical_align {
 		padding-left: 0;
 	}
@@ -2436,7 +2447,7 @@ select.widthcentpercentminusxx, span.widthcentpercentminusxx:not(.select2-select
 		height: 40px !important;
 	}
 	div.tabBar .listofinvoicetype table tr, div.tabBar .listofinvoicetype table tr td {
-		height: 28px !important;
+		height: 2.2em !important;
 	}
 
 	div.tabs div.tab a.tab  {
