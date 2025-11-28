@@ -245,8 +245,8 @@ class printing_printipp extends PrintingDriver
 	public function getlistAvailablePrinters()
 	{
 		include_once DOL_DOCUMENT_ROOT.'/includes/printipp/CupsPrintIPP.php';
+		$ipp = new CupsPrintIPP();
 		try {
-			$ipp = new CupsPrintIPP();
 			$ipp->setLog(DOL_DATA_ROOT.'/dolibarr_printipp.log', 'file', 3); // logging very verbose
 			$ipp->setHost($this->host);
 			$ipp->setPort($this->port);
@@ -256,7 +256,7 @@ class printing_printipp extends PrintingDriver
 			}
 			$ipp->getPrinters();
 		} catch (Exception $e) {
-			setEventMessage($e->getMessage());
+			setEventMessage($e->getMessage(), 'errors');
 		}
 		return $ipp->available_printers;
 	}
