@@ -394,4 +394,6 @@ CREATE TABLE llx_expensereport_det_extrafields
 ALTER TABLE llx_blockedlog ADD INDEX idx_ref_object (ref_object);
 ALTER TABLE llx_blockedlog ADD CONSTRAINT fk_linktoref FOREIGN KEY (linktoref) REFERENCES llx_blockedlog(ref_object);
 
+ALTER TABLE llx_fichinterdet ADD COLUMN special_code integer DEFAULT 0 AFTER fk_parent_line
+
 -- end of migration
