@@ -536,9 +536,7 @@ class Tasks extends DolibarrApi
 	 *
 	 * @url	GET {id}/getTimeSpent/{timespent_id}
 	 *
-	 * @return  array
-	 * @phan-return array{success:array{code:int,message:string}}
-	 * @phpstan-return array{success:array{code:int,message:string}}
+	 * @return  TimeSpent
 	 *
 	 * @throws	RestException
 	 */
