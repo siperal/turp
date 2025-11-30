@@ -578,6 +578,7 @@ class Tasks extends DolibarrApi
 	 * @param   datetime    $date               Date (YYYY-MM-DD HH:MI:SS in GMT)
 	 * @phan-param string $date
 	 * @param   int         $duration           Duration in seconds (3600 = 1h)
+	 * @param   int         $product_id         The product id that is used, default is null
 	 * @param   int         $user_id            User (Use 0 for connected user)
 	 * @param   string      $note               Note
 	 *
@@ -588,7 +589,7 @@ class Tasks extends DolibarrApi
 	 * @phan-return array{success:array{code:int,message:string}}
 	 * @phpstan-return array{success:array{code:int,message:string}}
 	 */
-	public function addTimeSpent($id, $date, $duration, $user_id = 0, $note = '')
+	public function addTimeSpent($id, $date, $duration, $product_id = null, $user_id = 0, $note = '')
 	{
 		if (!DolibarrApiAccess::$user->hasRight('projet', 'creer')) {
 			throw new RestException(403);
@@ -612,6 +613,7 @@ class Tasks extends DolibarrApi
 		$this->task->timespent_datehour = $newdate;
 		$this->task->timespent_withhour = 1;
 		$this->task->timespent_duration = $duration;
+		$this->task->timespent_fk_product  = $product_id;
 		$this->task->timespent_fk_user  = $uid;
 		$this->task->timespent_note     = $note;
 
