@@ -144,6 +144,7 @@ $entitytolang = array(
 	'bomline'      => 'BOMLine',
 	'mrp'          => 'ManufacturingOrder',
 	'mrp_line'     => 'ManufacturingOrderLine',
+	'conferenceorbooth' => 'ConferenceOrBooth',
 	'conferenceorboothattendee' => 'Attendee',
 	'inventory'   => 'Inventory',
 	'inventory_line' => 'InventoryLine'
