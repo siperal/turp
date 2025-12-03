@@ -700,11 +700,8 @@ class Contracts extends DolibarrApi
 		if ($old_thirdparty_result < 1) {
 			throw new RestException(404, 'Thirdparty with id='.$old_socid.' not found or not allowed');
 		}
-		$new_socid = (int) $request_data['socid'];
-		$newthirdpartytmp = new Societe($this->db);
-		$new_thirdparty_result = $newthirdpartytmp->fetch($new_socid);
-		if ($new_thirdparty_result < 1) {
-			throw new RestException(404, 'Thirdparty with id='.$new_socid.' not found or not allowed');
+		if (!DolibarrApi::_checkAccessToResource('societe', $old_socid)) {
+			throw new RestException(403, 'Access to old thirdparty='.$old_socid.' is not allowed for login '.DolibarrApiAccess::$user->login);
 		}
 
 		if (!DolibarrApi::_checkAccessToResource('contrat', $this->contract->id)) {
@@ -732,6 +729,9 @@ class Contracts extends DolibarrApi
 				$new_thirdparty_result = $loopthirdpartytmp->fetch($new_socid);
 				if ($new_thirdparty_result < 1) {
 					throw new RestException(404, 'Thirdparty with id='.$new_socid.' not found or not allowed');
+				}
+				if (!DolibarrApi::_checkAccessToResource('societe', $new_socid)) {
+					throw new RestException(403, 'Access to new thirdparty='.$new_socid.' is not allowed for login '.DolibarrApiAccess::$user->login);
 				}
 			}
 
