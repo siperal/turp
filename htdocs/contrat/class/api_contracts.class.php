@@ -159,7 +159,6 @@ class Contracts extends DolibarrApi
 			$sql .= $this->db->plimit($limit + 1, $offset);
 		}
 
-		dol_syslog("API Rest request");
 		$result = $this->db->query($sql);
 
 		if ($result) {
@@ -221,10 +220,6 @@ class Contracts extends DolibarrApi
 		if (!DolibarrApi::_checkAccessToResource('societe', $thirdpartytmp->id)) {
 			throw new RestException(404, 'Thirdparty with id='.$thirdpartytmp->id.' not found or not allowed');
 		}
-
-		dol_syslog("socid=".$socid);
-		dol_syslog("thirdparty_result=".$thirdparty_result);
-		dol_syslog("thirdpartytmp->id=".$thirdpartytmp->id);
 
 		// Check mandatory fields
 		$result = $this->_validate($request_data);
@@ -316,7 +311,6 @@ class Contracts extends DolibarrApi
 			$sql .= $this->db->plimit($limit + 1, $offset);
 		}
 
-		dol_syslog("API Rest request");
 		$result = $this->db->query($sql);
 		if ($result) {
 			$num = $this->db->num_rows($result);
