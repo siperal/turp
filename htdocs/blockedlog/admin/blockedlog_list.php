@@ -426,7 +426,7 @@ $htmltext = '';
 $htmltext .= $langs->trans("UnalterableLogTool2", $langs->transnoentitiesnoconv("Archives"))."<br>";
 $htmltext .= $langs->trans("UnalterableLogTool3")."<br>";
 
-print info_admin($htmltext);
+print info_admin($htmltext, 0, 0, 'warning');
 
 
 print '<br>';
