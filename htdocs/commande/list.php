@@ -606,6 +606,15 @@ if (empty($reshook)) {
 								$lines[$i]->fk_unit
 							);
 							if ($result > 0) {
+								if (!empty($lines[$i]->extraparams)) {
+									$factureLine = new FactureLigne($db);
+									$res = $factureLine->fetch($result);
+									if ($res>0) {
+										$factureLine->extraparams = $lines[$i]->extraparams;
+										$factureLine->setExtraParameters();
+									}
+								}
+
 								$lineid = $result;
 							} else {
 								$lineid = 0;
@@ -621,7 +630,6 @@ if (empty($reshook)) {
 					}
 				}
 			}
-
 			if ($currentIndex <= getDolGlobalInt("MAXREFONDOC", 10)) {
 				$objecttmp->note_public = dol_concatdesc($objecttmp->note_public, $langs->transnoentities($cmd->ref).(empty($cmd->ref_client) ? '' : ' ('.$cmd->ref_client.')'));
 				$objecttmp->update($user);
