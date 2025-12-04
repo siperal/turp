@@ -431,11 +431,11 @@ class AssetDepreciationOptions extends CommonObject
 
 		$duration_type_list = $this->deprecation_options_fields[$mode]['fields']['duration_type']['arrayofkeyval'];
 
-        $mode_opts = $this->deprecation_options[$mode] ?? array();
-        $duration_type_idx = $mode_opts['duration_type'] ?? null;
-        $duration_type_label = $duration_type_list[$duration_type_idx] ?? '';
+		$mode_opts = $this->deprecation_options[$mode] ?? array();
+		$duration_type_idx = $mode_opts['duration_type'] ?? null;
+		$duration_type_label = $duration_type_list[$duration_type_idx] ?? '';
 
-        return array(
+		return array(
 			'base_depreciation_ht' => $mode_opts['amount_base_depreciation_ht'] ?? 0,
 			'duration' => $mode_opts['duration'] ?? 0,
 			'duration_type' => $duration_type_label,
