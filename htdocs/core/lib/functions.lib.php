@@ -7579,7 +7579,7 @@ function price($amount, $form = 0, $outlangs = '', $trunc = 1, $rounding = -1, $
 	//print $amount."-";
 	$data = explode('.', $amount);
 	$decpart = isset($data[1]) ? $data[1] : '';
-	$decpart = preg_replace('/0+$/i', '', $decpart); // Supprime les 0 de fin de partie decimale
+	$decpart = preg_replace('/0+$/i', '', $decpart); // Remove 0 at end of decimal part
 	//print "decpart=".$decpart."<br>";
 	$end = '';
 
@@ -7662,7 +7662,7 @@ function price($amount, $form = 0, $outlangs = '', $trunc = 1, $rounding = -1, $
  */
 function price2num($amount, $rounding = '', $option = 0)
 {
-	global $langs, $conf;
+	global $langs;
 
 	// Clean parameters
 	if (is_null($amount)) {
