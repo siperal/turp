@@ -608,11 +608,9 @@ if (empty($reshook)) {
 							if ($result > 0) {
 								if (!empty($lines[$i]->extraparams)) {
 									$factureLine = new FactureLigne($db);
-									$res = $factureLine->fetch($result);
-									if ($res>0) {
-										$factureLine->extraparams = $lines[$i]->extraparams;
-										$factureLine->setExtraParameters();
-									}
+									$factureLine->id = $result;
+									$factureLine->extraparams = $lines[$i]->extraparams;
+									$factureLine->setExtraParameters();
 								}
 
 								$lineid = $result;
