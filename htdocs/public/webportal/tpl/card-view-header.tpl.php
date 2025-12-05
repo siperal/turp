@@ -38,7 +38,7 @@ $formCard = $this->formCard;
 		?>
 
 		<div class="header-card-main-information">
-			<?php if (!empty($formCard->object) && !empty($formCard->object->ref)) : ?>
+			<?php if (!empty($formCard->object->ref)) : ?>
 			<div class="header-card-ref"><?php print $langs->trans("Ref") . ' : ' . dol_escape_htmltag($formCard->object->ref) ?></div>
 			<?php endif; ?>
 
