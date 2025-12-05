@@ -1228,16 +1228,21 @@ function GETPOSTINT($paramname, $method = 0)
 
 /**
  *  Return the value of a $_GET or $_POST supervariable, converted into float.
+ *  Warning: This function assumes by default that the input is a number enterd by end user in user format in local language (with possible thousands separator and decimal separator).
+ *  If it is not the case, use the parameter $option = 1 instead.
  *
  *  @param  string          $paramname      Name of the $_GET or $_POST parameter
  *	@param	''|'MU'|'MT'|'MS'|'CU'|'CT'|int	$rounding	Type of rounding ('', 'MU', 'MT, 'MS', 'CU', 'CT', integer) {@see price2num()}
+ * 	@param	int<0,2>		$option			Put 1 if you know that content is already universal format number (so no correction on decimal will be done)
+ * 											Put 2 if you know that number is a user input (so we know we have to fix decimal separator).
+ * 					                        Use 0 if unknown (never use this anymore, automatic detection is not reliable with some languages).
  *  @return float                           Value converted into float
  *  @since	Dolibarr V20
  */
-function GETPOSTFLOAT($paramname, $rounding = '')
+function GETPOSTFLOAT($paramname, $rounding = '', $option = 2)
 {
 	// price2num() is used to sanitize any valid user input (such as "1 234.5", "1 234,5", "1'234,5", "1·234,5", "1,234.5", etc.)
-	return (float) price2num(GETPOST($paramname), $rounding, 2);
+	return (float) price2num(GETPOST($paramname), $rounding, $option);
 }
 
 /**
@@ -7651,6 +7656,7 @@ function price($amount, $form = 0, $outlangs = '', $trunc = 1, $rounding = -1, $
  *                                                                  Numeric = Nb of digits for rounding (For example 2 for a percentage)
  * 	@param	int<0,2>		$option			Put 1 if you know that content is already universal format number (so no correction on decimal will be done)
  * 											Put 2 if you know that number is a user input (so we know we have to fix decimal separator).
+ * 					                        Default 0 if unknown.
  *	@return	string							Amount with universal numeric format (Example: '99.99999'), or error message.
  *											If conversion fails to return a numeric, it returns:
  *											- text unchanged or partial if ($rounding = ''): price2num('W9ç', '', 0)   => '9ç', price2num('W9ç', '', 1)   => 'W9ç', price2num('W9ç', '', 2)   => '9ç'
@@ -7662,7 +7668,7 @@ function price($amount, $form = 0, $outlangs = '', $trunc = 1, $rounding = -1, $
  */
 function price2num($amount, $rounding = '', $option = 0)
 {
-	global $langs, $conf;
+	global $langs;
 
 	// Clean parameters
 	if (is_null($amount)) {
