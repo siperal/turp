@@ -85,7 +85,7 @@ if (!$sortorder) {
 $hookmanager->initHooks(array('warehousecard', 'stocklist', 'globalcard'));
 
 // Security check
-$result=restrictedArea($user,'stock', $id, 'entrepot&stock');
+$result=restrictedArea($user, 'stock', $id, 'entrepot&stock');
 
 $object = new Entrepot($db);
 $extrafields = new ExtraFields($db);
