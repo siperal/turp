@@ -1228,7 +1228,7 @@ function GETPOSTINT($paramname, $method = 0)
 
 /**
  *  Return the value of a $_GET or $_POST supervariable, converted into float.
- *  Warning: This function assumes by default that the input is a number enterd by end user in user format in local language (with possible thousands separator and decimal separator).
+ *  Warning: This function assumes by default that the input is a number entered by end user in user format in local language (with possible thousands separator and decimal separator).
  *  If it is not the case, use the parameter $option = 1 instead.
  *
  *  @param  string          $paramname      Name of the $_GET or $_POST parameter
