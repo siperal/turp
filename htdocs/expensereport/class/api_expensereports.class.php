@@ -245,37 +245,38 @@ class ExpenseReports extends DolibarrApi
 	}
 
 	/**
-	 * Get lines of an Expense Report
+	 * Get lines of an expense report
 	 *
-	 * @param int   $id             Id of Expense Report
+	 * @param	int		$id		ID of the expense report
 	 *
 	 * @url	GET {id}/lines
 	 *
-	 * @return int
+	 * @return array
+	 *
+	 * @throws RestException 403
+	 * @throws RestException 404
 	 */
-	/*
 	public function getLines($id)
 	{
-		if(! DolibarrApiAccess::$user->hasRight('expensereport', 'lire')) {
+		if(!DolibarrApiAccess::$user->hasRight('expensereport', 'lire')) {
 			throw new RestException(403);
 		}
 
 		$result = $this->expensereport->fetch($id);
-		if( ! $result ) {
+		if(!$result) {
 			throw new RestException(404, 'expensereport not found');
 		}
 
-		if( ! DolibarrApi::_checkAccessToResource('expensereport',$this->expensereport->id)) {
+		if(!DolibarrApi::_checkAccessToResource('expensereport',$this->expensereport->id)) {
 			throw new RestException(403, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
 		}
-		$this->expensereport->getLinesArray();
+		$this->expensereport->fetch_lines();
 		$result = array();
 		foreach ($this->expensereport->lines as $line) {
-			array_push($result,$this->_cleanObjectDatas($line));
+			$result[] = $this->_cleanObjectDatas($line);
 		}
 		return $result;
 	}
-	*/
 
 	/**
 	 * Add a line to given Expense Report
