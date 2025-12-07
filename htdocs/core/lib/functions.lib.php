@@ -5906,8 +5906,6 @@ function img_picto($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $srco
 	return '<img src="' . $fullpathpicto . '"' . ($notitle ? '' : ' alt="' . dolPrintHTMLForAttribute($alt, 0, $allowothertags) . '"') . (($notitle || empty($titlealt)) ? '' : ' title="' . dolPrintHTMLForAttribute($titlealt, 0, $allowothertags) . '"') . ($moreatt ? ' ' . $moreatt . ($morecss ? ' class="' . $morecss . '"' : '') : ' class="inline-block' . ($morecss ? ' ' . $morecss : '') . '"') . '>'; // Alt is used for accessibility, title for popup
 }
 
-
-
 /**
  * Get array to convert the Dolibarr picto keys into Font awesome keys
  *
