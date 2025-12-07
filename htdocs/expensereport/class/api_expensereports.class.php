@@ -683,6 +683,48 @@ class ExpenseReports extends DolibarrApi
 		return $this->_cleanObjectDatas($this->expensereport);
 	}
 
+	/**
+	 * Cancel an expense report
+	 *
+	 * @since	23.0.0	Initial implementation
+	 *
+	 * @param	int		$id				ID of the expense report
+	 * @param	string	$detail			Comments for cancellation
+	 * @param	int		$notrigger		1=Does not execute triggers, 0= execute triggers
+	 *
+	 * @url		POST	{id}/cancel
+	 *
+	 * @return	Object
+	 *
+	 * @throws RestException 403
+	 * @throws RestException 404
+	 * @throws RestException 500
+	 */
+	public function cancel($id, $detail, $notrigger = 0)
+	{
+		if (!DolibarrApiAccess::$user->hasRight('expensereport', 'creer')) {
+			throw new RestException(403, "Insufficiant rights");
+		}
+		$result = $this->expensereport->fetch($id);
+		if (!$result) {
+			throw new RestException(404, 'Expense report not found');
+		}
+
+		if (!DolibarrApi::_checkAccessToResource('expensereport', $this->expensereport->id)) {
+			throw new RestException(403, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
+		}
+
+		if ($this->expensereport->status == ExpenseReport::STATUS_CANCELED) {
+			throw new RestException(403, 'Expense report already canceled');
+		}
+		$result = $this->expensereport->set_cancel(DolibarrApiAccess::$user, $detail, $notrigger);
+		if ($result < 0) {
+			throw new RestException(500, 'Error when cancelling expense report: '.$this->expensereport->error);
+		}
+
+		$result = $this->expensereport->fetch($id);
+		return $this->_cleanObjectDatas($this->expensereport);
+	}
 
 	/**
 	 * Get the list of payments of an expense report
