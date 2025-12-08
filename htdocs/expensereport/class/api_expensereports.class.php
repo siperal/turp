@@ -381,11 +381,11 @@ class ExpenseReports extends DolibarrApi
 		}
 
 		$result = $this->expensereport->fetch($id);
-		if (!$result ) {
+		if (!$result) {
 			throw new RestException(404, 'expensereport not found');
 		}
 
-		if (!DolibarrApi::_checkAccessToResource('expensereport',$this->expensereport->id)) {
+		if (!DolibarrApi::_checkAccessToResource('expensereport', $this->expensereport->id)) {
 			throw new RestException(403, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
 		}
 
