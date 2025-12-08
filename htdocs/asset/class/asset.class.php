@@ -1185,9 +1185,9 @@ class Asset extends CommonObject
 					// Next fiscal period (+1 day/month/year)
 					$fiscal_period_start = dol_time_plus_duree($fiscal_period_end, 1, 'd');
 
-					if ($fields['duration_type'] == 0) { // Annually - use fiscal year end
+					if ($fields['duration_type'] == 0) { // Annually - use fiscal year-end
 						// Search for the NEXT fiscal year
-						$next_fy = getNextFiscalYear($this->db, $conf, $fiscal_period_end, 'gmt');
+						$next_fy = getNextFiscalYear($this->db, $fiscal_period_end, 'gmt');
 
 						if ($next_fy !== null) {
 							// Exercise found in database
