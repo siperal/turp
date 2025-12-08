@@ -213,6 +213,7 @@ trait CommonSubtotal
 			);
 			$this->fetch_lines();
 		} elseif ($current_module == 'fichinter' && $this instanceof Fichinter) {
+			global $user;
 			$result = $this->addline(
 				$user,					// user
 				$this->id,				// fk_fichinter
