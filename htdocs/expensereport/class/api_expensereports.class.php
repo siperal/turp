@@ -52,7 +52,7 @@ class ExpenseReports extends DolibarrApi
 		'date',
 		'fk_c_type_fees',
 		'qty',
-		'total_ttc',
+		'value_unit',
 		'vatrate'
 	);
 
