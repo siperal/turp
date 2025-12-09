@@ -85,20 +85,28 @@ if ($action === "updatestatusprospect" && $permisstiontoupdate) {
 	$prospectstatic->client = 2;
 	$prospectstatic->loadCacheOfProspStatus();
 
-	$response = '';
 
-	$sql  = "UPDATE ".MAIN_DB_PREFIX."societe SET ";
-	$sql .= "fk_stcomm = ".((int) $idstatus);
-	$sql .= " WHERE rowid = ".((int) $idprospect);
+	// Load thirdparty
+	$prospect = new Client($db);
+	$result = $prospect->fetch($idprospect);
 
-	$resql = $db->query($sql);
+	if ($result >= 0) {
+		$oldStatus = $prospect->fk_stcomm;
 
-	if (!$resql) {
-		dol_print_error($db);
+		// Apply new status
+		$prospect->fk_stcomm = $idstatus;
+
+		// Update using business logic (fires COMPANY_MODIFY)
+		$updateResult = $prospect->update($prospect->id, $user);
+
+		if ($updateResult >= 0) {
+			$response = img_action('', $prospectstatic->cacheprospectstatus[$idstatus]['code'], $prospectstatic->cacheprospectstatus[$idstatus]['picto'], 'class="inline-block valignmiddle paddingright pictoprospectstatus"');
+		} else {
+			dol_syslog(__METHOD__.': Failed to update prospect via update() method', LOG_ERR);
+			dol_print_error($db);
+		}
 	} else {
-		$num = $db->affected_rows($resql);
-		$response = img_action('', $prospectstatic->cacheprospectstatus[$idstatus]['code'], $prospectstatic->cacheprospectstatus[$idstatus]['picto'], 'class="inline-block valignmiddle paddingright pictoprospectstatus"');
+		dol_print_error($db);
 	}
-
 	echo json_encode(array('img' => $response));
 }
