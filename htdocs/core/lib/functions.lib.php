@@ -6583,7 +6583,7 @@ function img_allow($allow, $titlealt = 'default')
  *  @param  string	$morecss	More CSS
  *	@return string     			Return img tag
  */
-function img_credit_card($brand, $morecss = null)
+function img_credit_card($brand, $morecss = 'fa-2x inline-block valignmiddle')
 {
 	if (is_null($morecss)) {
 		$morecss = 'fa-2x';
