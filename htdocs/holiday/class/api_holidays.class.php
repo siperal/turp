@@ -412,6 +412,7 @@ class Holidays extends DolibarrApi
 			throw new RestException(403, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
 		}
 
+		$this->holiday->status = Holiday::STATUS_APPROVED;
 		$result = $this->holiday->approve(DolibarrApiAccess::$user, $notrigger);
 		if ($result == 0) {
 			throw new RestException(304, 'Error nothing done. May be object is already approved');
