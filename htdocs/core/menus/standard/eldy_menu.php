@@ -246,11 +246,13 @@ class MenuManager
 
 					// Start a new ul level 1
 					$level = 1;
+					// @phan-suppress-next-line PhanParamSuspiciousOrder
 					print str_pad('', $level).'<ul class="ullevel1">'."\n";
 
 					// Do we have to add an extra entry that is not into menu array ?
 					if (($canonrelurl != $canonnexturl && !in_array($val['mainmenu'], array('tools')))
 						|| (strpos($canonrelurl, '/product/index.php') !== false || strpos($canonrelurl, '/compta/bank/list.php') !== false)) {
+						// @phan-suppress-next-line PhanParamSuspiciousOrder
 						print str_pad('', $level).'<li class="lilevel1 ui-btn-icon-right ui-btn">'; // ui-btn to highlight on clic
 						print '<a href="'.$relurl.'">';
 

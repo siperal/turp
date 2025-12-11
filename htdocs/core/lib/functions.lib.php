@@ -10970,12 +10970,12 @@ function print_date_range($date_start, $date_end, $format = '', $outputlangs = n
 /**
  *    Format output for start and end date
  *
- *    @param	int			$date_start    		Start date
- *    @param    int			$date_end      		End date
- *    @param    string		$format        		Output date format ('day', 'dayhour', ...)
- *    @param	Translate	$outputlangs   		Output language
- *    @param	integer		$withparenthesis	1=Add space and parenthesis, 0=no parenthesis, 2=Add parenthesis
- *    @return	string							String
+ *    @param	int				$date_start    		Start date
+ *    @param    int				$date_end      		End date
+ *    @param    string			$format        		Output date format ('day', 'dayhour', ...)
+ *    @param	Translate|null	$outputlangs   		Output language
+ *    @param	integer			$withparenthesis	1=Add space and parenthesis, 0=no parenthesis, 2=Add parenthesis
+ *    @return	string								String
  */
 function get_date_range($date_start, $date_end, $format = '', $outputlangs = null, $withparenthesis = 1)
 {
