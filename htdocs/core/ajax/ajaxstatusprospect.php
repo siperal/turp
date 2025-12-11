@@ -85,6 +85,7 @@ if ($action === "updatestatusprospect" && $permisstiontoupdate) {
 	$prospectstatic->client = 2;
 	$prospectstatic->loadCacheOfProspStatus();
 
+	$response = "";
 
 	// Load thirdparty
 	$prospect = new Societe($db);
@@ -100,7 +101,7 @@ if ($action === "updatestatusprospect" && $permisstiontoupdate) {
 		if ($updateResult >= 0) {
 			$response = img_action('', $prospectstatic->cacheprospectstatus[$idstatus]['code'], $prospectstatic->cacheprospectstatus[$idstatus]['picto'], 'class="inline-block valignmiddle paddingright pictoprospectstatus"');
 		} else {
-			dol_syslog(__METHOD__.': Failed to update prospect via update() method', LOG_ERR);
+			dol_syslog('Failed to update prospect via update() method', LOG_ERR);
 			dol_print_error($db);
 		}
 	} else {
