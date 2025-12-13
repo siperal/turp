@@ -1121,6 +1121,8 @@ if ($mode == 'common' || $mode == 'commonkanban') {
 			} else {
 				// Module qualified for activation
 				$warningmessage = '';
+				$disableCancel = 0;
+
 				if (!empty($arrayofwarnings[$modName])) {
 					$codeenabledisable .= '<!-- This module is a core module and it may have a warning to show when we activate it (note: your country is '.$mysoc->country_code.') -->'."\n";
 					foreach ($arrayofwarnings[$modName] as $keycountry => $cursorwarningmessage) {
@@ -1129,7 +1131,12 @@ if ($mode == 'common' || $mode == 'commonkanban') {
 								$cursorwarningmessage = array($cursorwarningmessage);
 							}
 							foreach ($cursorwarningmessage as $messagetoshow) {
-								// TODO Use replacement instead of always adding param module name and country code to the string message
+								if (preg_match('/:1$/', $messagetoshow)) {
+									$disableCancel = 1;
+								}
+								$messagetoshow = preg_replace('/:1$/', '', $messagetoshow);
+
+								// TODO Use a replacement instead of always adding the module name and the country code to the string message ?
 								$warningmessage .= ($warningmessage ? "\n" : "").$langs->trans($messagetoshow, $objMod->getName(), $mysoc->country_code);
 							}
 						}
@@ -1167,7 +1174,7 @@ if ($mode == 'common' || $mode == 'commonkanban') {
 				$codeenabledisable .= '<!-- Message to show: '.$warningmessage.' -->'."\n";
 				$codeenabledisable .= '<a class="reposition" id="idqualified'.$objMod->numero.'" data-alreadyclicked="0" href="'.$urltogo.'"';
 				if ($warningmessage) {
-					$codeenabledisable .= ' onclick="return confirmDolibarr(\''.dol_escape_js($warningmessage).'\', \'idqualified'.$objMod->numero.'\', '.$popupwidth.');"';
+					$codeenabledisable .= ' onclick="return confirmDolibarr(\''.dol_escape_js($warningmessage).'\', \'idqualified'.$objMod->numero.'\', '.$popupwidth.', '.$disableCancel.');"';
 				}
 				$codeenabledisable .= '>';
 				$codeenabledisable .= img_picto($langs->trans("Disabled"), 'switch_off');
