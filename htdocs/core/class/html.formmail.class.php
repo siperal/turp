@@ -956,6 +956,10 @@ class FormMail extends Form
 				// Add lines substitution key from each line
 				$lines = '';
 				$defaultlines = $arraydefaultmessage->content_lines;
+				$linesisstructuredhtml = false;
+				if (!empty($defaultlines) && dol_textishtml($defaultlines) && preg_match('/<\\s*(tr|td|th|table|tbody|thead|tfoot|ul|ol|li)\\b/i', $defaultlines)) {
+						$linesisstructuredhtml = true;
+					}
 				if (isset($defaultlines)) {
 					foreach ($this->substit_lines as $substit_line) {
 						$lines .= make_substitutions($defaultlines, $substit_line)."\n";
@@ -988,6 +992,9 @@ class FormMail extends Form
 					}
 					if (!dol_textishtml($this->substit['__SENDEREMAIL_SIGNATURE__'])) {
 						$this->substit['__SENDEREMAIL_SIGNATURE__'] = dol_nl2br($this->substit['__SENDEREMAIL_SIGNATURE__']);
+					}
+					if (!$linesisstructuredhtml) {
+							$this->substit['__LINES__'] = dol_nl2br($this->substit['__LINES__']);
 					}
 					if (!dol_textishtml($this->substit['__ONLINE_PAYMENT_TEXT_AND_URL__'])) {
 						$this->substit['__ONLINE_PAYMENT_TEXT_AND_URL__'] = dol_nl2br($this->substit['__ONLINE_PAYMENT_TEXT_AND_URL__']);
