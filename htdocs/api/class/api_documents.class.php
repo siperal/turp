@@ -892,7 +892,7 @@ class Documents extends DolibarrApi
 				require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
 				$object = new Contact($this->db);
 				$fetchbyid = true;
-			} elseif ($modulepart == 'societe' || $modulepart == 'company') {
+			} elseif ($modulepart == 'societe' || $modulepart == 'company' || $modulepart == 'thirdparty') {
 				$modulepart = 'societe';
 				require_once DOL_DOCUMENT_ROOT.'/societe/class/societe.class.php';
 				$object = new Societe($this->db);
@@ -948,7 +948,11 @@ class Documents extends DolibarrApi
 
 			// Test on permissions
 			//if ($modulepart != 'ecm') {	// Here $modulepart is always != 'ecm'
-			$relativefile = $tmpreldir.dol_sanitizeFileName($object->ref);
+			if ($modulepart == 'societe' || $modulepart == 'company' || $modulepart == 'thirdparty') {
+				$relativefile = $tmpreldir.dol_sanitizeFileName($object->id);
+			} else {
+				$relativefile = $tmpreldir.dol_sanitizeFileName($object->ref);
+			}
 			$tmp = dol_check_secure_access_document($modulepart, $relativefile, $entity, DolibarrApiAccess::$user, $ref, 'write');
 			$upload_dir = $tmp['original_file']; // No dirname here, tmp['original_file'] is already the dir because dol_check_secure_access_document was called with param original_file that is only the dir
 			/*} else {
