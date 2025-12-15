@@ -3815,8 +3815,7 @@ function dol_filecache($directory, $filename, $object)
 	$cachefile = $directory.$filename;
 
 	file_put_contents($cachefile, serialize($object), LOCK_EX);
-
-	dolChmod($cachefile, '0644');
+	dolChmod($cachefile);
 }
 
 /**
