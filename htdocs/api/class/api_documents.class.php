@@ -310,7 +310,7 @@ class Documents extends DolibarrApi
 
 			if (!$result) {
 				throw new RestException(404, 'Exepnse report not found');
-      }
+			}
 		} elseif ($modulepart == 'product') {
 			require_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
