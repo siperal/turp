@@ -39,7 +39,7 @@ class box_produits_alerte_stock extends ModeleBoxes
 	public $boxcode = "productsalertstock";
 	public $boximg = "object_product";
 	public $boxlabel = "BoxProductsAlertStock";
-	public $depends = array("produit");
+	public $depends = array("product");
 
 	/**
 	 *  Constructor
