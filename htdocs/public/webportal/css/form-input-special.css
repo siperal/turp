@@ -26,9 +26,14 @@
 .select2.select2-container{
 	margin-bottom: calc(var(--form-element-spacing-vertical)*3);
 }
-.select2-selection__rendered, .select2-selection__arrow{
+.select2-selection--single .select2-selection__rendered, .select2-selection__arrow{
 	line-height: calc(1rem * var(--line-height) + var(--form-element-spacing-vertical) * 2 + var(--border-width) * 2) !important;
 	height: calc(1rem * var(--line-height) + var(--form-element-spacing-vertical) * 2 + var(--border-width) * 2) !important;
+}
+
+.select2-selection--multiple .select2-selection__rendered{
+	line-height: calc(1rem * var(--line-height) + var(--form-element-spacing-vertical) + var(--border-width) * 2) !important;
+	height: calc(1rem * var(--line-height) + var(--form-element-spacing-vertical) * 3 + var(--border-width) * 2 ) !important;
 }
 
 .select2-search__field[type="search"] {
@@ -36,6 +41,23 @@
 }
 .select2-search.select2-search--dropdown{
 	border-bottom : 1px solid rgba(0,0,0,0.1);
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+	border :var(--border-width) solid var(--border-color) !important; /* fix select 2 to be compatible pico css */
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple{
+	--border-color: var(--primary);
+}
+
+.select2-container .select2-selection--multiple .select2-selection__rendered {
+	display: block !important; /* fix select 2 to be compatible pico css */
+	overflow: auto;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice{
+	border: 0px solid #aaa !important; /* fix select 2 to be compatible pico css */
 }
 
 /**
