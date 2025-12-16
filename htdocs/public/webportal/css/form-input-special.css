@@ -110,7 +110,7 @@
 	justify-content: center;
 	line-height: 1;
 	gap: 0.25rem;
-	margin-bottom: var(--form-input-margin-bottom);;
+	margin-bottom: var(--form-input-margin-bottom);
 }
 .form-select-price-currency-container > input {
 	text-align: right;
