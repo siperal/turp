@@ -8928,7 +8928,7 @@ function dol_string_nohtmltag($stringtoclean, $removelinefeed = 1, $pagecodeto =
 /**
  *	Clean a string to keep only desirable HTML tags.
  *  Complementary of dol_string_onlythesehtmlattributes().
- *  WARNING: This also clean HTML comments (because they can be used to obfuscate tag name).
+ *  WARNING: This also clean HTML comments (because they can be used to obfuscate tag names).
  *
  *	@param	string		$stringtoclean			String to clean
  *  @param	int			$cleanalsosomestyles	Remove absolute/fixed positioning from inline styles
@@ -8936,7 +8936,7 @@ function dol_string_nohtmltag($stringtoclean, $removelinefeed = 1, $pagecodeto =
  *  @param	int			$cleanalsojavascript	Remove also occurrence of 'javascript:'.
  *  @param	int			$allowiframe			Allow iframe tags.
  *  @param	string[]	$allowed_tags			List of allowed tags to replace the default list
- *  @param	int			$allowlink				Allow "link" tags (for head html section)
+ *  @param	int			$allowlink				Allow "link" and "meta" tags (for head html section when using GETPOST with mode 'restricthtmlallowlinkscript')
  *  @param	int			$allowscript			Allow "script" tags (for head html section when using GETPOST with mode 'restricthtmlallowlinkscript')
  *  @param	int			$allowstyle				Allow "style" tags (for head html section when using GETPOST with mode 'restricthtmlallowlinkscript')
  *  @param	int			$allowphp				Allow "php" tags (Deprecated. Should never be used. If you can add php, you can also print in the php the code to output the other non allowed tags)
@@ -8948,9 +8948,9 @@ function dol_string_onlythesehtmltags($stringtoclean, $cleanalsosomestyles = 1, 
 {
 	if (empty($allowed_tags)) {
 		$allowed_tags = array(
+			// HTML 4
 			"html",
 			"head",
-			"meta",
 			"body",
 			"article",
 			"a",
@@ -8994,12 +8994,14 @@ function dol_string_onlythesehtmltags($stringtoclean, $cleanalsosomestyles = 1, 
 			"h4",
 			"h5",
 			"h6",
-			"header",
+
+			// HTML 5
 			"footer",
-			"nav",
-			"section",
+			"header",
 			"menu",
-			"menuitem"	// html5 tags
+			"menuitem",
+			"nav",
+			"section"
 		);
 	}
 	$allowed_tags[] = "comment";		// this tags is added to manage comment <!--...--> that are replaced into <comment>...</comment>
@@ -9011,6 +9013,9 @@ function dol_string_onlythesehtmltags($stringtoclean, $cleanalsosomestyles = 1, 
 	if ($allowlink) {
 		if (!in_array('link', $allowed_tags)) {
 			$allowed_tags[] = "link";
+		}
+		if (!in_array('meta', $allowed_tags)) {
+			$allowed_tags[] = "meta";
 		}
 	}
 	if ($allowscript) {
@@ -9088,6 +9093,7 @@ function dol_string_onlythesehtmlattributes($stringtoclean, $allowed_attributes 
 {
 	if (is_null($allowed_attributes)) {
 		$allowed_attributes = array(
+			// HTML 4
 			"allow",
 			"allowfullscreen",
 			"alt",
@@ -9109,13 +9115,14 @@ function dol_string_onlythesehtmlattributes($stringtoclean, $allowed_attributes 
 			"title",
 			"type",
 			"width",
+
 			// HTML5
-			"header",
 			"footer",
-			"nav",
-			"section",
+			"header",
 			"menu",
-			"menuitem"
+			"menuitem",
+			"nav",
+			"section"
 		);
 	}
 	// Always add content and http-equiv for meta tags, required to force encoding and keep html content in utf8 by load/saveHTML functions.
