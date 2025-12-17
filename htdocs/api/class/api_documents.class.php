@@ -327,6 +327,22 @@ class Documents extends DolibarrApi
 			if ($result <= 0) {
 				throw new RestException(500, 'Error generating document missing doctemplate parameter');
 			}
+		} elseif ($modulepart == 'stock' || $modulepart == 'entrepot') {
+			require_once DOL_DOCUMENT_ROOT . '/product/stock/class/entrepot.class.php';
+
+			$tmpobject = new Entrepot($this->db);
+			$result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
+
+			if (!$result) {
+				throw new RestException(404, 'Warehouse not found');
+			}
+
+			$templateused = $doctemplate ? $doctemplate : $tmpobject->model_pdf;
+			$result = $tmpobject->generateDocument($templateused, $outputlangs, $hidedetails, $hidedesc, $hideref);
+
+			if ($result <= 0) {
+				throw new RestException(500, 'Error generating document missing doctemplate parameter');
+			}
 		} else {
 			throw new RestException(403, 'Generation not available for this modulepart');
 		}
@@ -709,6 +725,19 @@ class Documents extends DolibarrApi
 				throw new RestException(404, 'Contact not found');
 			}
 			$upload_dir = $conf->societe->multidir_output[$object->entity ?? $conf->entity] . "/contact/" . get_exdir(0, 0, 0, 1, $object, 'contact');
+		} elseif ($modulepart == 'stock') {
+			require_once DOL_DOCUMENT_ROOT.'/product/stock/class/entrepot.class.php';
+
+			if (!DolibarrApiAccess::$user->hasRight('stock', 'lire')) {
+				throw new RestException(403);
+			}
+
+			$object = new Entrepot($this->db);
+			$result = $object->fetch($id, $ref);
+			if (!$result) {
+				throw new RestException(404, 'Warehouse not found');
+			}
+			$upload_dir = $conf->stock->multidir_output[$object->entity ?? $conf->entity].'/'.get_exdir(0, 0, 0, 1, $object, 'stock');
 		} else {
 			throw new RestException(500, 'Modulepart '.$modulepart.' not implemented yet.');
 		}
