@@ -994,6 +994,10 @@ class Documents extends DolibarrApi
 				$modulepart = 'mrp';
 				require_once DOL_DOCUMENT_ROOT . '/mrp/class/mo.class.php';
 				$object = new Mo($this->db);
+			} elseif ($modulepart == 'stock') {
+				$modulepart = 'stock';
+				require_once DOL_DOCUMENT_ROOT . '/product/stock/class/entrepot.class.php';
+				$object = new Entrepot($this->db);
 			} elseif ($modulepart == 'ecm') {
 				throw new RestException(500, 'Using a non empty "ref" is not compatible with using modulepart = '.$modulepart);
 			} else {
