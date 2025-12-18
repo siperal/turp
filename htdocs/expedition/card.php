@@ -1695,6 +1695,7 @@ if ($action == 'create' && $usercancreate) {
 			// Thirdparty
 			print '<tr><td class="titlefieldcreate fieldrequired">' . $langs->trans('Company') . '</td>';
 			print '<td colspan="3">' . $soc->getNomUrl(1) . '</td>';
+			print '<input type="hidden" name="socid" value="' . $soc->id . '">';
 			print '</tr>';
 
 			// Project
