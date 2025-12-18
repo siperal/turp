@@ -1644,10 +1644,10 @@ class Project extends CommonObject
 	 * Return array of projects a user has permission on, is affected to, or all projects
 	 *
 	 * @param 	User	$user			User object
-	 * @param 	int		$mode			0=All project I have permission on (assigned to me or public), 1=Projects assigned to me only, 2=Will return list of all projects with no test on contacts
+	 * @param 	int		$mode			0=All project I have permission on (assigned to the user or public), 1=Projects assigned to the user only, 2=Will return list of all projects with no test on contacts
 	 * @param 	int		$list			0=Return array, 1=Return string list
 	 * @param	int		$socid			0=No filter on third party, id of third party
-	 * @param	string	$filter			Additional filter on project (statut, ref, ...). TODO Use USF syntax here.
+	 * @param	string	$filter			Additional filter on project (statut, ref, ...). Use USF syntax here.
 	 * @return 	int[]|string			Array of projects id, or string with projects id separated with "," if param list is 1
 	 */
 	public function getProjectsAuthorizedForUser($user, $mode = 0, $list = 0, $socid = 0, $filter = '')
