@@ -1643,14 +1643,14 @@ class Project extends CommonObject
 	/**
 	 * Return array of projects a user has permission on, is affected to, or all projects
 	 *
-	 * @param 	User	$user			User object
+	 * @param 	User	$fuser			User object
 	 * @param 	int		$mode			0=All project I have permission on (assigned to the user or public), 1=Projects assigned to the user only, 2=Will return list of all projects with no test on contacts
 	 * @param 	int		$list			0=Return array, 1=Return string list
 	 * @param	int		$socid			0=No filter on third party, id of third party
 	 * @param	string	$filter			Additional filter on project (statut, ref, ...). Use USF syntax here.
 	 * @return 	int[]|string			Array of projects id, or string with projects id separated with "," if param list is 1
 	 */
-	public function getProjectsAuthorizedForUser($user, $mode = 0, $list = 0, $socid = 0, $filter = '')
+	public function getProjectsAuthorizedForUser($fuser, $mode = 0, $list = 0, $socid = 0, $filter = '')
 	{
 		$projects = array();
 		$temp = array();
@@ -1677,7 +1677,6 @@ class Project extends CommonObject
 		$sql .= " FROM ".MAIN_DB_PREFIX."projet as p";
 		$sql .= " WHERE p.entity IN (".getEntity('project').")";
 		// Internal users must see project he is contact to even if project is linked to a third party he can't see.
-		//if ($socid || ! $user->rights->societe->client->voir)	$sql.= " AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = ".((int) $socid).")";
 		if ($socid > 0) {
 			$sql .= " AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = ".((int) $socid).")";
 		}
@@ -1686,14 +1685,14 @@ class Project extends CommonObject
 			$sql .= " AND (p.public = 1";
 			$sql .= " OR EXISTS (SELECT ec.rowid FROM ".MAIN_DB_PREFIX."element_contact as ec";
 			$sql .= " WHERE ec.element_id = p.rowid AND ec.fk_c_type_contact IN (".$this->db->sanitize(implode(',', array_keys($listofprojectcontacttype))).")";
-			$sql .= " AND ec.fk_socpeople = ".((int) $user->id).")";
+			$sql .= " AND ec.fk_socpeople = ".((int) $fuser->id).")";
 			$sql .= ")";
 		} elseif ($mode == 1) {
 			$sql .= " AND EXISTS (SELECT ec.rowid FROM ".MAIN_DB_PREFIX."element_contact as ec";
 			$sql .= " WHERE ec.element_id = p.rowid AND ec.fk_c_type_contact IN (".$this->db->sanitize(implode(',', array_keys($listofprojectcontacttype))).")";
-			$sql .= " AND ec.fk_socpeople = ".((int) $user->id).")";
+			$sql .= " AND ec.fk_socpeople = ".((int) $fuser->id).")";
 		} // elseif ($mode == 2) {
-		// No filter. Use this if user has permission to see all project
+		// No filter. Use this if fuser has permission to see all project
 		//}
 
 		// Manage filter
