@@ -268,7 +268,7 @@ class Documents extends DolibarrApi
 			$result = $tmpobject->generateDocument($templateused, $outputlangs, $hidedetails, $hidedesc, $hideref);
 
 			if ($result <= 0) {
-				throw new RestException(500, 'Error generating document missing doctemplate parameter');
+				throw new RestException(500, 'Error generating document');
 			}
 		} elseif ($modulepart == 'expedition' || $modulepart == 'shipment') {
 			require_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
@@ -284,7 +284,7 @@ class Documents extends DolibarrApi
 			$result = $tmpobject->generateDocument($templateused, $outputlangs, $hidedetails, $hidedesc, $hideref);
 
 			if ($result <= 0) {
-				throw new RestException(500, 'Error generating document missing doctemplate parameter');
+				throw new RestException(500, 'Error generating document');
 			}
 		} elseif ($modulepart == 'mrp') {
 			require_once DOL_DOCUMENT_ROOT . '/mrp/class/mo.class.php';
@@ -300,7 +300,7 @@ class Documents extends DolibarrApi
 			$result = $tmpobject->generateDocument($templateused, $outputlangs, $hidedetails, $hidedesc, $hideref);
 
 			if ($result <= 0) {
-				throw new RestException(500, 'Error generating document missing doctemplate parameter');
+				throw new RestException(500, 'Error generating document');
 			}
 		} elseif ($modulepart == 'expensereport') {
 			require_once DOL_DOCUMENT_ROOT.'/expensereport/class/expensereport.class.php';
@@ -309,7 +309,14 @@ class Documents extends DolibarrApi
 			$result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
 
 			if (!$result) {
-				throw new RestException(404, 'Exepnse report not found');
+				throw new RestException(404, 'Expense report not found');
+			}
+
+			$templateused = $doctemplate ? $doctemplate : $tmpobject->model_pdf;
+			$result = $tmpobject->generateDocument($templateused, $outputlangs, $hidedetails, $hidedesc, $hideref);
+
+			if ($result <= 0) {
+				throw new RestException(500, 'Error generating document');
 			}
 		} elseif ($modulepart == 'product') {
 			require_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
@@ -325,7 +332,7 @@ class Documents extends DolibarrApi
 			$result = $tmpobject->generateDocument($templateused, $outputlangs, $hidedetails, $hidedesc, $hideref);
 
 			if ($result <= 0) {
-				throw new RestException(500, 'Error generating document missing doctemplate parameter');
+				throw new RestException(500, 'Error generating document');
 			}
 		} elseif ($modulepart == 'stock' || $modulepart == 'entrepot') {
 			require_once DOL_DOCUMENT_ROOT . '/product/stock/class/entrepot.class.php';
@@ -341,7 +348,23 @@ class Documents extends DolibarrApi
 			$result = $tmpobject->generateDocument($templateused, $outputlangs, $hidedetails, $hidedesc, $hideref);
 
 			if ($result <= 0) {
-				throw new RestException(500, 'Error generating document missing doctemplate parameter');
+				throw new RestException(500, 'Error generating document');
+			}
+		} elseif ($modulepart == 'fichinter' || $modulepart == 'intervention') {
+			require_once DOL_DOCUMENT_ROOT . '/fichinter/class/fichinter.class.php';
+
+			$tmpobject = new Fichinter($this->db);
+			$result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
+
+			if (!$result) {
+				throw new RestException(404, 'Intervention not found');
+			}
+
+			$templateused = $doctemplate ? $doctemplate : $tmpobject->model_pdf;
+			$result = $tmpobject->generateDocument($templateused, $outputlangs, $hidedetails, $hidedesc, $hideref);
+
+			if ($result <= 0) {
+				throw new RestException(500, 'Error generating document');
 			}
 		} else {
 			throw new RestException(403, 'Generation not available for this modulepart');
