@@ -115,3 +115,9 @@
 .form-select-price-currency-container > input {
 	text-align: right;
 }
+
+
+/** Duration and Date **/
+input.inputhour, input.inputminute, .maxwidthdate  {
+	max-width: 110px;
+}
