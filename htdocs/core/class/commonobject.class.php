@@ -6181,7 +6181,7 @@ abstract class CommonObject
 					$setsharekey = true;
 				}
 			}
-			if (!empty($this->TRIGGER_PREFIX) && getDolGlobalInt(strtoupper($this->TRIGGER_PREFIX."_ALLOW_EXTERNAL_DOWNLOAD"))) {
+			if (!empty($this->TRIGGER_PREFIX) && getDolGlobalInt($this->TRIGGER_PREFIX."_ALLOW_EXTERNAL_DOWNLOAD")) {
 				$setsharekey = true;
 			}
 			// TODO Remove case covered by trigger prefix
