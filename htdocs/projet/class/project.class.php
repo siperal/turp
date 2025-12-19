@@ -1704,7 +1704,7 @@ class Project extends CommonObject
 			$sql .= $filter;
 		}
 
-		print $sql;
+		//print $sql;
 
 		$resql = $this->db->query($sql);
 		if ($resql) {
