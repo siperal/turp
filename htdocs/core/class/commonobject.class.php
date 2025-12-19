@@ -6191,13 +6191,7 @@ abstract class CommonObject
 			if ($this->element == 'bank_account' && getDolGlobalInt("BANK_ACCOUNT_ALLOW_EXTERNAL_DOWNLOAD")) {
 				$setsharekey = true;
 			}
-			if ($this->element == 'product' && getDolGlobalInt("PRODUCT_ALLOW_EXTERNAL_DOWNLOAD")) {
-				$setsharekey = true;
-			}
 			if ($this->element == 'contrat' && getDolGlobalInt("CONTRACT_ALLOW_EXTERNAL_DOWNLOAD")) {
-				$setsharekey = true;
-			}
-			if ($this->element == 'fichinter' && getDolGlobalInt("FICHINTER_ALLOW_EXTERNAL_DOWNLOAD")) {
 				$setsharekey = true;
 			}
 			if ($this->element == 'supplier_proposal' && getDolGlobalInt("SUPPLIER_PROPOSAL_ALLOW_EXTERNAL_DOWNLOAD")) {
