@@ -6173,7 +6173,10 @@ abstract class CommonObject
 
 			// Set the public "share" key
 			$setsharekey = false;
-			if (!empty($this->TRIGGER_PREFIX) && (getDolGlobalInt($this->TRIGGER_PREFIX."_ALLOW_EXTERNAL_DOWNLOAD") || getDolGlobalInt($this->TRIGGER_PREFIX."_ALLOW_ONLINESIGN"))) {
+			if (
+				!empty($this->TRIGGER_PREFIX)
+				&& (getDolGlobalInt($this->TRIGGER_PREFIX . "_ALLOW_EXTERNAL_DOWNLOAD") || getDolGlobalInt($this->TRIGGER_PREFIX . "_ALLOW_ONLINESIGN"))
+			) {
 				$setsharekey = true;
 			}
 			// TODO Remove case covered by trigger prefix
