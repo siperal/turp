@@ -6185,9 +6185,6 @@ abstract class CommonObject
 				$setsharekey = true;
 			}
 			// TODO Remove case covered by trigger prefix
-			if ($this->element == 'commande' && getDolGlobalInt("ORDER_ALLOW_EXTERNAL_DOWNLOAD")) {
-				$setsharekey = true;
-			}
 			if ($this->element == 'facture' && getDolGlobalInt("INVOICE_ALLOW_EXTERNAL_DOWNLOAD")) {
 				$setsharekey = true;
 			}
