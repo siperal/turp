@@ -259,7 +259,6 @@ if ($action == 'confirm_delete' && !empty($permissiontodelete)) {
 	}
 
 	$result = $object->delete($user);
-	//var_dump($result);
 	if ($result > 0) {
 		// Delete OK
 		setEventMessages("RecordDeleted", null, 'mesgs');
@@ -410,7 +409,6 @@ if ($action == "create" || $action == "start" || $action == 'close') {
 }
 
 if ($action == "create" || $action == "start") {
-	//var_dump($theoricalamountforterminal); var_dump($theoricalnbofinvoiceforterminal);
 	if ($action != 'close') {
 		print load_fiche_titre($langs->trans("CashControl")." - ".$langs->trans("New"), '', 'cash-register');
 
