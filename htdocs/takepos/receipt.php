@@ -30,7 +30,7 @@
  */
 
 
-// Include main (when file in included into send.php, $action is set and main was already loaded)
+// Include the main.inc.php (note: when file is included into send.php, $action is already set and main.inc.php was already loaded)
 /**
  * @var string $action
  */
@@ -272,7 +272,7 @@ if (isALNERunningVersion() && isModEnabled('blockedlog')) {
 			}
 		}
 
-		print "<br>".$langs->trans("SignatureID").': '.dol_trunc(strtoupper($unalterablelogid), 10).'<br>';
+		print "<br>".$langs->trans("SignatureID").': '.dol_trunc(strtoupper($unalterablelogid), 10);
 	}
 }
 
@@ -281,10 +281,10 @@ $isADuplicata = $object->pos_print_counter;
 
 if ($object->status == $object::STATUS_CLOSED) {
 	if ($isADuplicata) {
-		print '<b>*** DUPLICATA***</b>';	// Hard coded string
+		print '<br><b>*** DUPLICATA***</b>';	// Hard coded string
 	}
 } else {
-	print '<b>*** '.strtoupper($langs->trans("TemporaryReceipt")).' ***</b>';	// Hard coded string
+	print '<br><b>*** '.strtoupper($langs->trans("TemporaryReceipt")).' ***</b>';	// Hard coded string
 }
 ?>
 </p>
