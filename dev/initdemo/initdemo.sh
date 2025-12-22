@@ -201,7 +201,7 @@ export documentdir
 documentdir=$(< "$mydir/../../htdocs/conf/conf.php" grep '^\$dolibarr_main_data_root' | sed -e 's/$dolibarr_main_data_root=//' | sed -e 's/;//' | sed -e "s/'//g" | sed -e 's/"//g')
 if [ "$documentdir" != "" ]
 then
-	$DIALOG --title "Reset document directory" --clear --yesno "DELETE and recreate document directory '$documentdir/':" 16 55 
+	$DIALOG --title "Reset document directory" --clear --yesno "DELETE and recreate document directory '$documentdir/':" 16 55
 	valret=$?
 
 	case $valret in
