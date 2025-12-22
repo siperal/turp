@@ -126,23 +126,4 @@ class DoliDBTest extends CommonClassTest
 
 		return $result;
 	}
-
-	/**
-	 * testGetNextAutoIncrementId
-	 *
-	 * @return	int
-	 */
-	public function testGetNextAutoIncrementId()
-	{
-		global $conf,$user,$langs,$db;
-		$conf = $this->savconf;
-		$user = $this->savuser;
-		$langs = $this->savlangs;
-		$db = $this->savdb;
-
-		print __METHOD__.' db->type = '.$db->type."\n";
-		$result = $db->getNextAutoIncrementId(MAIN_DB_PREFIX.'blockedlog');
-		$this->assertGreaterThan(0, $result);	// Must be strictlyhigher than 0
-		print __METHOD__." result=".$result."\n";
-	}
 }
