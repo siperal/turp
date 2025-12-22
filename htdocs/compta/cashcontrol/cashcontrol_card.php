@@ -426,8 +426,9 @@ if ($action == "create" || $action == "start") {
 			print '<input type="hidden" name="action" value="start">';
 		}
 
-		print '<div class="div-table-responsive-no-min">';
-		print '<table class="noborder centpercent">';
+		print '<!-- Table to start cash control -->'."\n";
+		print '<div class="div-table-responsive-no-min">'."\n";
+		print '<table class="noborder centpercent">'."\n";
 		print '<tr class="liste_titre">';
 		print '<td>'.$langs->trans("Module").'</td>';
 		print '<td>'.$langs->trans("Terminal").'</td>';
@@ -440,7 +441,7 @@ if ($action == "create" || $action == "start") {
 		$disabled = 0;
 		$prefix = 'close';
 
-		print '<tr class="oddeven">';
+		print '<tr class="oddeven nohover">';
 		print '<td>'.$form->selectarray('posmodule', $arrayofposavailable, GETPOST('posmodule', 'alpha'), (count($arrayofposavailable) > 1 ? 1 : 0)).'</td>';
 		print '<td>';
 
