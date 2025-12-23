@@ -3254,7 +3254,7 @@ function dol_check_secure_access_document($modulepart, $original_file, $entity, 
 		}
 		$modulepartsuffix = str_replace('tax-', '', $modulepart);
 		$original_file = $conf->tax->dir_output.'/'.($modulepartsuffix != 'tax' ? $modulepartsuffix.'/' : '').$original_file;
-	} elseif ($modulepart == 'actions' && !empty($conf->agenda->dir_output)) {
+	} elseif (($modulepart == 'actions' || $modulepart == 'actioncomm') && !empty($conf->agenda->dir_output)) {
 		// Wrapping for events
 		if ($fuser->hasRight('agenda', 'myactions', $read)) {
 			$accessallowed = 1;
@@ -3889,6 +3889,7 @@ function getFilesUpdated(&$file_list, SimpleXMLElement $dir, $path = '', $pathre
 	//$exclude = 'install';
 
 	$entry = array();
+	$algo = '';
 	if (!empty($dir->md5file)) {
 		$entry = $dir->md5file;
 		$algo = 'md5';
