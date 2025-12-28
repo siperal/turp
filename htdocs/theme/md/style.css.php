@@ -1208,6 +1208,10 @@ textarea.centpercent {
 .small, small {
 	font-size: 85%;
 }
+.select2-results__option .smallincombo {
+	font-size: 95%;
+	font-weight: bold;
+}
 .lineheightsmall {
 	line-height: 1.2em;
 }
@@ -7845,6 +7849,10 @@ div.kanban.column div.ui-sortable-helper {
 }
 .searchpage .searchform input {
 	font-size: 1.15em;
+	height: inherit;
+}
+.searchpage :focus-visible {
+  outline: none;
 }
 
 li.ui-li-divider .ui-link {
