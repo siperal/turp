@@ -430,7 +430,7 @@ if ($forgetpasslink || $helpcenterlink) {
 		if (getDolGlobalString('MAIN_PASSWORD_FORGOTLINK')) {
 			$url = getDolGlobalString('MAIN_PASSWORD_FORGOTLINK');
 		}
-		echo '<a class="alogin" href="'.dol_escape_htmltag($url).'">';
+		echo '<a class="alogin aloginpasswordforgotten" href="'.dol_escape_htmltag($url).'">';
 		echo $langs->trans('PasswordForgotten');
 		echo '</a>';
 	}
@@ -440,7 +440,7 @@ if ($forgetpasslink || $helpcenterlink) {
 	}
 
 	if ($helpcenterlink) {
-		echo '<a class="alogin" href="'.dol_escape_htmltag($helpcenterlink).'" target="_blank" rel="noopener noreferrer">';
+		echo '<a class="alogin aloginhelp" href="'.dol_escape_htmltag($helpcenterlink).'" target="_blank" rel="noopener noreferrer">';
 		echo $langs->trans('NeedHelpCenter');
 		echo '</a>';
 	}

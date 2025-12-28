@@ -260,8 +260,9 @@ span.butActionNewRefused>span.fa, span.butActionNewRefused>span.fa:hover
 	background-color: transparent ! important;
 }
 
-.butActionLogin {
+.butActionLogin, .butActionLogin:link, .butActionLogin:visited, .butActionLogin:hover, .butActionLogin:active {
 	background-color: rgb(<?php echo $colorbackhmenu1; ?>);
+	padding: 1em 1em;
 }
 
 
