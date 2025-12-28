@@ -1295,9 +1295,6 @@ td.wordbreak img, td.wordbreakimp img {
 .borderimp {
 	border: 1px solid #888 !important;
 }
-.text-warning {
-	color : <?php print $textWarning; ?>
-}
 /* CSS used for long description and extrafield text */
 .shortmessagecut {
 	max-height: <?php print getDolGlobalInt('MAIN_CSS_SHORTMESSSAGECUT', 125); ?>px;
@@ -1371,7 +1368,9 @@ i.fa-mars::before, i.fa-venus::before, i.fa-genderless::before, i.fa-transgender
 	white-space: nowrap;
 }
 
-
+.text-warning {
+	color : <?php print $textWarning; ?>
+}
 body[class*="colorblind-"] .text-warning{
 	color : <?php print $colorblind_deuteranopes_textWarning; ?>
 }
@@ -5602,12 +5601,13 @@ img.boxhandle, img.boxclose {
 .warning { color: #887711 !important; }
 .error   { color: #660000 !important; font-weight: bold; }
 .green   { color: #118822 !important; }
+.neutral { color: #444 !important; }
 
 div.ok {
 	color: #114466;
 }
 
-div.info, div.warning, div.error, div.green {
+div.info, div.warning, div.error, div.green, div.neutral {
 	padding-top: 16px;
 	padding-left: 10px;
 	padding-right: 4px;
@@ -5616,15 +5616,22 @@ div.info, div.warning, div.error, div.green {
 	border-radius: 5px;
 }
 
-/* Info admin */
+div.fiche div.info, div.fiche div.warning, div.fiche div.neutral {
+	box-shadow: 1px 1px 6px #e4e4e4;
+	margin: 1em 0em 1.2em 0em;
+}
+
+/* Neutral message */
+div.neutral {
+	border-<?php print $left; ?>: solid 5px #aaa;
+	background: #f8f8f8;
+}
+
+/* Info message */
 div.info {
 	border-<?php print $left; ?>: solid 5px #87cfd2;
 	background: #eff8fc;
 	color: #558;
-}
-div.fiche div.info, div.fiche div.warning {
-	box-shadow: 4px 4px 12px #e4e4e4;
-	margin: 1em 0em 1.2em 0em;
 }
 
 /* Ok message */

@@ -1446,9 +1446,6 @@ td.wordbreak img, td.wordbreakimp img {
 .borderimp {
 	border: 1px solid #888 !important;
 }
-.text-warning{
-	color : <?php print $textWarning; ?>
-}
 /* CSS used for extrafield text */
 .shortmessagecut {
 	max-height: <?php print getDolGlobalInt('MAIN_CSS_SHORTMESSSAGECUT', 125); ?>px;
@@ -3154,7 +3151,6 @@ img.photorefnoborder {
 <?php
 $minwidthtmenu = 66; /* minimum width for one top menu entry */
 $heightmenu = 48; /* height of top menu, part with image */
-$heightmenu2 = 48; /* height of top menu, ârt with login  */
 $disableimages = 0;
 $maxwidthloginblock = 110;
 if (getDolGlobalInt('THEME_TOPMENU_DISABLE_IMAGE') == 1 || !empty($user->conf->MAIN_OPTIMIZEFORTEXTBROWSER)) {
@@ -5538,12 +5534,13 @@ img.boxhandle, img.boxclose {
 .warning { color: #887711 !important; }
 .error   { color: #550000 !important; font-weight: bold; }
 .green   { color: #118822 !important; }
+.neutral { color: #444 !important; }
 
 div.ok {
   color: #114466;
 }
 
-div.info, div.warning, div.error {
+div.info, div.warning, div.error, div.green, div.neutral {
 	padding-top: 8px;
 	padding-left: 10px;
 	padding-right: 4px;
@@ -5552,15 +5549,15 @@ div.info, div.warning, div.error {
 	border-radius: 1px;
 }
 
-/* Info admin */
-div.info {
-	border-<?php print $left; ?>: solid 5px #87cfd2;
-	background: #eff8fc;
-	color: #558;
-}
-div.fiche div.info, div.fiche div.warning {
-	box-shadow: 4px 4px 12px #e4e4e4;
+div.fiche div.info, div.fiche div.warning, div.fiche div.neutral {
+	box-shadow: 1px 1px 6px #e4e4e4;
 	margin: 1em 0em 1.2em 0em;
+}
+
+/* Info message */
+div.neutral {
+	border-<?php print $left; ?>: solid 5px #aaa;
+	background: #f8f8f8;
 }
 
 /* Ok message */
