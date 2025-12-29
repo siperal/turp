@@ -398,7 +398,7 @@ if (!empty($morelogincontent)) {
 <?php if (!isset($conf->file->main_authentication) || $conf->file->main_authentication != 'googleoauth') { ?>
 <br>
 <div id="login-submit-wrapper">
-<input type="submit" class="butAction butActionLogin" value="&nbsp; <?php echo $langs->trans('Connection'); ?> &nbsp;" tabindex="5" />
+<input type="submit" class="butAction butActionLogin noborderfocus" value="&nbsp; <?php echo $langs->trans('Connection'); ?> &nbsp;" tabindex="5" />
 </div>
 <?php } ?>
 
