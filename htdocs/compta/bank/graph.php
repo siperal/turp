@@ -71,9 +71,7 @@ $error = 0;
  */
 
 $now = dol_now();
-$nowlasthour = dol_get_last_hour($now);
-
-$form = new Form($db);
+$nowlasthourmidday = dol_get_last_hour($now) + 1 + (12 * 3600);	// +1 to get next day at 00:00:00. We add 12 hours to be at midday.
 
 $datetime = dol_now();
 $year = dol_print_date($datetime, "%Y");
@@ -221,7 +219,7 @@ if ($result < 0) {
 		$dataall = array();
 		while ($xmonth == $month) {
 			$subtotal += (isset($amounts[$textdate]) ? $amounts[$textdate] : 0);
-			if ($day > $nowlasthour) {
+			if ($day > $nowlasthourmidday) {
 				$datas[$i] = ''; // Valeur speciale permettant de ne pas tracer le graph
 			} else {
 				$datas[$i] = $solde + $subtotal;
@@ -369,7 +367,7 @@ if ($result < 0) {
 		$i = 0;
 		while ($xyear == $year && $day <= $datetime) {
 			$subtotal += (isset($amounts[$textdate]) ? $amounts[$textdate] : 0);
-			if ($day > $nowlasthour) {
+			if ($day > $nowlasthourmidday) {
 				$datas[$i] = ''; // Valeur speciale permettant de ne pas tracer le graph
 			} else {
 				$datas[$i] = $solde + $subtotal;
