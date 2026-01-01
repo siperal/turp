@@ -607,8 +607,8 @@ if (getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
 	print '</td>';
 }
 if (!empty($arrayfields['d.ref']['checked'])) {
-	print '<td class="liste_titre" align="left">';
-	print '<input class="flat" size="15" type="text" name="search_ref" value="'.$search_ref.'">';
+	print '<td class="liste_titre">';
+	print '<input class="flat width100" type="text" name="search_ref" value="'.dolPrintHTMLForAttribute($search_ref).'">';
 	print '</td>';
 }
 // User
