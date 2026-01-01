@@ -1512,7 +1512,8 @@ class BlockedLog
 			$sql .= " AND date_creation <= '".$this->db->idate($search_end)."'";
 		}
 		if ($search_ref != '') {
-			$sql .= natural_search("ref_object", $search_ref);
+			$sql .= " AND (".natural_search("ref_object", $search_ref, 0, 1);
+			$sql .= " OR ".natural_search("linktoref", $search_ref, 0, 1).")";
 		}
 		if ($search_amount != '') {
 			$sql .= natural_search("amounts", $search_amount, 1);
@@ -1602,6 +1603,6 @@ class BlockedLog
 	public function alreadyUsed($ignoresystem = 0)
 	{
 		include_once DOL_DOCUMENT_ROOT.'/blockedlog/lib/blockedlog.lib.php';
-		return isBlockedLogused($ignoresystem);
+		return isBlockedLogUsed($ignoresystem);
 	}
 }

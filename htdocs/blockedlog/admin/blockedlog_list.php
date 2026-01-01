@@ -442,6 +442,9 @@ if ($limit > 0 && $limit != $conf->liste_limit) {
 if ($search_id != '') {
 	$param .= '&search_id='.urlencode($search_id);
 }
+if ($search_ref != '') {
+	$param .= '&search_ref='.urlencode($search_ref);
+}
 if ($search_fk_user > 0) {
 	$param .= '&search_fk_user='.urlencode($search_fk_user);
 }
@@ -630,12 +633,14 @@ if (is_array($blocks)) {
 		if (empty($search_showonlyerrors) || !$checkresult[$block->id]) {
 			$nbshown++;
 
-			if ($nbshown < $MAXFORSHOWNLINKS) {	// For performance and memory purpose, we get/show the link of objects only for the 100 first output
-				$object_link = $block->getObjectLink();
-				$object_link_title = '';
-			} else {
-				$object_link = $block->element.'/'.$block->fk_object;
-				$object_link_title = $langs->trans('LinkHasBeenDisabledForPerformancePurpose');
+			if (getDolGlobalString("BLOCKEDLOG_DEBUG")) {
+				if ($nbshown < $MAXFORSHOWNLINKS) {	// For performance and memory purpose, we get/show the debug info link of objects only for the 100 first output
+					$object_link = $block->getObjectLink();
+					$object_link_title = '';
+				} else {
+					$object_link = $block->element.'/'.$block->fk_object;
+					$object_link_title = $langs->trans('LinkHasBeenDisabledForPerformancePurpose');
+				}
 			}
 
 			print '<tr class="oddeven">';
@@ -666,6 +671,14 @@ if (is_array($blocks)) {
 			print '<td class="nowraponall">';
 			if (!empty($block->ref_object)) {
 				print dol_escape_htmltag($block->ref_object);
+				if ($block->linktype && $block->linktoref) {
+					if ($block->linktype == 'paymentof') {
+						print '<br><span class="opacitymedium small">'.$langs->trans("PaymentOf").' '.$block->linktoref.'</span>';
+					}
+					if ($block->linktype == 'replacedby') {
+						print '<br><span class="opacitymedium small">'.$langs->trans("ReplacedBy").' '.$block->linktoref.'</span>';
+					}
+				}
 			} else {
 				// Ref not stored
 			}
@@ -673,43 +686,12 @@ if (is_array($blocks)) {
 
 			//$tmpobj = json_decode($block->object_data);
 
+			// Define $totalhtamount, $totalvatamount, $totalamount for $block->action event code
+			$total_ht = $total_vat = $total_ttc = 0;
+			sumAmountsForUnalterableEvent($block, $totalhtamount, $totalvatamount, $totalamount, $total_ht, $total_vat, $total_ttc);
+
 			// Amount
 			print '<td class="right nowraponall">';
-
-			// Define $totalhtamount, $totalvatamount, $totalamount
-			if (empty($totalamount[$block->action])) {
-				$totalamount[$block->action] = array();
-			}
-			if ($block->action == 'BILL_VALIDATE') {
-				$total_ht = $block->object_data->total_ht;
-				$total_vat = $block->object_data->total_tva;
-				$total_ttc = $block->object_data->total_ttc;
-
-				if (empty($totalamount[$block->action][$block->ref_object])) {	// If not, we already met the event for this object, we keep only first one.
-					$totalhtamount[$block->action][$block->ref_object] = $total_ht;
-					$totalvatamount[$block->action][$block->ref_object] = $total_vat;
-					$totalamount[$block->action][$block->ref_object] = $total_ttc;
-				}
-			} elseif ($block->action == 'PAYMENT_CUSTOMER_CREATE') {
-				$total_ht = $block->object_data->amount;
-				$total_vat = 0;
-				$total_ttc = $block->object_data->amount;
-
-				if (empty($totalhtamount[$block->action][$block->ref_object])) {
-					$totalhtamount[$block->action][$block->ref_object] = 0;
-				}
-				if (empty($totalvatamount[$block->action][$block->ref_object])) {
-					$totalvatamount[$block->action][$block->ref_object] = 0;
-				}
-				if (empty($totalamount[$block->action][$block->ref_object])) {
-					$totalamount[$block->action][$block->ref_object] = 0;
-				}
-				$totalhtamount[$block->action][$block->ref_object] = $total_ht;
-				$totalvatamount[$block->action][$block->ref_object] = $total_vat;
-				$totalamount[$block->action][$block->ref_object] = $total_ttc;
-			} else {
-				$total_ttc = $block->amounts;
-			}
 
 			if (empty($total_ttc)) {
 				print '<span class="opacitymedium">';

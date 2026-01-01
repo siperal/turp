@@ -221,38 +221,7 @@ if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		/
 	}
 
 	if (!$error) {
-		// We record the export as a new line into the unalterable logs
-		require_once DOL_DOCUMENT_ROOT.'/blockedlog/class/blockedlog.class.php';
-		$b = new BlockedLog($db);
-
-		$object = new stdClass();
-		$object->id = 0;
-		$object->element = 'module';
-		$object->ref = 'systemevent';
-		$object->entity = $conf->entity;
-		$object->date = dol_now();
-
-		$object->label = 'Export unalterable logs - Period: year='.GETPOSTINT('yeartoexport').(GETPOSTINT('monthtoexport') ? ' month='.GETPOSTINT('monthtoexport') : '');
-
-		$action = 'BLOCKEDLOG_EXPORT';
-		$result = $b->setObjectData($object, $action, 0, $user);
-		//var_dump($b); exit;
-
-		if ($result < 0) {
-			setEventMessages('Failed to insert the export int the unalterable log', null, 'errors');
-			$error++;
-		}
-
-		$res = $b->create($user);
-
-		if ($res < 0) {
-			setEventMessages('Failed to insert the export int the unalterable log', null, 'errors');
-			$error++;
-		}
-	}
-
-	if (!$error) {
-		// Now restart request with all data, si without the limit(1) in sql request
+		// Now restart request with all data, so without the limit(1) in sql request
 		$sql = "SELECT rowid, date_creation, tms, user_fullname, action, amounts, element, fk_object, date_object, ref_object,";
 		$sql .= " signature, fk_user, object_data, object_version, object_format, debuginfo";
 		$sql .= " FROM ".MAIN_DB_PREFIX."blockedlog";
@@ -279,8 +248,10 @@ if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		/
 
 			$fh = fopen($tmpfile, 'w');
 
+			$formatexport = 'V1';
+
 			// Print line with title
-			fwrite($fh, "BEGIN - date=".$yearmonthdateofexport." - period=".$yearmonthtoexport." - format=V1 - user=".$user->getFullName($langs)
+			fwrite($fh, "BEGIN - date=".$yearmonthdateofexport." - period=".$yearmonthtoexport." - formatexport=".$formatexport." - user=".$user->getFullName($langs)
 				.';'.$langs->transnoentities('Id')
 				.';'.$langs->transnoentities('DateCreation')
 				.';'.$langs->transnoentities('Action')
@@ -301,6 +272,10 @@ if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		/
 
 			$loweridinerror = 0;
 			$i = 0;
+
+			$totalhtamount = array();
+			$totalvatamount = array();
+			$totalamount = array();
 
 			while ($obj = $db->fetch_object($resql)) {
 				// We set here all data used into signature calculation (see checkSignature method) and more
@@ -366,6 +341,12 @@ if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		/
 				$signatureexport = dol_hash($previoushash.$concatenateddata, 'sha256');		// SHA256
 				//$signatureexporthmac = 'TODO';
 
+
+				// Define $totalhtamount, $totalvatamount, $totalamount for $block->action event code
+				$total_ht = $total_vat = $total_ttc = 0;
+				sumAmountsForUnalterableEvent($block_static, $totalhtamount, $totalvatamount, $totalamount, $total_ht, $total_vat, $total_ttc);
+
+
 				fwrite($fh,
 					';'.$block_static->id
 					.';'.$block_static->date_creation
@@ -392,6 +373,107 @@ if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		/
 				$i++;
 			}
 
+			$totalhtamountallines = array('BILL_VALIDATE' => 0);
+			$totalvatamountallines = array('BILL_VALIDATE' => 0);
+			$totalamountalllines = array('BILL_VALIDATE' => 0);
+			if (array_key_exists('BILL_VALIDATE', $totalhtamount)) {
+				foreach ($totalhtamount['BILL_VALIDATE'] as $key => $val) {
+					$totalhtamountalllines['BILL_VALIDATE'] += $val;
+				}
+				foreach ($totalvatamount['BILL_VALIDATE'] as $key => $val) {
+					$totalvatamountalllines['BILL_VALIDATE'] += $val;
+				}
+				foreach ($totalamount['BILL_VALIDATE'] as $key => $val) {
+					$totalamountalllines['BILL_VALIDATE'] += $val;
+				}
+			}
+
+
+			// Add a final line with cumulative total of invoices validated
+			$block_static->id = '';
+			$block_static->date_creation = '';
+			$block_static->action = '';
+			$block_static->amounts = $langs->transnoentitiesnoconv("HT").': '.$totalhtamountalllines['BILL_VALIDATE'].' | '.$langs->transnoentitiesnoconv("VAT").': '.$totalvatamountalllines['BILL_VALIDATE'].' | '.$langs->transnoentitiesnoconv("TTC").': '.$totalamountalllines['BILL_VALIDATE'];
+			$block_static->ref_object = '';
+			$block_static->date_object = '';
+			$block_static->user_fullname = '';
+			$block_static->linktoref = '';
+			$block_static->linktype = '';
+			$block_static->object_data = '';
+			$block_static->object_version = '';
+			$block_static->signature = '';
+
+			$statusofrecord = '';
+			$signatureexport = '';
+
+			$block_static->object_format = '';
+
+			fwrite($fh, 'Cumulative total Invoice Validation;'
+				.$block_static->id
+				.';'.$block_static->date_creation
+				.';'.$block_static->action
+				.';'.$block_static->amounts			// Can be 1.20000000 with 8 digits. TODO Clean to have 8 digits in V1
+				.';"'.str_replace('"', '""', $block_static->ref_object).'";'
+				.$block_static->date_object
+				.';"'.str_replace('"', '""', $block_static->user_fullname).'";"'
+				.str_replace('"', '""', $block_static->linktoref).'";"'
+				.str_replace('"', '""', $block_static->linktype).'";"'
+				.str_replace('"', '""', $obj->object_data).'"'				// We must the string to decode into object with dolDecodeBlockedData
+				.';"'.str_replace('"', '""', $block_static->object_version).'";"'
+				.str_replace('"', '""', $block_static->signature).'";"'
+				.str_replace('"', '""', $statusofrecord).'";"'
+				.str_replace('"', '""', $signatureexport).'";"'
+				.str_replace('"', '""', $block_static->object_format).'";'
+				//.str_replace('"', '""', $signatureexporthmac).'"'
+				//.';'.$statusofrecordnote
+				."\n");
+
+
+			// Add a final line with perpetual total
+			$totalhtamountlifetime = array();
+			$totalvatamountlifetime = array();
+			$totalamountlifetime = array();
+
+
+			$block_static->id = '';
+			$block_static->date_creation = '';
+			$block_static->action = '';
+			$block_static->amounts = $totalamountlifetime['BILL_VALIDATE'];
+			$block_static->ref_object = '';
+			$block_static->date_object = '';
+			$block_static->user_fullname = '';
+			$block_static->linktoref = '';
+			$block_static->linktype = '';
+			$block_static->object_data = '';
+			$block_static->object_version = '';
+			$block_static->signature = '';
+
+			$statusofrecord = '';
+			$signatureexport = '';
+
+			$block_static->object_format = '';
+
+			fwrite($fh, 'Perpetual total Invoice Validation;'
+				.$block_static->id
+				.';'.$block_static->date_creation
+				.';'.$block_static->action
+				.';'.$block_static->amounts			// Can be 1.20000000 with 8 digits. TODO Clean to have 8 digits in V1
+				.';"'.str_replace('"', '""', $block_static->ref_object).'";'
+				.$block_static->date_object
+				.';"'.str_replace('"', '""', $block_static->user_fullname).'";"'
+				.str_replace('"', '""', $block_static->linktoref).'";"'
+				.str_replace('"', '""', $block_static->linktype).'";"'
+				.str_replace('"', '""', $obj->object_data).'"'				// We must the string to decode into object with dolDecodeBlockedData
+				.';"'.str_replace('"', '""', $block_static->object_version).'";"'
+				.str_replace('"', '""', $block_static->signature).'";"'
+				.str_replace('"', '""', $statusofrecord).'";"'
+				.str_replace('"', '""', $signatureexport).'";"'
+				.str_replace('"', '""', $block_static->object_format).'";'
+				//.str_replace('"', '""', $signatureexporthmac).'"'
+				//.';'.$statusofrecordnote
+				."\n");
+
+
 			fclose($fh);
 
 			// Calculate the md5 of the file (the last line has a return line)
@@ -406,6 +488,37 @@ if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		/
 			setEventMessages($langs->trans("FileGenerated"), null);
 		} else {
 			setEventMessages($db->lasterror, null, 'errors');
+		}
+	}
+
+	if (!$error) {
+		// We record the export as a new line into the unalterable logs
+		require_once DOL_DOCUMENT_ROOT.'/blockedlog/class/blockedlog.class.php';
+		$b = new BlockedLog($db);
+
+		$object = new stdClass();
+		$object->id = 0;
+		$object->element = 'module';
+		$object->ref = 'systemevent';
+		$object->entity = $conf->entity;
+		$object->date = dol_now();
+
+		$object->label = 'Export unalterable logs - Period: year='.GETPOSTINT('yeartoexport').(GETPOSTINT('monthtoexport') ? ' month='.GETPOSTINT('monthtoexport') : '');
+
+		$action = 'BLOCKEDLOG_EXPORT';
+		$result = $b->setObjectData($object, $action, 0, $user);
+		//var_dump($b); exit;
+
+		if ($result < 0) {
+			setEventMessages('Failed to insert the export int the unalterable log', null, 'errors');
+			$error++;
+		}
+
+		$res = $b->create($user);
+
+		if ($res < 0) {
+			setEventMessages('Failed to insert the export int the unalterable log', null, 'errors');
+			$error++;
 		}
 	}
 }

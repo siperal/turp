@@ -153,7 +153,7 @@ class modBlockedLog extends DolibarrModules
 	{
 		require_once DOL_DOCUMENT_ROOT.'/blockedlog/lib/blockedlog.lib.php';
 
-		return isBlockedLogused();
+		return isBlockedLogUsed();
 	}
 
 
