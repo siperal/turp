@@ -37,6 +37,7 @@ require '../../main.inc.php';
  * @var HookManager $hookmanager
  * @var Translate $langs
  * @var User $user
+ * @var Societe $mysoc
  */
 require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';
@@ -230,6 +231,9 @@ if ($action == "valid" && $permissiontoadd) {	// validate = close
 	$object->card = (float) price2num(GETPOST('card_amount', 'alpha'));
 	$object->cheque = (float) price2num(GETPOST('cheque_amount', 'alpha'));
 
+	// TODO Add pepetual amount
+
+
 	$result = $object->update($user);
 
 	$result = $object->valid($user);
@@ -377,6 +381,7 @@ if ($action == "create" || $action == "start" || $action == 'close') {
 		}
 
 		// Calculate $theoricalamountforterminal at end of period
+		// Sum of payment + Initial amount in bank
 		foreach ($arrayofpaymentmode as $key => $val) {
 			$sql = "SELECT SUM(pf.amount) as total, COUNT(*) as nb";
 			$sql .= " FROM ".MAIN_DB_PREFIX."paiement_facture as pf, ".MAIN_DB_PREFIX."facture as f, ".MAIN_DB_PREFIX."paiement as p, ".MAIN_DB_PREFIX."c_paiement as cp";
@@ -416,7 +421,6 @@ if ($action == "create" || $action == "start" || $action == 'close') {
 if ($action == "create" || $action == "start") {
 	print load_fiche_titre($langs->trans("CashControl")." - ".$langs->trans("New"), '', 'cash-register');
 
-
 	if ($action == 'start') {
 		if (empty(GETPOSTINT('closeday'))) {
 			$endperiod = dol_get_last_day(GETPOSTINT('closeyear'), GETPOSTINT('closemonth') ? GETPOSTINT('closemonth') : 12, 'gmt');
@@ -432,7 +436,6 @@ if ($action == "create" || $action == "start") {
 			}
 		}
 	}
-
 
 	print '<form method="POST" action="'.dolBuildUrl($_SERVER["PHP_SELF"]).'">';
 	print '<input type="hidden" name="token" value="'.newToken().'">';
