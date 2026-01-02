@@ -426,7 +426,7 @@ if ($action == "create" || $action == "start") {
 			}
 		} else {
 			$endperiod = dol_get_first_hour(GETPOSTDATE('close', 'getpostend'));
-			if ($endperiod >= dol_now()) {
+			if ($endperiod >= dol_now() && $mysoc->country_code == 'FR') {	// For other countries we may need to make 2 cash control in the same day (one at opening and one at closing)
 				setEventMessages($langs->trans("CashControlEndDayMustNotBeInPast"), null, 'errors');
 				$action = 'create';
 			}
