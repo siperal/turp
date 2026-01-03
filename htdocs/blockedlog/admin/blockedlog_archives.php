@@ -192,7 +192,6 @@ if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		/
 	$datee = dol_get_last_day(GETPOSTINT('yeartoexport'), GETPOSTINT('monthtoexport') > 0 ? GETPOSTINT('monthtoexport') : 12);
 
 	if ($datee >= dol_now()) {
-		setEventMessages($langs->trans("ErrorPeriodMustBePastToAllowExport"), null, "warnings");
 		$periodnotcomplete = 1;
 	}
 
@@ -650,33 +649,37 @@ if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		/
 	}
 
 	if (!$error) {
-		// We record the export as a new line into the unalterable logs
-		require_once DOL_DOCUMENT_ROOT.'/blockedlog/class/blockedlog.class.php';
-		$b = new BlockedLog($db);
+		if ($periodnotcomplete) {
+			setEventMessages($langs->trans("ErrorPeriodMustBePastToAllowExport"), null, "warnings");
+		} else {
+			// We record the export as a new line into the unalterable logs
+			require_once DOL_DOCUMENT_ROOT.'/blockedlog/class/blockedlog.class.php';
+			$b = new BlockedLog($db);
 
-		$object = new stdClass();
-		$object->id = 0;
-		$object->element = 'module';
-		$object->ref = 'systemevent';
-		$object->entity = $conf->entity;
-		$object->date = dol_now();
+			$object = new stdClass();
+			$object->id = 0;
+			$object->element = 'module';
+			$object->ref = 'systemevent';
+			$object->entity = $conf->entity;
+			$object->date = dol_now();
 
-		$object->label = 'Export unalterable logs - Period: year='.GETPOSTINT('yeartoexport').(GETPOSTINT('monthtoexport') ? ' month='.GETPOSTINT('monthtoexport') : '');
+			$object->label = 'Export unalterable logs - Period: year='.GETPOSTINT('yeartoexport').(GETPOSTINT('monthtoexport') ? ' month='.GETPOSTINT('monthtoexport') : '');
 
-		$action = 'BLOCKEDLOG_EXPORT';
-		$result = $b->setObjectData($object, $action, 0, $user, null);
-		//var_dump($b); exit;
+			$action = 'BLOCKEDLOG_EXPORT';
+			$result = $b->setObjectData($object, $action, 0, $user, null);
+			//var_dump($b); exit;
 
-		if ($result < 0) {
-			setEventMessages('Failed to insert the export int the unalterable log', null, 'errors');
-			$error++;
-		}
+			if ($result < 0) {
+				setEventMessages('Failed to insert the export int the unalterable log', null, 'errors');
+				$error++;
+			}
 
-		$res = $b->create($user);
+			$res = $b->create($user);
 
-		if ($res < 0) {
-			setEventMessages('Failed to insert the export int the unalterable log', null, 'errors');
-			$error++;
+			if ($res < 0) {
+				setEventMessages('Failed to insert the export int the unalterable log', null, 'errors');
+				$error++;
+			}
 		}
 	}
 }
