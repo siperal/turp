@@ -34,6 +34,7 @@ require '../../main.inc.php'; // Load $user and permissions
  * @var HookManager $hookmanager
  * @var Translate $langs
  * @var User $user
+ * @var Societe $mysoc
  */
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/product/class/html.formproduct.class.php';
@@ -216,6 +217,17 @@ if (getDolGlobalString('TAKEPOS_PRINT_WITHOUT_DETAILS')) {
 	print '<input type="text" name="TAKEPOS_PRINT_WITHOUT_DETAILS_LABEL_DEFAULT" value="' . getDolGlobalString('TAKEPOS_PRINT_WITHOUT_DETAILS_LABEL_DEFAULT') . '" />';
 	print "</td></tr>\n";
 }
+
+// Gift receipt
+print '<tr class="oddeven"><td>';
+print $langs->trans('GiftReceiptButton');
+print '<td>';
+if (isALNERunningVersion()) {
+	print '<span class="opacitymedium">'.$langs->trans("NotAvailableForCountryWhenModuleIsOn", $mysoc->country_code).'</span>';
+} else {
+	print ajax_constantonoff("TAKEPOS_GIFT_RECEIPT", array(), $conf->entity, 0, 0, 1, 0);
+}
+print "</td></tr>\n";
 
 // Auto print tickets
 print '<tr class="oddeven"><td>';
