@@ -23,6 +23,7 @@ BlockedLogBillPreview=Customer invoice preview or print
 BlockedlogInfoDialog=Log Details
 ListOfTrackedEvents=List of tracked events
 Fingerprint=Signature
+FingerprintInBlockedLog=Signature in Unalterable Log table
 FingerprintDatabase=Signature in database
 FingerprintExport=Signature export
 FingerprintExportHMAC=Signature export HMAC

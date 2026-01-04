@@ -3586,9 +3586,10 @@ form#login {
 	border-top:solid 1px #f8f8f8;
 }
 .login_table input#username, .login_table input#password, .login_table input#securitycode{
-	border: none;
+	/* border: none; */
 	/* border-bottom: solid 1px rgba(180,180,180,.4); */
 	padding: 5px;
+	padding-left: 10px;
 	margin-left: 5px;
 	margin-top: 5px;
 	margin-bottom: 5px;
@@ -3604,9 +3605,11 @@ form#login {
 	min-width: 220px;
 	border-radius: 2px;
 }
+/*
 .login_table .tdinputlogin {
 	border-bottom: 1px solid #ccc;
 }
+*/
 .login_table .tdinputlogin .fa {
 	padding-left: 10px;
 	width: 14px;
@@ -3617,7 +3620,7 @@ form#login {
 }
 .login_table #tdpasswordlogin #togglepassword {
 	position: absolute;
-	top: 0.7em;
+	top: 0.6em;
 	right: 8px;
 	background: none;
 	border: none;

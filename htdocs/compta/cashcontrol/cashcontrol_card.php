@@ -39,12 +39,13 @@ require '../../main.inc.php';
  * @var User $user
  * @var Societe $mysoc
  */
+require_once DOL_DOCUMENT_ROOT.'/blockedlog/lib/blockedlog.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';
 require_once DOL_DOCUMENT_ROOT.'/compta/cashcontrol/class/cashcontrol.class.php';
 require_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture.class.php';
 
-$langs->loadLangs(array("install", "cashdesk", "admin", "banks"));
+$langs->loadLangs(array("install", "cashdesk", "admin", "banks", "blockedlog"));
 
 $action = GETPOST('action', 'aZ09');
 $backtopage = GETPOST('backtopage', 'aZ09');
@@ -227,6 +228,8 @@ if ($action == "valid" && $permissiontoadd) {	// validate = close
 	$object->year_close = GETPOST('closeyear', 'int');
 	*/
 
+	// Save the real amount in llx_pos_cash_fence.
+	// It will also be saved automatically into llx_blockedlog by the trigger in valid().
 	$object->cash = (float) price2num(GETPOST('cash_amount', 'alpha'));
 	$object->card = (float) price2num(GETPOST('card_amount', 'alpha'));
 	$object->cheque = (float) price2num(GETPOST('cheque_amount', 'alpha'));
@@ -236,7 +239,7 @@ if ($action == "valid" && $permissiontoadd) {	// validate = close
 
 	$result = $object->update($user);
 
-	$result = $object->valid($user);
+	$result = $object->valid($user);	// This also save data into the Unalterable Log table by the trigger CASHCONTROL_VALIDATE.
 
 	if ($result <= 0) {
 		setEventMessages($object->error, $object->errors, 'errors');
@@ -291,19 +294,18 @@ $initialbalanceforterminal = array();
 $theoricalamountforterminal = array();
 $theoricalnbofinvoiceforterminal = array();
 
-
-llxHeader('', $langs->trans("CashControl"));
-
-
 $terminalid = '';
 $terminaltouse = '';
 
-// TODO Ask hours to use for initial amount estimation
+// TODO Ask hours to use for the range date
 $shour = 0;
 $smin = 0;
 $ssec = 0;
 $datestart = null;
 $dateend = null;
+
+
+llxHeader('', $langs->trans("CashControl"));
 
 
 // Calculate initial amount estimation and final amount
@@ -380,16 +382,52 @@ if ($action == "create" || $action == "start" || $action == 'close') {
 			}
 		}
 
+		$dates = $datestart;
+		$datee = $dateend;
+		/*
+		if ($syear && !$smonth) {
+			$dates = dol_get_first_day($syear, 1); $datee = dol_get_last_day($syear, 12);
+		} elseif ($syear && $smonth && !$sday) {
+			$dates = dol_get_first_day($syear, $smonth); $datee = dol_get_last_day($syear, $smonth);
+		} elseif ($syear && $smonth && $sday) {
+			$dates = dol_mktime(0, 0, 0, $smonth, $sday, $syear); $datee = dol_mktime(23, 59, 59, $smonth, $sday, $syear);
+		} else {
+			dol_print_error(null, 'Year not defined');
+		}
+		*/
+		$datefilter = 'p.datep';
+		$modulesourcefilter = 'f.module_source';
+		$amountfield = 'pf.amount';
+		$joinleft = 'LEFT ';
+		if (isALNERunningVersion() && $mysoc->country_code == 'FR') {
+			$datefilter = 'bl.date_creation';	// By using this as a filter, it is like the LEFT JOIN is an INNER JOIN
+			$modulesourcefilter = 'bl.module_source';
+			$amountfield = 'bl.amounts';
+			$joinleft = '';
+		}
+
 		// Calculate $theoricalamountforterminal at end of period
 		// Sum of payment + Initial amount in bank
 		foreach ($arrayofpaymentmode as $key => $val) {
-			$sql = "SELECT SUM(pf.amount) as total, COUNT(*) as nb";
-			$sql .= " FROM ".MAIN_DB_PREFIX."paiement_facture as pf, ".MAIN_DB_PREFIX."facture as f, ".MAIN_DB_PREFIX."paiement as p, ".MAIN_DB_PREFIX."c_paiement as cp";
+			// NOTE: Must be same request than into report.php, except it does an aggregate and do the request 3 times, once per payment type.
+
+			/*$sql = "SELECT p.rowid, p.datep as datep, cp.code,";
+			$sql .= " f.rowid as facid, f.ref, f.datef as datef, pf.amount as amount,";
+			$sql .= " b.fk_account as bankid,";
+			$sql .= " bl.signature"; */
+			$sql = "SELECT SUM(".$db->sanitize($amountfield).") as total, COUNT(*) as nb";
+			$sql .= " FROM ".MAIN_DB_PREFIX."paiement_facture as pf, ".MAIN_DB_PREFIX."facture as f,";
+			$sql .= " ".MAIN_DB_PREFIX."paiement as p";
+			//$sql .= " LEFT JOIN ".MAIN_DB_PREFIX."blockedlog as bl ON bl.ref_object = p.ref AND bl.entity = ".((int) $conf->entity).",";
+			$sql .= " ".$joinleft." JOIN ".MAIN_DB_PREFIX."blockedlog as bl ON bl.action = 'PAYMENT_CUSTOMER_CREATE'";
+			$sql .= " AND bl.element = 'payment' AND bl.fk_object = p.rowid AND bl.entity = ".((int) $conf->entity).",";
+			//$sql .= " LEFT JOIN ".MAIN_DB_PREFIX."bank as b ON p.fk_bank = b.rowid,";
+			$sql .= " ".MAIN_DB_PREFIX."c_paiement as cp";
 			$sql .= " WHERE pf.fk_facture = f.rowid AND p.rowid = pf.fk_paiement AND cp.id = p.fk_paiement";
-			$sql .= " AND f.module_source = '".$db->escape($posmodule)."'";
+			$sql .= " AND ".$db->sanitize($modulesourcefilter)." = '".$db->escape($posmodule)."'";
 			$sql .= " AND f.pos_source = '".$db->escape($terminalid)."'";
-			$sql .= " AND (f.fk_statut = ".Facture::STATUS_VALIDATED." OR f.fk_statut = ".Facture::STATUS_CLOSED.")";
-			$sql .= " AND p.entity IN (".getEntity('facture').")";
+			$sql .= " AND p.entity = ".((int) $conf->entity); // Never share entities for features related to accountancy
+			$sql .= " AND ".$db->sanitize($datefilter)." BETWEEN '".$db->idate($dates)."' AND '".$db->idate($datee)."'";
 			if ($key == 'cash') {
 				$sql .= " AND cp.code = 'LIQ'";
 			} elseif ($key == 'cheque') {
@@ -400,7 +438,6 @@ if ($action == "create" || $action == "start" || $action == 'close') {
 				dol_print_error(null, 'Value for key = '.$key.' not supported');
 				exit;
 			}
-			$sql .= " AND datep BETWEEN '".$db->idate((int) $datestart)."' AND '".$db->idate((int) $dateend)."'";
 
 			$resql = $db->query($sql);
 			if ($resql) {
