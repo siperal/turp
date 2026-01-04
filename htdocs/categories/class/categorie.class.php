@@ -1436,7 +1436,7 @@ class Categorie extends CommonObject
 		while ((empty($protection) || $i < $protection) && !empty($this->motherof[$cursor_categ])) {
 			//print '&nbsp; cursor_categ='.$cursor_categ.' i='.$i.' '.$this->motherof[$cursor_categ].'<br>'."\n";
 			$this->cats[$id_categ]['fullpath'] = '_'.$this->motherof[$cursor_categ].$this->cats[$id_categ]['fullpath'];
-			$this->cats[$id_categ]['fulllabel'] = (empty($this->cats[$this->motherof[$cursor_categ]]) ? 'NotFound' : $this->cats[$this->motherof[$cursor_categ]]['label']).' >> '.$this->cats[$id_categ]['fulllabel'];
+			$this->cats[$id_categ]['fulllabel'] = (empty($this->cats[$this->motherof[$cursor_categ]]) ? 'NotFound' : $this->cats[$this->motherof[$cursor_categ]]['label']).' > '.$this->cats[$id_categ]['fulllabel'];
 			//print '&nbsp; Result for id_categ='.$id_categ.' : '.$this->cats[$id_categ]['fullpath'].' '.$this->cats[$id_categ]['fulllabel'].'<br>'."\n";
 			$i++;
 			$cursor_categ = $this->motherof[$cursor_categ];
