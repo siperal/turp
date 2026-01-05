@@ -174,8 +174,8 @@ class BlockedLog
 	public $trackedevents = array();
 
 	/**
-	 * Array of tracked modules
-	 * @var array<string,string|mixed>
+	 * Array of tracked modules (key => label)
+	 * @var array<string,string>
 	 */
 	public $trackedmodules = array();
 
