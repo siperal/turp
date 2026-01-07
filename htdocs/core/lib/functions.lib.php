@@ -14828,6 +14828,12 @@ function getElementProperties($elementType)
 		$module = 'projet';
 		$subelement = 'task';
 		$table_element = 'projet_task';
+	} elseif ($elementType == 'mo') {
+		$classpath = 'mrp/class';
+		$module = 'mrp';
+		$classfile = 'mo';
+		$classname = 'Mo';
+		$table_element = 'mrp_mo';
 	} elseif ($elementType == 'facture' || $elementType == 'invoice') {
 		$classpath = 'compta/facture/class';
 		$module = 'facture';
