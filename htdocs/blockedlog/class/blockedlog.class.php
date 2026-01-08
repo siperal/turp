@@ -1329,32 +1329,17 @@ class BlockedLog
 					// TODO Do it only selected events: BILL_VALIDATE
 
 					// Code here is similar to the one into printCodeForPing()
-					global $dolibarr_distrib;
-
 					$url_for_ping = getDolGlobalString('MAIN_URL_FOR_PING', "https://ping.dolibarr.org/");
-					// Try to guess the distrib used
-					$distrib = 'standard';
-					if (isset($_SERVER["SERVER_ADMIN"]) && $_SERVER["SERVER_ADMIN"] == 'doliwamp@localhost') {
-						$distrib = 'doliwamp';
-					}
-					if (!empty($dolibarr_distrib)) {
-						$distrib = $dolibarr_distrib;
-					}
 
 					include_once DOL_DOCUMENT_ROOT.'/core/lib/security.lib.php';
 					$hash_unique_id = dol_hash('dolibarr'.$conf->file->instance_unique_id, 'sha256');	// Note: if the global salt changes, this hash changes too so ping may be counted twice. We don't mind. It is for statistics and inventory purpose only.
 
-					$data = 'hash_algo=dol_hash-sha256';
+					$data = 'action=dolibarrtrack';
+					$data .= '&hash_algo=dol_hash-sha256';
 					$data .= '&hash_unique_id='.urlencode($hash_unique_id);
 					$data .= '&version='.(float) DOL_VERSION;
 					$data .= '&version_full='.urlencode(DOL_VERSION);
 					$data .= '&entity='.(int) $conf->entity;
-					$data .= '&dbtype='.urlencode($this->db->type);
-					$data .= '&php_version='.urlencode(phpversion());
-					$data .= '&os_version='.urlencode(version_os('smr'));
-					$data .= '&db_version='.urlencode(version_db());
-					$data .= '&distrib='.urlencode($distrib);
-					$data .= '&token=notrequired';
 
 					$addheaders = array();
 					$timeoutconnect = 1;

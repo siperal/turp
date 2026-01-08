@@ -3750,11 +3750,11 @@ if (!function_exists("llxFooter")) {
 					// Output code for ping
 					include_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
-					$arrayofdata = array(
+					$arrayofmoredata = array(
 						'action' => 'dolibarrping',
 						'country_code' => ($mysoc->country_code ? $mysoc->country_code : 'unknown')
 					);
-					printCodeForPing($constanttosavelastko, $constanttosavefirstok, $arrayofdata, $forceping);
+					printCodeForPing($constanttosavelastko, $constanttosavefirstok, $arrayofmoredata, $forceping);
 				} else {
 					$now = dol_now();
 					print "\n<!-- NO JS CODE TO ENABLE the anonymous Ping. It was disabled -->\n";
