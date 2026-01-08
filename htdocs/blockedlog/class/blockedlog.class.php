@@ -1237,7 +1237,8 @@ class BlockedLog
 		$this->object_format = 'V1';	// TODO Switch to V2 when v2 support is complete
 
 		try {
-			$previoushash = $this->getPreviousHash(1, 0); // This get last record and lock database until insert is done and transaction closed
+			$tmparray = $this->getPreviousHash(1, 0); // This get last record and lock database until insert is done and transaction closed
+			$previoushash = $tmparray['previoushash'];
 
 			$concatenateddata = $this->buildKeyForSignature();	// All the information for the hash (meta data + data saved)
 
@@ -1346,7 +1347,8 @@ class BlockedLog
 	public function checkSignature($previoushash = '', $returnarray = 0)
 	{
 		if (empty($previoushash)) {
-			$previoushash = $this->getPreviousHash(0, $this->id);
+			$tmparray = $this->getPreviousHash(0, $this->id);
+			$previoushash = $tmparray['previoushash'];
 		}
 
 		$concatenateddata = '';
@@ -1474,6 +1476,7 @@ class BlockedLog
 	{
 		global $conf;
 
+		$previousid = 0;
 		$previoussignature = '';
 
 		// Fast search of previous record by searching with beforeid - 1. This is very fast and will work 99% of time.
@@ -1487,6 +1490,7 @@ class BlockedLog
 			if ($resql) {
 				$obj = $this->db->fetch_object($resql);
 				if ($obj) {
+					$previousid = $obj->rowid;
 					$previoussignature = $obj->signature;
 				}
 			} else {
@@ -1511,6 +1515,7 @@ class BlockedLog
 			if ($resql) {
 				$obj = $this->db->fetch_object($resql);
 				if ($obj) {
+					$previousid = $obj->rowid;
 					$previoussignature = $obj->signature;
 				}
 			} else {
@@ -1521,10 +1526,11 @@ class BlockedLog
 
 		if (empty($previoussignature)) {
 			// First signature line (line 0)
+			$previousid = 0;
 			$previoussignature = $this->getOrInitFirstSignature();
 		}
 
-		return $previoussignature;
+		return array('previousid' => $previousid, 'previoussignature' => $previoussignature);
 	}
 
 	/**
