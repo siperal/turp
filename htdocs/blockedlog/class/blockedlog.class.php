@@ -1184,7 +1184,7 @@ class BlockedLog
 	 */
 	public function create($user, $forcesignature = '')
 	{
-		global $conf, $langs;
+		global $conf, $langs, $mysoc;
 
 		$langs->load('blockedlog');
 
@@ -1321,6 +1321,19 @@ class BlockedLog
 
 				$this->db->commit();
 
+				if (isALNERunningVersion(1) && $mysoc->country_code == 'FR') {
+					// TODO Push last rowid + signature to remote dolibarr server
+					/*
+					$remoteurl = '';
+					$param = '';
+					$addheaders = array();
+					$timeoutconnect = 0;
+					$timeoutresponse = 0;
+
+					$result = getURLContent($remoteurl, 'POSTALREADYFORMATED', $param, 1, $addheaders, 'https', 0, -1, $timeoutconnect, $timeoutresponse);
+					*/
+				}
+
 				return $this->id;
 			} else {
 				$this->db->rollback();
@@ -1332,7 +1345,7 @@ class BlockedLog
 			return -1;
 		}
 
-		// The commit will release the lock so we can insert nex record
+		// The commit or rollback will release the lock so app can insert other record now
 	}
 
 	/**
