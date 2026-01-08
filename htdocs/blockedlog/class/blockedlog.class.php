@@ -1334,9 +1334,9 @@ class BlockedLog
 					$algo = 'sha256';
 					$hash_unique_id = dol_hash('dolibarr'.$conf->file->instance_unique_id, $algo);	// Note: if the global salt changes, this hash changes too so ping may be counted twice. We don't mind. It is for statistics and inventory purpose only.
 
-					$data = 'action=dolibarrtrack';
-					$data .= '&hash_algo=dol_hash-'.$algo;
+					$data = 'hash_algo=dol_hash-'.urlencode($algo);
 					$data .= '&hash_unique_id='.urlencode($hash_unique_id);
+					$data .= '&action=dolibarrtrack';
 					$data .= '&version='.(float) DOL_VERSION;
 					$data .= '&version_full='.urlencode(DOL_VERSION);
 					$data .= '&entity='.(int) $conf->entity;
@@ -1344,18 +1344,31 @@ class BlockedLog
 					$data .= '&lastrowid='.(int) $this->id;
 					$data .= '&lastsignature='.urlencode($this->signature);
 
+					/*
+					$data = array(
+						'action' => 'dolibarrtrack',
+						'hash_algo' => 'dol_hash-'.$algo,
+						'hash_unique_id' => $hash_unique_id,
+						'version' => (float) DOL_VERSION,
+						'version_full' => urlencode(DOL_VERSION),
+						'entity=' => (int) $conf->entity
+					);
+					$data['lastrowid'] = (int) $this->id;
+					$data['lastsignature'] = urlencode($this->signature);
+					*/
+
 					$addheaders = array();
 					$timeoutconnect = 1;
 					$timeoutresponse = 1;
 
 					$BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING = min(10, getDolGlobalString('BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING'));
-					$BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING = 1;	// To force track at every call
+					//$BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING = 1;	// To force track at every call
 					$random = random_int(1, $BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING);
 
 					if ($random == 1) {	// 1 chance on BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING
 						dol_syslog(get_class($this)."::create Record is selected to be remotely pushed for tracking", LOG_DEBUG);
 
-						$tmpresult = getURLContent($url_for_ping, 'POST', $data, 1, $addheaders, 'https', 0, -1, $timeoutconnect, $timeoutresponse, array(), '_dolibarrtrack');
+						$tmpresult = getURLContent($url_for_ping, 'POST', $data, 1, $addheaders, array('https'), 0, -1, $timeoutconnect, $timeoutresponse, array(), '_dolibarrtrack');
 
 						// Add a warning in log in case of error
 						if ($tmpresult['http_code'] != 200) {
