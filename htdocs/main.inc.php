@@ -75,6 +75,8 @@ require_once 'filefunc.inc.php';
 /**
  * @var ?string $php_session_save_handler
  * @var ?string $dolibarr_main_force_https
+ * @var ?string $dolibarr_main_restrict_ip
+ * @var ?string $dolibarr_nocsrfcheck
  */
 
 // If there is a POST parameter to tell to save automatically some POST parameters into cookies, we do it.
@@ -3748,7 +3750,10 @@ if (!function_exists("llxFooter")) {
 					// Output code for ping
 					include_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
-					$arrayofdata = array('action' => 'dolibarrping', 'country_code' => ($mysoc->country_code ? $mysoc->country_code : 'unknown'));
+					$arrayofdata = array(
+						'action' => 'dolibarrping',
+						'country_code' => ($mysoc->country_code ? $mysoc->country_code : 'unknown')
+					);
 					printCodeForPing($constanttosavelastko, $constanttosavefirstok, $arrayofdata, $forceping);
 				} else {
 					$now = dol_now();
