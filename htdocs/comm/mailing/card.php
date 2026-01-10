@@ -1127,10 +1127,10 @@ if ($action == 'create') {	// aaa
 				$email = CMailFile::getValidAddress($object->email_from, 2);
 				if ($email && !isValidEmail($email)) {
 					$langs->load("errors");
-					print img_warning($langs->trans("ErrorBadEMail", $email));
+					print img_warning($langs->transnoentitiesnoconv("ErrorBadEMail", $email));
 				} elseif ($email && !isValidMailDomain($email)) {
 					$langs->load("errors");
-					print img_warning($langs->trans("ErrorBadMXDomain", $email));
+					print img_warning($langs->transnoentitiesnoconv("ErrorBadMXDomain", $email));
 				}
 			}
 			print '</td></tr>';
@@ -1141,16 +1141,17 @@ if ($action == 'create') {	// aaa
 				print $form->editfieldkey("MailErrorsTo", 'email_errorsto', $object->email_errorsto, $object, (int) ($user->hasRight('mailing', 'creer') && $object->status < $object::STATUS_SENTCOMPLETELY), 'string');
 				print '</td><td>';
 				print $form->editfieldval("MailErrorsTo", 'email_errorsto', $object->email_errorsto, $object, $user->hasRight('mailing', 'creer') && $object->status < $object::STATUS_SENTCOMPLETELY, 'string');
+
 				$emailarray = CMailFile::getArrayAddress($object->email_errorsto);
 				foreach ($emailarray as $email => $name) {
 					if ($name != $email) {
 						if ($action != 'editemail_errorsto') {
 							if ($email && !isValidEmail($email)) {
 								$langs->load("errors");
-								print img_warning($langs->trans("ErrorBadEMail", $email));
+								print img_warning($langs->transnoentitiesnoconv("ErrorBadEMail", $email));
 							} elseif ($email && !isValidMailDomain($email)) {
 								$langs->load("errors");
-								print img_warning($langs->trans("ErrorBadMXDomain", $email));
+								print img_warning($langs->transnoentitiesnoconv("ErrorBadMXDomain", $email));
 							}
 						}
 					} else {
@@ -1598,7 +1599,7 @@ if ($action == 'create') {	// aaa
 			$htmltext .= '</span></i>';
 
 			// Print mail content
-			print load_fiche_titre($langs->trans("EMail"), '<span class="opacitymedium">'.$form->textwithpicto($langs->trans("AvailableVariables").'</span>', $htmltext, 1, 'help', '', 0, 2, 'emailsubstitionhelp'), 'generic');
+			print load_fiche_titre($langs->trans("EMail"), '<span class="opacitymedium small">'.$form->textwithpicto($langs->trans("AvailableVariables").'</span>', $htmltext, 1, 'help', '', 0, 2, 'emailsubstitionhelp'), 'generic');
 
 			print dol_get_fiche_head([], '', '', -1);
 
