@@ -261,7 +261,7 @@ if (isALNERunningVersion() || !getDolGlobalString('TAKEPOS_HIDE_DATE_OF_PRINTING
 }
 // Transaction ID
 if (isALNERunningVersion() && isModEnabled('blockedlog')) {
-	if ($object->status == $object::STATUS_CLOSED) {
+	if ($object->status > $object::STATUS_DRAFT) {
 		$unalterablelogid = 'UNDEFINED';
 		$sql = "SELECT signature FROM ".MAIN_DB_PREFIX."blockedlog";
 		$sql .= " WHERE action = 'BILL_VALIDATE' AND element = 'facture' AND ref_object = '".$db->escape($object->ref)."'";
@@ -377,7 +377,7 @@ if ($object->status == $object::STATUS_CLOSED) {
 if (getDolGlobalString('TAKEPOS_TICKET_VAT_GROUPPED')) {
 	$vat_groups = array();
 	foreach ($object->lines as $line) {
-		if (!array_key_exists($line->tva_tx, $vat_groups)) {
+		if (!array_key_exists((string) $line->tva_tx, $vat_groups)) {
 			$vat_groups[(string) $line->tva_tx] = 0;
 		}
 		$vat_groups[(string) $line->tva_tx] += $line->total_tva;
