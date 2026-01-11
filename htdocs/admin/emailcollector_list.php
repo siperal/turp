@@ -258,6 +258,7 @@ foreach ($search as $key => $val) {
 			continue;
 		}
 		$field_spec = $object->fields[$key];
+		// @phpstan-ignore-next-line The $errormsg can have been modified by the dol_compress_dir function.
 		if ($field_spec === null) {
 			continue;
 		}
