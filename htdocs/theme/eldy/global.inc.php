@@ -5390,9 +5390,9 @@ ul.noborder li:nth-child(even):not(.liste_titre) {
 .boxstats:hover {
 	box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.20);
 }
-span.boxstatstext span:not(.fas) {
+/*span.boxstatstext span:not(.fas) {
 	opacity: 0.5;
-}
+}*/
 span.boxstatstext {
 	opacity: 0.5;		/* a bug if browser make z-index was discovered when opacity is set, if still present, we must disable it */
 	line-height: 18px;
