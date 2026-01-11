@@ -87,4 +87,9 @@ ALTER TABLE llx_categorie_mo ADD INDEX idx_categorie_mo_fk_mo (fk_mo);
 
 ALTER TABLE llx_categorie_mo ADD CONSTRAINT fk_categorie_mo_categorie_rowid FOREIGN KEY (fk_categorie) REFERENCES llx_categorie (rowid);
 ALTER TABLE llx_categorie_mo ADD CONSTRAINT fk_categorie_mo_fk_mo_rowid FOREIGN KEY (fk_mo) REFERENCES llx_mrp_mo (rowid);
+
+
+ALTER TABLE llx_facture ADD COLUMN thirdparty_payment_id integer NULL;
+
+
 -- end of migration
