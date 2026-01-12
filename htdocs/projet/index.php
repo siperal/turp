@@ -313,7 +313,7 @@ if ($resql) {
 			print '</td>';
 
 			// Label
-			print '<td class="tdoverflowmax150" title="'.dolPrintHTMLForAttribute($obj->title).'">';
+			print '<td class="tdoverflowmax200" title="'.dolPrintHTMLForAttribute($obj->title).'">';
 			print dolPrintHTML($projectstatic->title);
 			print '</td>';
 
