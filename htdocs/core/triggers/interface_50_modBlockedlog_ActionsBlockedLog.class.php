@@ -124,9 +124,16 @@ class InterfaceActionsBlockedLog extends DolibarrTriggers
 				return -2;
 			}
 			if (($object->oldcopy->total_ht != $object->total_ht) || ($object->oldcopy->total_tva != $object->total_tva) || ($object->oldcopy->total_ttc != $object->total_ttc)
-				|| ($object->oldcopy->date != $object->date) || ($object->oldcopy->thirdparty->revenuestamp != $object->thirdparty->revenuestamp)
+				|| ($object->oldcopy->date != $object->date) || ($object->oldcopy->revenuestamp != $object->revenuestamp)
+				|| ($object->oldcopy->thirdparty->idprof1 != $object->thirdparty->idprof1)	// Siren
+				|| ($object->oldcopy->thirdparty->idprof2 != $object->thirdparty->idprof2)	// Siret
+				|| ($object->oldcopy->thirdparty->tva_intra != $object->thirdparty->tva_intra)
 				) {
-				$this->errors[] = 'You try to modify a property that is locked once the invoice has been validated (total, revenu stamp).';
+				$this->errors[] = 'You try to modify a property that is locked once the invoice has been validated (total, revenu stamp, professional id).';
+				return -2;
+			}
+			if ($object->oldcopy->lines != $object->lines) {
+				$this->errors[] = 'Modifying the lines of invoice is not allowed';
 				return -2;
 			}
 		}
