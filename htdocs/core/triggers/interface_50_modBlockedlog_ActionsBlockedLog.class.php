@@ -66,7 +66,7 @@ class InterfaceActionsBlockedLog extends DolibarrTriggers
 		}
 
 		// List of mandatory logged actions
-		$listofqualifiedelement = array('invoice', 'facture', 'don', 'payment', 'payment_donation', 'subscription', 'payment_various', 'cashcontrol');
+		$listofqualifiedelement = array('invoice', 'facture', 'don', 'payment', 'payment_donation', 'subscription', 'cashcontrol');
 
 		// Add custom actions to log
 		if (getDolGlobalString('BLOCKEDLOG_ADD_ACTIONS_SUPPORTED')) {
@@ -86,7 +86,7 @@ class InterfaceActionsBlockedLog extends DolibarrTriggers
 		$b->loadTrackedEvents();			// Get the list of tracked events into $b->trackedevents
 
 		// Tracked events
-		if (!in_array($action, array_keys($b->trackedevents))) {
+		if (!in_array($action, array_keys($b->trackedevents)) && !in_array($action, array_keys($b->controlledevents))) {
 			return 0;
 		}
 
@@ -105,10 +105,29 @@ class InterfaceActionsBlockedLog extends DolibarrTriggers
 						}
 					}
 					// Test there is not invoices with id in $invoiceids and with a module_source that is not empty
-
-					//$this->errors[] = 'The payment mode '.$object->paiementcode.' is not available in this version.';
-					//return -1;
+					$tmpinvoice = new Facture($this->db);
+					foreach ($invoiceids as $invoiceid) {
+						$tmpinvoice->fetch($invoiceid);
+						if ($tmpinvoice->module_source == 'takepos') {
+							$this->errors[] = 'The payment mode '.$object->paiementcode.' is not available in this version for payment of invoices generated from '.$tmpinvoice->module_source;
+							return -1;
+						}
+					}
 				}
+			}
+		}
+
+		// Protect against modification of data that should be immutable on a validated invoice
+		if (($action === 'BILL_MODIFY' || $action === 'FACTURE_MODIFY') && !empty($object->oldcopy) && in_array($object->element, array('invoice', 'facture')) && $object->status != 0) {
+			if ($object->oldcopy->ref != $object->ref) {
+				$this->errors[] = 'Modifying the property Ref of a non draft invoice is not allowed';
+				return -2;
+			}
+			if (($object->oldcopy->total_ht != $object->total_ht) || ($object->oldcopy->total_tva != $object->total_tva) || ($object->oldcopy->total_ttc != $object->total_ttc)
+				|| ($object->oldcopy->date != $object->date) || ($object->oldcopy->thirdparty->revenuestamp != $object->thirdparty->revenuestamp)
+				) {
+				$this->errors[] = 'You try to modify a property that is locked once the invoice has been validated (total, revenu stamp).';
+				return -2;
 			}
 		}
 
