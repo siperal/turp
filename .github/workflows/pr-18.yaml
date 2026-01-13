@@ -41,12 +41,14 @@ jobs:
     - name: Assign Tag
       env:
         GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+        prid: ${{ github.event.pull_request.number }}
         url: ${{ github.event.pull_request.html_url }}
         url2: ${{ github.event.pull_request_target.html_url }}
       run: |
+        echo "env.prid=${{env.prid}}"
         echo "env.url=${{env.url}}"
         echo "env.url2=${{env.url2}}"
-        gh pr edit "${{env.url}}" --add-label "Issue for v18 maintenance Team"
+        gh pr edit "${{env.prid}}" --add-label "Issue for v18 maintenance Team"
 
     - name: Set reviewers except PR author
       id: set-reviewers
@@ -67,8 +69,9 @@ jobs:
       if: steps.set-reviewers.outputs.reviewers != ''
       env:
         GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+        prid: ${{ github.event.pull_request.number }}
         url: ${{ github.event.pull_request.html_url }}
         reviewers: ${{ steps.set-reviewers.outputs.reviewers }}
       run: |
         echo "Assigning reviewers: ${{env.reviewers}}"
-        gh pr edit "${{env.url}}" --add-reviewer "${{env.reviewers}}"
+        gh pr edit "${{env.prid}}" --add-reviewer "${{env.reviewers}}"
