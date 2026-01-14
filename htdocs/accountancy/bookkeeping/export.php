@@ -850,15 +850,26 @@ if ($action == 'export_file') {
 		|| getDolGlobalString('ACCOUNTING_EXPORT_MODELCSV') == AccountancyExport::$EXPORT_TYPE_FEC
 		|| getDolGlobalString('ACCOUNTING_EXPORT_MODELCSV') == AccountancyExport::$EXPORT_TYPE_FEC2
 	) {
+		$except = array();
+		if (getDolGlobalInt('ACCOUNTING_EXPORT_REMOVE_INVOICE_SOURCE_FILE')) {
+			$except[] = $langs->trans('Invoice');
+		}
+		if (getDolGlobalInt('ACCOUNTING_EXPORT_REMOVE_EXPENSEREPORT_SOURCE_FILE')) {
+			$except[] = $langs->trans('ExpenseReport');
+		}
+		if (getDolGlobalInt('ACCOUNTING_EXPORT_REMOVE_SUPPLIERINVOICE_SOURCE_FILE')) {
+			$except[] = $langs->trans('SupplierInvoice');
+		}
+
 		$form_question['notifiedexportfull'] = array(
 			'name' => 'notifiedexportfull',
 			'type' => 'checkbox',
-			'label' => $langs->trans('NotifiedExportFull'),
+			'label' => $langs->trans('NotifiedExportFull').(empty($except) ? '' : '(Except '.join(', ', $except).')'),
 			'value' => 'false',
 		);
 	}
 
-	$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"].'?'.$param, $langs->trans("ExportFilteredList").'...', $langs->trans('ConfirmExportFile'), 'export_fileconfirm', $form_question, '', 1, 390, 700);
+	$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"].'?'.$param, $langs->trans("ExportFilteredList").'...', '', 'export_fileconfirm', $form_question, '', 1, 390, 700);
 }
 
 // Print form confirm
