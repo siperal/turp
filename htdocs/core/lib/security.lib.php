@@ -1470,10 +1470,9 @@ function getMaxFileSizeArray()
  *
  * @param	string		$ip			IP address to check (ex: 192.168.0.50, 2001:db8:3333:4444::5555:6666)
  * @param	string		$cidr		Network IP CIDR notation (ex: 192.168.0.0/24, 2001:db8:3333:4444::/64)
- *
- * @return	int					1 if IP is in CIDR range, 0 if IP out of CIDR range, -1 if check error
+ * @return	int						1 if IP is in CIDR range, 0 if IP out of CIDR range, -1 if check error
  */
-function check_ip_in_cidr($ip, $cidr)
+function checkIPInCidr($ip, $cidr)
 {
 	list($network, $prefix) = explode('/', $cidr, 2);
 

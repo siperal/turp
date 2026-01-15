@@ -272,7 +272,7 @@ if (!defined('NOLOGIN') && !defined('NOIPCHECK') && !empty($dolibarr_main_restri
 	foreach ($listofip as $ip) {
 		$authorized_ip = trim($ip);
 		if (strpos($authorized_ip, '/')) { // Check if IP with CIDR notation
-			if (check_ip_in_cidr($_SERVER['REMOTE_ADDR'], $authorized_ip) > 0) {
+			if (checkIPInCidr($user_ip, $authorized_ip) > 0) {
 				$found = true;
 				break;
 			}
@@ -282,7 +282,7 @@ if (!defined('NOLOGIN') && !defined('NOIPCHECK') && !empty($dolibarr_main_restri
 		}
 	}
 	if (!$found) {
-		print 'Access refused by IP protection. Your detected IP is: '.$user_ip;
+		print 'Access refused by IP protection. Your detected IP is: '.dol_escape_htmltag($user_ip);
 		exit;
 	}
 }
