@@ -1119,8 +1119,8 @@ abstract class CommonInvoice extends CommonObject
 				$labelStatus .= $langs->trans("DisputeClosed");
 			} else {
 				$labelStatus .= $langs->trans("DisputeOpen");
+				$statusType = 'status8';
 			}
-			$statusType = 'status8';
 		}
 
 		$statusbadge = dolGetStatus($labelStatus, $labelStatusShort, '', $statusType, $mode, '', $paramsBadge);
