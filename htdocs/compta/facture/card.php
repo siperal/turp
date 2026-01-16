@@ -4550,9 +4550,9 @@ if ($action == 'create') {
 			print '</td></tr>';
 		}
 
-		// Dispute open
+		// Dispute
 		/* Not necessary on creation
-		print '<tr><td class="nowrap fieldrequired">'.$langs->trans('DisputeOpen').'</td><td colspan="2">';
+		print '<tr><td class="nowrap fieldrequired">'.$langs->trans('Dispute').'</td><td colspan="2">';
 		//print yn($object->dispute_status);
 		print '</td></tr>';
 		*/
@@ -5582,7 +5582,7 @@ if ($action == 'create') {
 		// Dispute open
 		print '<tr><td>';
 		print '<table class="nobordernopadding centpercent"><tr><td>';
-		print $langs->trans('DisputeOpen');
+		print $langs->trans('Dispute');
 		print '<td><td class="right">';
 		if ($usercancreate) {
 			print '<a class="editfielda" href="'.DOL_URL_ROOT.'/compta/facture/card.php?facid='.$object->id.'&action=editdispute_status&token='.newToken().'">'.img_edit().'</a>';
