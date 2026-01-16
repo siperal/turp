@@ -1051,7 +1051,7 @@ function print_left_eldy_menu($db, $menu_array_before, $menu_array_after, &$tabM
 							print $menu_array[$i]['prefix'];
 						}
 					}
-					print $menu_array[$i]['titre'];
+					print ucfirst($menu_array[$i]['titre']);
 					if ($shorturlwithoutparam) {
 						print '</a>';
 					} else {
@@ -1065,7 +1065,7 @@ function print_left_eldy_menu($db, $menu_array_before, $menu_array_after, &$tabM
 					if (!empty($menu_array[$i]['prefix'])) {
 						print $menu_array[$i]['prefix'];
 					}
-					print $menu_array[$i]['titre'];
+					print ucfirst($menu_array[$i]['titre']);
 					print '</span>';
 					print '</div>'."\n";
 					$lastlevel0 = 'greyed';
@@ -1093,7 +1093,7 @@ function print_left_eldy_menu($db, $menu_array_before, $menu_array_after, &$tabM
 					} else {
 						print '<span class="vsmenu" title="'.dolPrintHTMLForAttribute($menu_array[$i]['titre']).'">';
 					}
-					print $menu_array[$i]['titre'];
+					print ucfirst($menu_array[$i]['titre']);
 					if ($shorturlwithoutparam) {
 						print '</a>';
 					} else {

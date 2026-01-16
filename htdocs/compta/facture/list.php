@@ -1958,7 +1958,7 @@ if (!empty($arrayfields['f.import_key']['checked'])) {
 // Dispute status
 if (!empty($arrayfields['f.dispute_status']['checked'])) {
 	print '<td class="liste_titre center parentonrightofpage">';
-	$liststatus = array('0' => $langs->trans("None"), '1' => $langs->trans("DisputeOpen"));
+	$liststatus = array('0' => "None", '1' => "DisputeOpen", '9' => "DisputeClosed");
 	// @phan-suppress-next-line PhanPluginSuspiciousParamOrder
 	print $form->selectarray('search_dispute_status', $liststatus, $search_dispute_status, 1, 0, 0, '', 0, 0, 0, '', 'search_status width100 onrightofpage', 1);
 	print '</td>';
