@@ -72,7 +72,7 @@ ExpenseReportRulesDesc=Izdevumu pārskatiem varat definēt maksimālās summas n
 ExpenseReportWaitingForApproval=Apstiprināšanai iesniegts jauns izdevumu pārskats
 ExpenseReportWaitingForApprovalMessage=Ir iesniegts jauns izdevumu pārskats un tas gaida apstiprināšanu. <br> - Lietotājs: %s <br> - Periods: %s <br> Uzklikšķināt šeit, lai apstiprinātu: %s
 ExpenseReportWaitingForReApproval=Izdevumu pārskats ir iesniegts atkārtotai apstiprināšanai
-ExpenseReportWaitingForReApprovalMessage=Izdevumu pārskats ir iesniegts un gaida atkārtotu apstiprināšanu.<br>Jūs atteicāties apstiprināt izdevumu pārskatu par %s. šī iemesla dēļ: %s.<br>Ir piedāvāta jauna versija, kas gaida jūsu apstiprinājumu. <br> — lietotājs: %s<br> — periods: b0ecb2fz87f <span class='notranslate'><br>
+ExpenseReportWaitingForReApprovalMessage=Izdevumu pārskats ir iesniegts un gaida atkārtotu apstiprināšanu.<br>Jūs atteicāties apstiprināt izdevumu pārskatu par %s. šī iemesla dēļ: %s.<br>Ir piedāvāta jauna versija, kas gaida jūsu apstiprinājumu. <br> — lietotājs: %s<br> — periods: %s<br>
 ExpenseReportWaitingForReApprovalMessage2=Noklikšķiniet šeit, lai apstiprinātu: %s
 ExpenseReportsIk=Nobraukuma maksu konfigurēšana
 ExpenseReportsRules=Izdevumu pārskatu noteikumi
