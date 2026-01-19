@@ -62,7 +62,7 @@ class ExpenseReports extends DolibarrApi
 	 */
 	public static $FIELDSPAYMENT = array(
 		"fk_typepayment",
-		'datepaid',
+		'datep',
 		'amounts',
 	);
 
