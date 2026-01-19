@@ -218,6 +218,7 @@ class Ai
 
 			if (is_array($instructions)) {
 				$arrayforpayload = $instructions;
+				$fullInstructions = '';
 			} else {
 				$fullInstructions = $instructions.($postPrompt ? (preg_match('/[\.\!\?]$/', $instructions) ? '' : '.').' '.$postPrompt : '');
 
