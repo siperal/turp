@@ -1224,12 +1224,14 @@ class EmailCollector extends CommonObject
 				try {
 					$tokenobj = $storage->retrieveAccessToken($OAUTH_SERVICENAME);
 
-					$expire = true;
-					// TODO
-					// Is token expired or will token expire in the next 30 seconds
-					// if (is_object($tokenobj)) {
-					// 	$expire = ($tokenobj->getEndOfLife() !== -9002 && $tokenobj->getEndOfLife() !== -9001 && time() > ($tokenobj->getEndOfLife() - 30));
-					// }
+					$expire = false;
+					if (is_object($tokenobj) && method_exists($tokenobj, 'getEndOfLife')) {
+						$endOfLife = $tokenobj->getEndOfLife();
+						if ($endOfLife !== -9002 && $endOfLife !== -9001 && time() > ($endOfLife - 30)) {
+							$expire = true;
+						}
+					}
+
 					// Token expired so we refresh it
 					if (is_object($tokenobj) && $expire) {
 						$this->debuginfo .= 'Refresh token '.$OAUTH_SERVICENAME.'<br>';
@@ -1840,20 +1842,32 @@ class EmailCollector extends CommonObject
 
 				// Now apply some filters.
 
-				//If there is an emailcollector filter on trackid
+				// If there is an emailcollector filter on trackid
 				if ($searchfilterdoltrackid > 0) {
+					$referencesForFilter = $headers['References'] ?? '';
+					if (!empty($headers['References']) && !empty($headers['In-Reply-To'])) {
+						$referencesForFilter .= ' ';
+					}
+					$referencesForFilter .= ($headers['In-Reply-To'] ?? '');
+
 					if (empty($trackidfoundintorecipienttype) && empty($trackidfoundintomsgidtype)) {
-						if (empty($headers['References']) || !preg_match('/@'.preg_quote($host, '/').'/', $headers['References'])) {
+						if (empty($referencesForFilter) || !preg_match('/@'.preg_quote($host, '/').'/', $referencesForFilter)) {
 							$nbemailprocessed++;
-							dol_syslog(" Discarded - No suffix in email recipient and no Header References found matching the signature of the application, so with a trackid coming from the application");
+							dol_syslog(" Discarded - No suffix in email recipient, and no Header 'References/In-Reply-To' found matching the signature of the application, so with a trackid coming from the application");
 							continue; // Exclude email
 						}
 					}
 				}
 				if ($searchfilternodoltrackid > 0) {
-					if (!empty($trackidfoundintorecipienttype) || !empty($trackidfoundintomsgidtype) || (!empty($headers['References']) && preg_match('/@'.preg_quote($host, '/').'/', $headers['References']))) {
+					$referencesForFilter = $headers['References'] ?? '';
+					if (!empty($headers['References']) && !empty($headers['In-Reply-To'])) {
+						$referencesForFilter .= ' ';
+					}
+					$referencesForFilter .= ($headers['In-Reply-To'] ?? '');
+
+					if (!empty($trackidfoundintorecipienttype) || !empty($trackidfoundintomsgidtype) || (!empty($referencesForFilter) && preg_match('/@'.preg_quote($host, '/').'/', $referencesForFilter))) {
 						$nbemailprocessed++;
-						dol_syslog(" Discarded - Suffix found into email or Header References found and matching signature of application so with a trackid");
+						dol_syslog(" Discarded - Suffix found into email recipient, or Header 'References/In-Reply-To' found and matching signature of application so with a trackid");
 						continue; // Exclude email
 					}
 				}
