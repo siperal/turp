@@ -644,7 +644,7 @@ function dolibarr_get_const($db, $name, $entity = 1)
 
 	$sql = "SELECT ".$db->sanitize($db->decrypt('value'))." as value";
 	$sql .= " FROM ".MAIN_DB_PREFIX."const";
-	$sql .= " WHERE name = '".$db->escape($db->encrypt($name))."'";
+	$sql .= " WHERE name = '".$db->escape($db->encrypt($name, 0))."'";
 	$sql .= " AND entity = ".((int) $entity);
 
 	$resql = $db->query($sql);
