@@ -312,7 +312,7 @@ foreach ($dirmodels as $reldir) {
 						require_once $dir.$file.'.php';
 
 						$module = new $file($db);
-						/** @var ModeleNumRefCommande $module */
+						/** @var ModeleNumRefCommandes $module */
 						'@phan-var-force ModeleNumRefCommandes $module';
 
 						$arrayofmodules[] = $module;
@@ -325,8 +325,8 @@ foreach ($dirmodels as $reldir) {
 }
 
 $arrayofmodules = dol_sort_array($arrayofmodules, 'position');
-/** @var ModeleNumRefCommande[] $arrayofmodules */
-'@phan-var-force ModeleNumRefCommande[] $arrayofmodules';
+/** @var ModeleNumRefCommandes[] $arrayofmodules */
+'@phan-var-force ModeleNumRefCommandes[] $arrayofmodules';
 
 foreach ($arrayofmodules as $module) {
 	$file = strtolower($module->getName($langs));
