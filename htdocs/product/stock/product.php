@@ -370,17 +370,17 @@ if ($action == "transfert_stock" && !$cancel && $usercanupdatestock) {
 	if (!(GETPOSTINT("id_entrepot") > 0) || !(GETPOSTINT("id_entrepot_destination") > 0)) {
 		setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Warehouse")), null, 'errors');
 		$error++;
-		$action = 'transfert';
+		$action = 'transfer';
 	}
 	if (!GETPOST("nbpiece")) {
 		setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("NumberOfUnit")), null, 'errors');
 		$error++;
-		$action = 'transfert';
+		$action = 'transfer';
 	}
 	if (GETPOSTINT("id_entrepot") == GETPOSTINT("id_entrepot_destination")) {
 		setEventMessages($langs->trans("ErrorSrcAndTargetWarehouseMustDiffers"), null, 'errors');
 		$error++;
-		$action = 'transfert';
+		$action = 'transfer';
 	}
 	if (isModEnabled('productbatch')) {
 		$object = new Product($db);
@@ -389,7 +389,7 @@ if ($action == "transfert_stock" && !$cancel && $usercanupdatestock) {
 		if ($object->hasbatch() && !$batchnumber) {
 			setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("batch_number")), null, 'errors');
 			$error++;
-			$action = 'transfert';
+			$action = 'transfer';
 		}
 	}
 	$batch = '';
@@ -524,7 +524,7 @@ if ($action == "transfert_stock" && !$cancel && $usercanupdatestock) {
 			} else {
 				setEventMessages($object->error, $object->errors, 'errors');
 				$db->rollback();
-				$action = 'transfert';
+				$action = 'transfer';
 			}
 		}
 	}
