@@ -1444,7 +1444,7 @@ if (getDolGlobalString('PRODUIT_MULTIPRICES') || getDolGlobalString('PRODUIT_CUS
 
 	// Packaging
 	if (getDolGlobalString('PRODUCT_USE_CUSTOMER_PACKAGING')) {
-		print '<tr class="field_price_label"><td>'.$form->textwithpicto($langs->trans("PackagingForThisProduct"), $langs->trans("PackagingForThisProductSellDesc")).'</td><td>';
+		print '<tr class="field_price_label"><td>'.$form->textwithpicto($langs->trans("PackagingForThisProduct"), $langs->trans("PackagingForThisProductDesc")).'</td><td>';
 		print $object->packaging;
 		print '</td></tr>';
 	}
@@ -1725,9 +1725,9 @@ if (($action == 'edit_price' || $action == 'edit_level_price') && $object->getRi
 		print $form->textwithpicto($text, $langs->trans("PrecisionUnitIsLimitedToXDecimals", getDolGlobalString('MAIN_MAX_DECIMALS_UNIT')), 1, 'help');
 		print '</td><td>';
 		if ($object->price_base_type == 'TTC') {
-			print '<input name="price_min" size="10" value="'.price($object->price_min_ttc).'">';
+			print '<input name="price_min" size="10" value="'.($object->price_min_ttc ? price($object->price_min_ttc) : '').'">';
 		} else {
-			print '<input name="price_min" size="10" value="'.price($object->price_min).'">';
+			print '<input name="price_min" size="10" value="'.($object->price_min ? price($object->price_min) : '').'">';
 		}
 		if (getDolGlobalString('PRODUCT_MINIMUM_RECOMMENDED_PRICE')) {
 			print ' &nbsp; '.$langs->trans("MinimumRecommendedPrice", price((float) $maxpricesupplier, 0, '', 1, -1, -1, 'auto')).' '.img_warning().'</td>';
@@ -1738,10 +1738,10 @@ if (($action == 'edit_price' || $action == 'edit_level_price') && $object->getRi
 		// Packaging
 		if (getDolGlobalString('PRODUCT_USE_CUSTOMER_PACKAGING')) {
 			print '<tr><td>';
-			print $form->textwithpicto($langs->trans("PackagingForThisProduct"), $langs->trans("PackagingForThisProductSellDesc"));
+			print $form->textwithpicto($langs->trans("PackagingForThisProduct"), $langs->trans("PackagingForThisProductDesc"));
 			print '</td><td>';
 			$packaging = $object->packaging;
-			print '<input class="flat" name="packaging" size="5" value="' . price($packaging, 0, '', 1, -1, 2).'">';
+			print '<input class="flat" name="packaging" size="5" value="' . ($packaging ? price($packaging, 0, '', 1, -1, 2) : '').'">';
 			print '</td>';
 			print '</tr>';
 		}
@@ -2761,8 +2761,8 @@ if ((!getDolGlobalString('PRODUIT_CUSTOMER_PRICES') || $action == 'showlog_defau
 		if (!$num) {
 			$db->free($result);
 
-			// Il doit au moins y avoir la ligne de prix initial.
-			// On l'ajoute donc pour remettre a niveau (pb vieilles versions)
+			// We must have at least one initial line
+			// We add it to fix this if not (trouble with old versions)
 			// We emulate the change of the price from interface with the same value than the one into table llx_product
 			if (getDolGlobalString('PRODUIT_MULTIPRICES') || getDolGlobalString('PRODUIT_CUSTOMER_PRICES_AND_MULTIPRICES')) {
 				$ret = $object->updatePrice(($object->multiprices_base_type[1] == 'TTC' ? $object->multiprices_ttc[1] : $object->multiprices[1]), $object->multiprices_base_type[1], $user, (empty($object->multiprices_tva_tx[1]) ? 0 : $object->multiprices_tva_tx[1]), ($object->multiprices_base_type[1] == 'TTC' ? $object->multiprices_min_ttc[1] : $object->multiprices_min[1]), 1);

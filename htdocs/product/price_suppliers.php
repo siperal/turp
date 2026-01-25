@@ -613,9 +613,9 @@ if ($id > 0 || $ref) {
 				// Packaging/Conditionnement
 				print '<tr>';
 
-				print '<td class="fieldrequired">'.$form->textwithpicto($langs->trans("PackagingForThisProduct"), $langs->trans("PackagingForThisProductDesc")).'</td>';
+				print '<td>'.$form->textwithpicto($langs->trans("PackagingForThisProduct"), $langs->trans("PackagingForThisProductDesc")).'</td>';
 				print '<td>';
-				$packaging = GETPOSTISSET('packaging') ? price2num(GETPOST('packaging', 'alphanohtml'), 'MS') : ((empty($rowid)) ? "1" : price2num($object->packaging, 'MS'));
+				$packaging = GETPOSTISSET('packaging') ? price2num(GETPOST('packaging', 'alphanohtml'), 'MS') : ((empty($rowid)) ? "" : price2num($object->packaging, 'MS'));
 				print '<input class="flat" name="packaging" size="5" value="'.$packaging.'">';
 
 				// Units
