@@ -3245,12 +3245,16 @@ if (!GETPOST('hide_websitemenu')) {
 			//print '<div class="inline-block marginrightonly">';
 			//print ajax_object_onoff($object, 'status', 'status', 'Online', 'Offline', array(), 'valignmiddle inline-block', 'statuswebsite');
 			//print '</div>';
+			$disabled = '';
+			if (!$user->hasRight('website', 'write')) {
+				$disabled = ' disabled="disabled"';
+			}
 			if ($website->status == $website::STATUS_DRAFT) {
 				$text_off = 'Offline';
-				print '<a href="'.$_SERVER["PHP_SELF"].'?action=setwebsiteonline&token='.newToken().'&website='.urlencode($website->ref).'&websitepage='.((int) $websitepage->id).'">'.img_picto($langs->trans($text_off), 'switch_off').'</a>';
+				print '<a href="'.$_SERVER["PHP_SELF"].'?action=setwebsiteonline&token='.newToken().'&website='.urlencode($website->ref).'&websitepage='.((int) $websitepage->id).'"'.$disabled.'>'.img_picto($langs->trans($text_off), 'switch_off', '', 0, 0, 0, '', ($user->hasRight('website', 'write') ? '' : 'opacitymedium cursordefault')).'</a>';
 			} else {
 				$text_off = 'Online';
-				print '<a href="'.$_SERVER["PHP_SELF"].'?action=setwebsiteoffline&token='.newToken().'&website='.urlencode($website->ref).'&websitepage='.((int) $websitepage->id).'">'.img_picto($langs->trans($text_off), 'switch_on').'</a>';
+				print '<a href="'.$_SERVER["PHP_SELF"].'?action=setwebsiteoffline&token='.newToken().'&website='.urlencode($website->ref).'&websitepage='.((int) $websitepage->id).'"'.$disabled.'>'.img_picto($langs->trans($text_off), 'switch_on', '', 0, 0, 0, '', ($user->hasRight('website', 'write') ? '' : 'opacitymedium cursordefault')).'</a>';
 			}
 			print '</span>';
 		}
