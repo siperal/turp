@@ -879,8 +879,8 @@ class modProduct extends DolibarrModules
 			$this->import_regex_array[$r] = array(
 				'pr.datec'=>'^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$',
 				'pr.recuperableonly'=>'^[0|1]$'
-	        );
-	        $this->import_convertvalue_array[$r] = array(
+			);
+			$this->import_convertvalue_array[$r] = array(
 				'pr.fk_product'=>array('rule'=>'fetchidfromref', 'classfile'=>'/product/class/product.class.php', 'class'=>'Product', 'method'=>'fetch', 'element'=>'Product')
 			);
 			$this->import_examplevalues_array[$r] = array('pr.fk_product'=>"ref:PRODUCT_REF or id:123456",
