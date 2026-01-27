@@ -3190,9 +3190,11 @@ if (!GETPOST('hide_websitemenu')) {
 
 		// Button Add new website
 		$urltocreatenewwebsite = $_SERVER["PHP_SELF"].'?action=createsite';
-		print '<span class="websiteselection paddingrightonly">';
-		print '<a href="'.$urltocreatenewwebsite.'" class=""'.$disabled.' title="'.dol_escape_htmltag($langs->trans("AddWebsite")).'"><span class="fa fa-plus-circle valignmiddle btnTitle-icon"><span></a>';
-		print '</span>';
+		if ($user->hasRight('website', 'write')) {
+			print '<span class="websiteselection paddingrightonly">';
+			print '<a href="'.$urltocreatenewwebsite.'" class=""'.$disabled.' title="'.dol_escape_htmltag($langs->trans("AddWebsite")).'"><span class="fa fa-plus-circle valignmiddle btnTitle-icon"><span></a>';
+			print '</span>';
+		}
 
 		// List of website
 		print '<span class="websiteselection nopaddingrightimp">';
@@ -3475,10 +3477,11 @@ if (!GETPOST('hide_websitemenu')) {
 		print '</div>';
 
 		// Button Add new web page
-		print '<span class="websiteselection paddingrightonly">';
-		print '<a href="'.$_SERVER["PHP_SELF"].'?action=createcontainer&token='.newToken().'&website='.urlencode($website->ref).'" class=""'.$disabled.' title="'.dol_escape_htmltag($langs->trans("AddPage")).'"><span class="fa fa-plus-circle valignmiddle btnTitle-icon"></span></a>';
-		print '</span>';
-
+		if ($user->hasRight('website', 'write')) {
+			print '<span class="websiteselection paddingrightonly">';
+			print '<a href="'.$_SERVER["PHP_SELF"].'?action=createcontainer&token='.newToken().'&website='.urlencode($website->ref).'" class=""'.$disabled.' title="'.dol_escape_htmltag($langs->trans("AddPage")).'"><span class="fa fa-plus-circle valignmiddle btnTitle-icon"></span></a>';
+			print '</span>';
+		}
 
 		$out = '';
 
