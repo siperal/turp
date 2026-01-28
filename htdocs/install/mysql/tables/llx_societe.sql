@@ -70,14 +70,14 @@ create table llx_societe
   fk_forme_juridique       integer        DEFAULT 0,            		-- juridical status
   birth                    date,				            			-- date of company creation
   fk_currency			   varchar(3),									-- default currency
-  siren	                   varchar(128),                         		-- IDProf1: depends on country (example: siren or RCS for france, ...)
-  siret                    varchar(128),                         		-- IDProf2: depends on country (example: siret for france, ...)
-  ape                      varchar(128),                         		-- IDProf3: depends on country (example: code ape for france, ...)
-  idprof4                  varchar(128),                         		-- IDProf4: depends on country (example: nu for france, ...)
-  idprof5                  varchar(128),                         		-- IDProf5: depends on country (example: nu for france, ...)
-  idprof6                  varchar(128),                         		-- IDProf6: depends on country (example: nu for france, ...
-  tva_intra                varchar(20),                         		-- vat number
+  siren	                   varchar(128),                         		-- IDProf1: depends on country (example: Siren for france, ...)
+  siret                    varchar(128),                         		-- IDProf2: depends on country (example: Siret for france, ...)
+  ape                      varchar(128),                         		-- IDProf3: depends on country (example: Code ape for france, ...)
+  idprof4                  varchar(128),                         		-- IDProf4: depends on country (example: Rcs/rm for france, ...)
+  idprof5                  varchar(128),                         		-- IDProf5: depends on country (example: EORI, ...)
+  idprof6                  varchar(128),                         		-- IDProf6: depends on country (example: Not used for france, ...
   euid                     varchar(64),                         		-- EUID number (European Unique Identifier)
+  tva_intra                varchar(20),                         		-- VAT number (example: FR12345678901 for france, ...)
   capital                  double(24,8)   DEFAULT NULL,        			-- capital of company
   fk_stcomm                integer        DEFAULT 0 NOT NULL,      		-- commercial status
   note_private             text,                                		--
