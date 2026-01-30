@@ -1174,9 +1174,11 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 		*/
 		$paiement->paiementid   = dol_getIdFromCode($db, 'PRE', 'c_paiement', 'code', 'id', 1);
 		$paiement->num_payment  = $object->id;	// A string like 'du_...'
-		$paiement->note_public = 'Fund withdrawn by bank. Reason: '.$reason;
-		$paiement->note_private = '';
+		$paiement->note_private = 'Fund withdrawn by bank with id='.$object->id.'. Reason: '.$reason;
 		$paiement->fk_account   = $accountfrom->id;
+
+		$paiement->ext_payment_id   = $object->payment_intent;
+		$paiement->ext_payment_site = $service;
 
 		$db->begin();
 
@@ -1217,7 +1219,21 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 			}
 		}
 
-		if (!$error && !$alreadytransferedinaccounting) {
+		// Check that a withdrawn payment does not already exists for the withdrawn (if IPN is sent twice by Stripe)
+		$withdrawn_payment_already_exists = true;	// By default, we assume that it exists
+		$sql = "SELECT p.rowid, p.ref";
+		$sql .= " FROM ".MAIN_DB_PREFIX."paiement as p";
+		$sql .= " WHERE p.ext_payment_id = '".$db->escape($paiement->payment_intent)."'";
+		$sql .= " AND p.ext_payment_site = '".$db->escape($service)."'";
+		$tmpresult = $db->query($sql);
+		if ($tmpresult)	{
+			$obj = $db->fetch_object($tmpresult);
+			if (empty($obj)) {
+				$withdrawn_payment_already_exists = false;
+			}
+		}
+
+		if (!$error && !$alreadytransferedinaccounting && !$withdrawn_payment_already_exists) {
 			if ($paiement->fk_account > 0) {
 				// If not yet in accountnacy, we can record the negative payment, otherwise, only the dispute status will be set and user
 				// will have to make manual correction like a credit note.
