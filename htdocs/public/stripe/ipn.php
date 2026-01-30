@@ -1127,7 +1127,7 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 		$actioncomm->create($user);
 		*/
 
-		// Add a flag "dispute_status" in invoice table
+		// Add a flag "dispute_status" in invoice table to Dispute Open
 		$result = $tmpinvoice->setStatut(1, null, '', 'FACTURE_MODIFY', 'dispute_status');
 		if ($result < 0) {
 			$errormsg = $tmpinvoice->error.implode(', ', $tmpinvoice->errors);
@@ -1180,7 +1180,7 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 
 		if ($alreadytransferedinaccounting) {
 			// TODO Test if invoice already in accountancy.
-			// What to do ?
+			// If yes, what to do ?
 			$errormsg = 'Error: the invoice '.$tmpinvoice->id.' is already transferred into accounting. Don\'t know what to do.';
 			$error++;
 		}
@@ -1192,11 +1192,19 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 				$errormsg = $tmpinvoice->error.implode(', ', $tmpinvoice->errors);
 				$error++;
 			}
+		}
 
-			$result = $tmpinvoice->setStatut(0, null, '', 'FACTURE_MODIFY', 'dispute_status');
+		if (! $error) {
+			// Add status dispute_status to Dispute Lost
+			$result = $tmpinvoice->setStatut(8, null, '', 'FACTURE_MODIFY', 'dispute_status');
 			if ($result < 0) {
 				$errormsg = $tmpinvoice->error.implode(', ', $tmpinvoice->errors);
 				$error++;
+			}
+
+			if (!$error) {
+				dol_syslog("The dispute_status of invoice ".$tmpinvoice->ref." has been modified to 8");
+				dol_syslog("The dispute_status of invoice ".$tmpinvoice->ref." has been modified to 8", LOG_DEBUG, 0, '_payment');
 			}
 		}
 
@@ -1210,14 +1218,21 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 
 		if (!$error) {
 			//$db->commit();	// Code not yet enough tested
-			dol_syslog("Code not yet enough tested - Return HTTP 500.", LOG_WARNING, 0, '_payment');
 			$db->rollback();
+
+			dol_syslog("Code not yet enough tested - Return HTTP 500.", LOG_WARNING);
+			dol_syslog("Code not yet enough tested - Return HTTP 500.", LOG_WARNING, 0, '_payment');
+
 			http_response_code(500);
 			return -1;
 		} else {
-			dol_syslog("Error - Return HTTP 500.", LOG_WARNING, 0, '_payment');
 			$db->rollback();
+
+			dol_syslog("Error - Return HTTP 500 - ".$errormsg, LOG_WARNING);
+			dol_syslog("Error - Return HTTP 500 - ".$errormsg, LOG_WARNING, 0, '_payment');
+
 			http_response_code(500);
+
 			print $errormsg;
 			return -1;
 		}
