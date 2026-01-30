@@ -157,8 +157,9 @@ if (isModEnabled('multicompany') && !empty($conf->stripeconnect->enabled) && iss
 	$sql .= " FROM ".MAIN_DB_PREFIX."oauth_token";
 	$sql .= " WHERE service = '".$db->escape($service)."' and tokenstring LIKE '%".$db->escape($db->escapeforlike($event->account))."%'";
 
-	dol_syslog(get_class($db)."::fetch", LOG_DEBUG);
+	dol_syslog(get_class($db)."::fetch");
 	dol_syslog(get_class($db)."::fetch", LOG_DEBUG, 0, '_payment');
+
 	$result = $db->query($sql);
 	if ($result) {
 		if ($db->num_rows($result)) {
@@ -1139,7 +1140,7 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 		if (!$error) {
 			$db->commit();
 
-			dol_syslog("The dispute_status of invoice ".$tmpinvoice->ref." has been modified to 1", LOG_DEBUG);
+			dol_syslog("The dispute_status of invoice ".$tmpinvoice->ref." has been modified to 1");
 			dol_syslog("The dispute_status of invoice ".$tmpinvoice->ref." has been modified to 1", LOG_DEBUG, 0, '_payment');
 
 			http_response_code(200);
@@ -1184,7 +1185,7 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 
 		$alreadytransferedinaccounting = $tmpinvoice->getVentilExportCompta();
 
-		dol_syslog("The invoice has alreadytransferedinaccounting=".$alreadytransferedinaccounting, LOG_DEBUG);
+		dol_syslog("The invoice has alreadytransferedinaccounting=".$alreadytransferedinaccounting);
 		dol_syslog("The invoice has alreadytransferedinaccounting=".$alreadytransferedinaccounting, LOG_DEBUG, 0, '_payment');
 
 		/*
@@ -1214,7 +1215,7 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 			}
 
 			if (!$error) {
-				dol_syslog("The dispute_status of invoice ".$tmpinvoice->ref." has been modified to 1", LOG_DEBUG);
+				dol_syslog("The dispute_status of invoice ".$tmpinvoice->ref." has been modified to 1");
 				dol_syslog("The dispute_status of invoice ".$tmpinvoice->ref." has been modified to 1", LOG_DEBUG, 0, '_payment');
 			}
 		}
@@ -1223,13 +1224,17 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 		$withdrawn_payment_already_exists = true;	// By default, we assume that it exists
 		$sql = "SELECT p.rowid, p.ref";
 		$sql .= " FROM ".MAIN_DB_PREFIX."paiement as p";
-		$sql .= " WHERE p.ext_payment_id = '".$db->escape($paiement->payment_intent)."'";
+		$sql .= " WHERE p.ext_payment_id = '".$db->escape($paiement->ext_payment_id)."'";
 		$sql .= " AND p.ext_payment_site = '".$db->escape($service)."'";
-		$tmpresult = $db->query($sql);
-		if ($tmpresult)	{
-			$obj = $db->fetch_object($tmpresult);
+
+		dol_syslog("SQL = ".$sql);
+
+		$tmpresql = $db->query($sql);
+		if ($tmpresql) {
+			$obj = $db->fetch_object($tmpresql);
 			if (empty($obj)) {
 				$withdrawn_payment_already_exists = false;
+				dol_syslog("A withdraw payment already exists", LOG_DEBUG);
 			}
 		}
 
@@ -1237,7 +1242,7 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 			if ($paiement->fk_account > 0) {
 				// If not yet in accountnacy, we can record the negative payment, otherwise, only the dispute status will be set and user
 				// will have to make manual correction like a credit note.
-				dol_syslog("We try to record the payment", LOG_DEBUG);
+				dol_syslog("We try to record the payment");
 				dol_syslog("We try to record the payment", LOG_DEBUG, 0, '_payment');
 
 				$paiement_id = $paiement->create($user, 0, $tmpinvoice->thirdparty); // This include regenerating documents
@@ -1252,7 +1257,7 @@ if ($event->type == 'payout.created' && getDolGlobalString('STRIPE_AUTO_RECORD_P
 					}
 				}
 			} else {
-				dol_syslog("No bank account defined to record payment so no payment recorded", LOG_DEBUG);
+				dol_syslog("No bank account defined to record payment so no payment recorded");
 				dol_syslog("No bank account defined to record payment so no payment recorded", LOG_DEBUG, 0, '_payment');
 			}
 		}
