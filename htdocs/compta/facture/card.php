@@ -5601,10 +5601,10 @@ if ($action == 'create') {
 		}
 		print '</td></tr></table>';
 		print '</td><td>';
-		$liststatus = array('0' => "None", '1' => "DisputeOpen", '8' => "DisputeLost", '9' => "DisputeWon");
+		$liststatus = Facture::ARRAY_OF_DISPUTE_STATUS;
 		if ($action != 'editdispute_status') {
 			if ($object->dispute_status) {
-				print $langs->trans($liststatus[$object->dispute_status]);
+				print $langs->trans($liststatus[$object->dispute_status]['label']);
 			}
 		} else {
 			print '<form enctype="multipart/form-data" action="'.DOL_URL_ROOT.'/compta/facture/card.php" method="POST">';
