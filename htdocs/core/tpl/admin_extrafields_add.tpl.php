@@ -249,7 +249,8 @@ print $formadmin->selectTypeOfFields('type', GETPOST('type', 'alpha'));
 		$elementprop["module"] = "intervention";
 	}
 	$substitutionarray = getCommonSubstitutionArray($langs, 1, null, $object, array("object", $elementprop["module"]));
-	$texthelp = $langs->trans("FollowingConstantsWillBeSubstituted").'<br>';
+	$texthelp = $langs->trans("AIPromptExtrafieldDesc").'<br><br>';
+	$texthelp .= $langs->trans("FollowingConstantsWillBeSubstituted").'<br>';
 	foreach ($substitutionarray as $key => $val) {
 		$texthelp .= $key.' -> '.$val.'<br>';
 	}
