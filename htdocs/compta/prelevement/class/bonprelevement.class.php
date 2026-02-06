@@ -163,7 +163,7 @@ class BonPrelevement extends CommonObject
 	const STATUS_TRANSFERED = 1;
 	const STATUS_CREDITED = 2;		// STATUS_CREDITED and STATUS_DEBITED is same. Difference is in ->type
 	const STATUS_DEBITED = 2;		// STATUS_CREDITED and STATUS_DEBITED is same. Difference is in ->type
-	const STATUS_CANCELED = -1;
+	const STATUS_CANCELED = 9;
 
 
 	/**
