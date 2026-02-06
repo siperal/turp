@@ -163,6 +163,7 @@ class BonPrelevement extends CommonObject
 	const STATUS_TRANSFERED = 1;
 	const STATUS_CREDITED = 2;		// STATUS_CREDITED and STATUS_DEBITED is same. Difference is in ->type
 	const STATUS_DEBITED = 2;		// STATUS_CREDITED and STATUS_DEBITED is same. Difference is in ->type
+	const STATUS_CANCELED = -1;
 
 
 	/**
@@ -2909,6 +2910,8 @@ class BonPrelevement extends CommonObject
 				$this->labelStatus[self::STATUS_CREDITED] = $langs->transnoentitiesnoconv('StatusCredited');
 				$this->labelStatusShort[self::STATUS_CREDITED] = $langs->transnoentitiesnoconv('StatusCredited');
 			}
+			$this->labelStatus[self::STATUS_CANCELED] = $langs->transnoentitiesnoconv('Canceled');
+			$this->labelStatusShort[self::STATUS_CANCELED] = $langs->transnoentitiesnoconv('Canceled');
 		}
 
 		$statusType = 'status1';
@@ -2917,6 +2920,9 @@ class BonPrelevement extends CommonObject
 		}
 		if ($status == self::STATUS_CREDITED || $status == self::STATUS_DEBITED) {
 			$statusType = 'status6';
+		}
+		if ($status == self::STATUS_CANCELED) {
+			$statusType = 'status9';
 		}
 
 		return dolGetStatus($this->labelStatus[$status], $this->labelStatusShort[$status], '', $statusType, $mode);
