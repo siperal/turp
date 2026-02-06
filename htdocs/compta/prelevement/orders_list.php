@@ -360,9 +360,10 @@ print '<td class="liste_titre">&nbsp;</td>';
 print '<td class="liste_titre right"><input type="text" class="flat maxwidth100" name="search_amount" value="'.dol_escape_htmltag($search_amount).'"></td>';
 print '<td class="liste_titre right minwidth75imp parentonrightofpage">';
 $arrayofstatus = array(
-	'0' => $langs->trans('StatusWaiting'),
-	'1' => $langs->trans('StatusTrans'),
-	'2' => $langs->trans('StatusCredited')
+	BonPrelevement::STATUS_DRAFT => $langs->trans('StatusWaiting'),
+	BonPrelevement::STATUS_TRANSFERED => $langs->trans('StatusTrans'),
+	BonPrelevement::STATUS_CREDITED => $langs->trans('StatusCredited'),
+	BonPrelevement::STATUS_CANCELED => $langs->trans('Canceled')
 );
 print $form->selectarray('search_status', $arrayofstatus, $search_status, 1, 0, 0, '', 0, 0, 0, '', 'search_status width100 onrightofpage', 1);
 print '</td>';
