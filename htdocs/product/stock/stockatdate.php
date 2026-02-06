@@ -112,6 +112,8 @@ if ($user->socid) {
 $result = restrictedArea($user, 'produit|service');	// Must have permission to read product
 $result = restrictedArea($user, 'stock');	// Must have permission to read stock
 
+$usercancreadsupplierprice = getDolGlobalString('MAIN_USE_ADVANCED_PERMS') ? $user->hasRight('product', 'product_advance', 'read_supplier_prices') : $user->hasRight('product', 'read');
+
 $dateIsValid = true;
 if ($mode == 'future') {
 	if ($date && $date < $now) {
@@ -125,15 +127,6 @@ if ($mode == 'future') {
 	}
 }
 
-// Security check
-if ($user->socid) {
-	$socid = $user->socid;
-}
-
-$result = restrictedArea($user, 'produit|service');	// Must have permission to read product
-$result = restrictedArea($user, 'stock');	// Must have permission to read stock
-
-$usercancreadsupplierprice = getDolGlobalString('MAIN_USE_ADVANCED_PERMS') ? $user->hasRight('product', 'product_advance', 'read_supplier_prices') : $user->hasRight('product', 'read');
 
 /*
  * Actions

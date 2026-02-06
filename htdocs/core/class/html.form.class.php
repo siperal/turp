@@ -5556,9 +5556,10 @@ class Form
 	 * @param int<0,1>		$showcurrency 	Show currency in label
 	 * @param string 		$morecss 		More CSS
 	 * @param int<0,1>		$nooutput 		1=Return string, do not send to output
+	 * @param int<0,1>		$addentrynone	Add an entry None
 	 * @return int|string   	           	If nooutput=0: Return integer <0 if error, Num of bank account found if OK (0, 1, 2, ...), If nooutput=1: Return a HTML select string.
 	 */
-	public function select_comptes($selected = '', $htmlname = 'accountid', $status = 0, $filtre = '', $useempty = 0, $moreattrib = '', $showcurrency = 0, $morecss = '', $nooutput = 0)
+	public function select_comptes($selected = '', $htmlname = 'accountid', $status = 0, $filtre = '', $useempty = 0, $moreattrib = '', $showcurrency = 0, $morecss = '', $nooutput = 0, $addentrynone = 0)
 	{
 		// phpcs:enable
 		global $langs;
@@ -5624,6 +5625,11 @@ class Form
 				$out .= '</option>';
 				$i++;
 			}
+
+			if (!empty($addentrynone)) {
+				$out .= '<option value="-2"'.($selected == -2 ? ' selected="selected"': '').' data-html="'.dolPrintHTMLForAttribute('<span class="opacitymedium">'.$langs->trans("None").'</span>').'">'.$langs->trans("None").'</option>';
+			}
+
 			$out .= "</select>";
 			$out .= ajax_combobox('select' . $htmlname);
 		} else {
