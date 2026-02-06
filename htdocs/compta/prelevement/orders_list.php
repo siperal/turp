@@ -271,6 +271,12 @@ if ($limit > 0 && $limit != $conf->liste_limit) {
 if ($optioncss != '') {
 	$param .= '&optioncss='.urlencode($optioncss);
 }
+if ($search_amount) {
+	$param .= '&search_amount='.urlencode($search_amount);
+}
+if ((string) $search_status != '' && (string) $search_status != '-1') {
+	$param .= '&search_status='.((int) $search_status);
+}
 
 $arrayofmassactions = array(
 	//'presend'=>img_picto('', 'email', 'class="pictofixedwidth"').$langs->trans("SendByMail"),
