@@ -2981,7 +2981,7 @@ class BonPrelevement extends CommonObject
 				$response->label = $langs->trans("PendingCreditTransferToComplete");
 				$response->labelShort = $langs->trans("PendingCreditTransferToCompleteShort");
 				$response->url = DOL_URL_ROOT . '/compta/prelevement/orders_list.php?leftmenu=checks&mainmenu=bank&type=bank-transfer&search_status=0,1';
-				$response->url_late = DOL_URL_ROOT . '/compta/prelevement/orders_list.php?leftmenu=checks&mainmenu=bank&type="bank-transfer&search_status=0,1';
+				$response->url_late = DOL_URL_ROOT . '/compta/prelevement/orders_list.php?leftmenu=checks&mainmenu=bank&type=bank-transfer&search_status=0,1';
 			}
 			$response->img = img_object('', "payment");
 
