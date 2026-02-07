@@ -16310,6 +16310,8 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 		$sql2 .= " AND mc.fk_mailing=m.rowid";
 	}
 
+	$MAXWITHOUTPAGINATION = getDolGlobalInt('AGENDA_MAX_EVENTS_ON_PAGE_WITHOUT_PAGINATION', 10);
+
 	if ($sql || $sql2) {	// May not be defined if module Agenda is not enabled and mailing module disabled too
 		if (!empty($sql) && !empty($sql2)) {
 			$sql = $sql . " UNION " . $sql2;
@@ -16319,7 +16321,8 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 
 		//TODO Add navigation with this limits...
 		$offset = 0;
-		$limit = 1000;
+		$limit = $MAXWITHOUTPAGINATION;
+		$num = 0;
 
 		// Complete request and execute it with limit
 		$sql .= $db->order($sortfield_new, $sortorder);
@@ -16328,6 +16331,7 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 		}
 
 		dol_syslog("function.lib::show_actions_messaging", LOG_DEBUG);
+
 		$resql = $db->query($sql);
 		if ($resql) {
 			$i = 0;
@@ -16864,6 +16868,12 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 
 		if (empty($histo)) {
 			$out .= '<span class="opacitymedium">' . $langs->trans("NoRecordFound") . '</span>';
+		}
+
+		if ($num > $MAXWITHOUTPAGINATION) {
+			$langs->load("errors");
+			$colspan = 9;
+			$out .= '<center><span class="opacitymedium">...' . $langs->trans("WarningTooManyDataPleaseUseMoreFilters", $MAXWITHOUTPAGINATION) . '...</span></center>';
 		}
 	}
 

@@ -1836,6 +1836,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 {
 	global $hookmanager;
 	global $form;
+
 	global $param, $massactionbutton;
 
 	$start_year = GETPOSTINT('dateevent_startyear');
@@ -2370,8 +2371,6 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 		$caction = new CActionComm($db);
 		$arraylist = $caction->liste_array(1, 'code', '', (getDolGlobalString('AGENDA_USE_EVENT_TYPE') ? 0 : 1), '', 1);
 
-		$counter = 0;
-
 		foreach ($histo as $key => $value) {
 			$actionstatic->fetch($histo[$key]['id']); // TODO Do we need this, we already have a lot of data of line into $histo
 
@@ -2604,7 +2603,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 		if ($num > $MAXWITHOUTPAGINATION) {
 			$langs->load("errors");
 			$colspan = 9;
-			$out .= '<tr><td class="center" colspan="' . $colspan . '"><span class="opacitymedium">' . $langs->trans("WarningTooManyDataPleaseUseMoreFilters", $MAXWITHOUTPAGINATION) . '</span></td></tr>';
+			$out .= '<tr><td class="center" colspan="' . $colspan . '"><span class="opacitymedium">...' . $langs->trans("WarningTooManyDataPleaseUseMoreFilters", $MAXWITHOUTPAGINATION) . '...</span></td></tr>';
 		}
 
 		$out .= "</table>\n";
