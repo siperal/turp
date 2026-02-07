@@ -24,7 +24,8 @@
  * @var DoliDB $db
  * @var ExtraFields $extrafields
  *
- * @var string	$extrafieldsobjectkey
+ * @var string $extrafieldsobjectkey
+ * @var string $extrafieldsobjectprefix
  */
 
 '
@@ -83,6 +84,7 @@ if (!empty($extrafieldsobjectkey) && !empty($extrafields->attributes[$extrafield
 				}
 
 				$valuetoshow = $extrafields->showOutputField($key, $value, '', $extrafieldsobjectkey, null, $object ?? null);
+
 				$title = dol_string_nohtmltag($valuetoshow);
 
 				print '<td'.($cssclasstd ? ' class="'.$cssclasstd.'"' : '');
