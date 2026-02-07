@@ -4511,19 +4511,19 @@ function dol_print_email($email, $contactid = 0, $socid = 0, $addlink = 0, $max 
  */
 function getArrayOfSocialNetworks()
 {
-	global $conf, $db;
+	global $db;
 
 	$socialnetworks = array();
 	// Enable caching of array
 	require_once DOL_DOCUMENT_ROOT . '/core/lib/memory.lib.php';
-	$cachekey = 'socialnetworks_' . $conf->entity;
+	$cachekey = dol_sanitizeKeyCode(str_replace(',', '_', 'socialnetworks_'.getEntity('c_socialnetworks')));
 	$dataretrieved = dol_getcache($cachekey);
 
 	if (!is_null($dataretrieved)) {
 		$socialnetworks = $dataretrieved;
 	} else {
 		$sql = "SELECT rowid, code, label, url, icon, active FROM " . MAIN_DB_PREFIX . "c_socialnetworks";
-		$sql .= " WHERE entity = " . ((int) $conf->entity);
+		$sql .= " WHERE entity IN (" . getEntity('c_socialnetworks').")";
 
 		$resql = $db->query($sql);
 		if ($resql) {

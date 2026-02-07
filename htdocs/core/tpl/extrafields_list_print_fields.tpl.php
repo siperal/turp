@@ -23,8 +23,8 @@
  * @var DoliDB $db
  * @var ExtraFields $extrafields
  *
- * @var string	$extrafieldsobjectkey
- * @var	string	$extrafieldsobjectprefix
+ * @var string $extrafieldsobjectkey
+ * @var string $extrafieldsobjectprefix
  */
 '
 @phan-var-force CommonObject $object
@@ -82,6 +82,7 @@ if (!empty($extrafieldsobjectkey) && !empty($extrafields->attributes[$extrafield
 				}
 
 				$valuetoshow = $extrafields->showOutputField($key, $value, '', $extrafieldsobjectkey, null, $object ?? null, 'list');
+
 				$title = dol_string_nohtmltag($valuetoshow);
 
 				print '<td'.($cssclasstd ? ' class="'.$cssclasstd.'"' : '');
