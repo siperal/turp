@@ -2140,10 +2140,12 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 		}
 	}
 
+	$MAXWITHOUTPAGINATION = getDolGlobalInt('AGENDA_MAX_EVENTS_ON_PAGE_WITHOUT_PAGINATION', 100);
+
 	if ($sql) {
-		//TODO Add navigation with this limits...
+		// TODO Add navigation with this limits by replacing call of show_actions_done by the code found into comm/action/list.php...
 		$offset = 0;
-		$limit = 1000;
+		$limit = $MAXWITHOUTPAGINATION;
 
 		// Complete request and execute it with limit
 		$sql .= $db->order($sortfield_new, $sortorder);
@@ -2367,7 +2369,16 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 		$caction = new CActionComm($db);
 		$arraylist = $caction->liste_array(1, 'code', '', (getDolGlobalString('AGENDA_USE_EVENT_TYPE') ? 0 : 1), '', 1);
 
+		$counter = 0;
+
 		foreach ($histo as $key => $value) {
+			$counter++;
+			if ($counter > $MAXWITHOUTPAGINATION) {
+				$langs->load("errors");
+				$colspan = 9;
+				$out .= '<tr><td colspan="' . $colspan . '"><span class="opacitymedium">' . $langs->trans("WarningTooManyDataPleaseUseMoreFilters", $MAXWITHOUTPAGINATION) . '</span></td></tr>';
+				break;
+			}
 			$actionstatic->fetch($histo[$key]['id']); // TODO Do we need this, we already have a lot of data of line into $histo
 
 			if (empty($actionstatic->code)) {
@@ -2539,16 +2550,17 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 
 					if ($result < 0) {
 						dol_print_error($db, $contact->error);
-					}
-
-					if ($result > 0) {
-						$out .= $contact->getNomUrl(-3, '', 10, '', -1, 0, 'paddingright');
-						if (isset($histo[$key]['acode']) && $histo[$key]['acode'] == 'AC_TEL') {
-							if (!empty($contact->phone_pro)) {
-								$out .= '(' . dol_print_phone($contact->phone_pro) . ')';
+					} elseif ($result > 0) {
+						if (count($histo[$key]['socpeopleassigned']) > 1) {
+							$out .= $contact->getNomUrl(-2, '', 0, '', -1, 0, 'paddingright');
+						} else {
+							$out .= $contact->getNomUrl(-3, '', 0, '', -1, 0, 'paddingright');
+							if (isset($histo[$key]['acode']) && $histo[$key]['acode'] == 'AC_TEL') {
+								if (!empty($contact->phone_pro)) {
+									$out .= '(' . dol_print_phone($contact->phone_pro) . ')';
+								}
 							}
 						}
-						$out .= '<div class="paddingright"></div>';
 					}
 				}
 				$out .= '</td>';
