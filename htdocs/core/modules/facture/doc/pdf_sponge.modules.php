@@ -2411,7 +2411,10 @@ class pdf_sponge extends ModelePDFFactures
 			if ($currency != getDolCurrency()) {
 				// Use nb of digit of the total price of main currency + nb of digit for total price of foreign currency + 1
 				$maxnbofdec = getDolGlobalInt('MAIN_MAX_DECIMALS_TOT') + getDolGlobalInt('MAIN_MAX_DECIMALS_CURRENCY_TOT', getDolGlobalInt('MAIN_MAX_DECIMALS_TOT')) + 1;
-				$titre .= ' ('.price($object->multicurrency_tx, 0, $outputlangs, 1, -1, $maxnbofdec, $currency).' = '.price(1, 0, $outputlangs, 1, 0, -1, getDolCurrency()).')';
+				$pricetoshow1 = price($object->multicurrency_tx, 0, $outputlangs, 1, 0, $maxnbofdec, $currency);
+				$pricetoshow2 = price($object->multicurrency_tx, 0, $outputlangs, 1, 0, -2, $currency);
+				$pricetoshow = ((strlen($pricetoshow1) < strlen($pricetoshow2)) ? $pricetoshow1 : $pricetoshow2);
+				$titre .= ' ('.$pricetoshow.' = '.price(1, 0, $outputlangs, 1, 0, 0, getDolCurrency()).')';
 			}
 
 			$pdf->SetXY($this->page_largeur - $this->marge_droite - ($pdf->GetStringWidth($titre) + 3), $tab_top - 4);
