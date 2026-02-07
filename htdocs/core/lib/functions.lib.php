@@ -1600,7 +1600,7 @@ if (!function_exists('dol_getprefix')) {
  */
 function dol_include_once($relpath, $classname = '')
 {
-	global $conf, $langs, $user, $mysoc; // Do not remove this. They must be defined for files we include. Other globals var must be retrieved with $GLOBALS['var']
+	global $conf, $langs, $user, $mysoc; // Do not remove this. They must be defined for files we make "include". Other globals var must be retrieved with $GLOBALS['var']
 
 	$fullpath = dol_buildpath($relpath);
 
