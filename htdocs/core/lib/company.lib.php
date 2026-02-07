@@ -2307,8 +2307,8 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 		$out .= '<td class="liste_titre">';
 		$out .= $formactions->select_type_actions($actioncode, "actioncode", '', getDolGlobalString('AGENDA_USE_EVENT_TYPE') ? -1 : 1, 0, (getDolGlobalString('AGENDA_USE_MULTISELECT_TYPE') ? 1 : 0), 1, 'selecttype combolargeelem minwidth100 maxwidth150', 1);
 		$out .= '</td>';
-		// Label
-		$out .= '<td class="liste_titre maxwidth100onsmartphone"><input type="text" class="maxwidth100onsmartphone" name="search_agenda_label" value="' . $filters['search_agenda_label'] . '"></td>';
+		// Label - Title
+		$out .= '<td class="liste_titre maxwidth100onsmartphone"><input type="text" class="maxwidth125" name="search_agenda_label" value="' . $filters['search_agenda_label'] . '"></td>';
 		$out .= '<td class="liste_titre"></td>';
 		$out .= '<td class="liste_titre"></td>';
 		// Status ($percent can be 'na'or < 100 or 100)
@@ -2353,9 +2353,9 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 		$out .= getTitleFieldOfList("Date", 0, $_SERVER["PHP_SELF"], 'a.datep,a.id', '', $param, '', $sortfield, $sortorder, 'center ');
 		$out .= getTitleFieldOfList("Owner");
 		$out .= getTitleFieldOfList("Type");
-		$out .= getTitleFieldOfList("Label", 0, $_SERVER["PHP_SELF"], '', '', $param, '', $sortfield, $sortorder);
-		$out .= getTitleFieldOfList("RelatedObjects", 0, $_SERVER["PHP_SELF"], '', '', $param, '', $sortfield, $sortorder);
+		$out .= getTitleFieldOfList("Title", 0, $_SERVER["PHP_SELF"], '', '', $param, '', $sortfield, $sortorder);
 		$out .= getTitleFieldOfList("ActionOnContact", 0, $_SERVER["PHP_SELF"], '', '', $param, '', $sortfield, $sortorder, 'tdoverflowmax125 ', 0, '', 0);
+		$out .= getTitleFieldOfList("LinkedObject", 0, $_SERVER["PHP_SELF"], '', '', $param, '', $sortfield, $sortorder);
 		$out .= getTitleFieldOfList("Status", 0, $_SERVER["PHP_SELF"], 'a.percent', '', $param, '', $sortfield, $sortorder, 'center ');
 		// Action column
 		if (!getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
@@ -2401,7 +2401,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 			$out .= '</td>';
 
 			// Date
-			$out .=  '<td class="center nowraponall nopaddingtopimp nopaddingbottomimp">';
+			$out .= '<td class="center nowraponall nopaddingtopimp nopaddingbottomimp">';
 			if ($histo[$key]['dateend']) {	// There is also a end date
 				$tmpa = dol_getdate($histo[$key]['datestart']);
 				$tmpb = dol_getdate($histo[$key]['dateend']);
@@ -2431,7 +2431,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 					$out .=  dol_print_date($histo[$key]['datestart'], 'hourreduceformat', 'tzuserrel');
 					$out .=  '</span>';
 					$out .=  '</div>';
-					$out .=  ' ';
+					$out .=  ' - ';
 					$out .=  '<div class="center inline-block lineheightsmall">';
 					$out .=  dol_print_date($histo[$key]['dateend'], 'dayreduceformat', 'tzuserrel');
 					$out .=  '<br><span class="opacitymedium hourspan">';
@@ -2458,38 +2458,6 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 				$out .= img_warning($langs->trans("Late")) . ' ';
 			}
 			$out .=  '</td>';
-
-			/*
-			$out .= '<td class="center nowraponall">';
-			$out .= dol_print_date($histo[$key]['datestart'], 'dayhour', 'tzuserrel');
-			if ($histo[$key]['dateend'] && $histo[$key]['dateend'] != $histo[$key]['datestart']) {
-				$tmpa = dol_getdate($histo[$key]['datestart'], true);
-				$tmpb = dol_getdate($histo[$key]['dateend'], true);
-				if ($tmpa['mday'] == $tmpb['mday'] && $tmpa['mon'] == $tmpb['mon'] && $tmpa['year'] == $tmpb['year']) {
-					$out .= '-' . dol_print_date($histo[$key]['dateend'], 'hour', 'tzuserrel');
-				} else {
-					$out .= '-' . dol_print_date($histo[$key]['dateend'], 'dayhour', 'tzuserrel');
-				}
-			}
-			// Add the late warning
-			$late = 0;
-			if ($histo[$key]['percent'] == 0 && $histo[$key]['datestart'] && $histo[$key]['datestart'] < ($now - $delay_warning)) {
-				$late = 1;
-			}
-			if ($histo[$key]['percent'] == 0 && !$histo[$key]['datestart'] && $histo[$key]['dateend'] && $histo[$key]['datestart'] < ($now - $delay_warning)) {
-				$late = 1;
-			}
-			if ($histo[$key]['percent'] > 0 && $histo[$key]['percent'] < 100 && $histo[$key]['dateend'] && $histo[$key]['dateend'] < ($now - $delay_warning)) {
-				$late = 1;
-			}
-			if ($histo[$key]['percent'] > 0 && $histo[$key]['percent'] < 100 && !$histo[$key]['dateend'] && $histo[$key]['datestart'] && $histo[$key]['datestart'] < ($now - $delay_warning)) {
-				$late = 1;
-			}
-			if ($late) {
-				$out .= img_warning($langs->trans("Late")) . ' ';
-			}
-			$out .= "</td>\n";
-			*/
 
 			// Author of event
 			$out .= '<td class="tdoverflowmax125">';
@@ -2535,6 +2503,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 			}
 
 			$out .= '<td class="tdoverflowmax125" title="' . $labelOfTypeToShowLong . '">';
+			// Example $actionstatic->code = AC_COMPANY_MODIFY and $actionstatic->type_code = AC_OTH_AUTO
 			$out .= $actionstatic->getTypePicto();
 			$out .= $labelOfTypeToShow;
 			$out .= '</td>';
@@ -2558,22 +2527,6 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 				//$out .= img_object($langs->trans("EMailing").'<br>'.$histo[$key]['note'], "email").' ';
 				$out .= dol_trunc($label, 120);
 				$out .= '</a>';
-			}
-			$out .= '</td>';
-
-			// Linked object
-			$out .= '<td class="tdoverflowmax200 nowraponall">';
-			if (isset($histo[$key]['elementtype']) && !empty($histo[$key]['fk_element'])) {
-				if (isset($elementlinkcache[$histo[$key]['elementtype']]) && isset($elementlinkcache[$histo[$key]['elementtype']][$histo[$key]['fk_element']])) {
-					$link = $elementlinkcache[$histo[$key]['elementtype']][$histo[$key]['fk_element']];
-				} else {
-					if (!isset($elementlinkcache[$histo[$key]['elementtype']])) {
-						$elementlinkcache[$histo[$key]['elementtype']] = array();
-					}
-					$link = dolGetElementUrl((int) $histo[$key]['fk_element'], $histo[$key]['elementtype'], 1);
-					$elementlinkcache[$histo[$key]['elementtype']][$histo[$key]['fk_element']] = $link;
-				}
-				$out .= $link;
 			}
 			$out .= '</td>';
 
@@ -2608,6 +2561,22 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 			} else {
 				$out .= '<td>&nbsp;</td>';
 			}
+
+			// Linked object
+			$out .= '<td class="tdoverflowmax200 nowraponall">';
+			if (isset($histo[$key]['elementtype']) && !empty($histo[$key]['fk_element'])) {
+				if (isset($elementlinkcache[$histo[$key]['elementtype']]) && isset($elementlinkcache[$histo[$key]['elementtype']][$histo[$key]['fk_element']])) {
+					$link = $elementlinkcache[$histo[$key]['elementtype']][$histo[$key]['fk_element']];
+				} else {
+					if (!isset($elementlinkcache[$histo[$key]['elementtype']])) {
+						$elementlinkcache[$histo[$key]['elementtype']] = array();
+					}
+					$link = dolGetElementUrl((int) $histo[$key]['fk_element'], $histo[$key]['elementtype'], 1);
+					$elementlinkcache[$histo[$key]['elementtype']][$histo[$key]['fk_element']] = $link;
+				}
+				$out .= $link;
+			}
+			$out .= '</td>';
 
 			// Status / Progression
 			$out .= '<td class="nowrap center">';
