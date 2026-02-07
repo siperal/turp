@@ -2146,6 +2146,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 		// TODO Add navigation with this limits by replacing call of show_actions_done by the code found into comm/action/list.php...
 		$offset = 0;
 		$limit = $MAXWITHOUTPAGINATION;
+		$num = 0;
 
 		// Complete request and execute it with limit
 		$sql .= $db->order($sortfield_new, $sortorder);
@@ -2372,13 +2373,6 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 		$counter = 0;
 
 		foreach ($histo as $key => $value) {
-			$counter++;
-			if ($counter > $MAXWITHOUTPAGINATION) {
-				$langs->load("errors");
-				$colspan = 9;
-				$out .= '<tr><td colspan="' . $colspan . '"><span class="opacitymedium">' . $langs->trans("WarningTooManyDataPleaseUseMoreFilters", $MAXWITHOUTPAGINATION) . '</span></td></tr>';
-				break;
-			}
 			$actionstatic->fetch($histo[$key]['id']); // TODO Do we need this, we already have a lot of data of line into $histo
 
 			if (empty($actionstatic->code)) {
@@ -2605,6 +2599,12 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 		if (empty($histo)) {
 			$colspan = 9;
 			$out .= '<tr><td colspan="' . $colspan . '"><span class="opacitymedium">' . $langs->trans("NoRecordFound") . '</span></td></tr>';
+		}
+
+		if ($num > $MAXWITHOUTPAGINATION) {
+			$langs->load("errors");
+			$colspan = 9;
+			$out .= '<tr><td colspan="' . $colspan . '"><span class="opacitymedium">' . $langs->trans("WarningTooManyDataPleaseUseMoreFilters", $MAXWITHOUTPAGINATION) . '</span></td></tr>';
 		}
 
 		$out .= "</table>\n";
