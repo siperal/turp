@@ -41,7 +41,7 @@ create table llx_fichinter
   duree				real,                       -- duration total of  intervention
   description		text,
 
-  signed_status     smallint DEFAULT NULL,      -- signed status NULL, 0 or 1
+  signed_status     smallint DEFAULT NULL,      -- signed status NULL - 0 or 1
   online_sign_ip	varchar(48),
   online_sign_name	varchar(64),
 
