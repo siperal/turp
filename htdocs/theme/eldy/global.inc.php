@@ -1346,6 +1346,9 @@ div.urllink {
 	align-items: center;
 	height: 2em;
 }
+div.urllink.unsetheight {
+	height: unset;
+}
 div.urllink span.fa, div.urllink span.fas, div.urllink span.far {
 	width: 22px;
 }
