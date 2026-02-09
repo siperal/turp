@@ -544,7 +544,7 @@ if ($action == 'create') {
 	// Category
 	if (is_array($options) && count($options) && isModEnabled('category')) {
 		print '<tr><td>'.$langs->trans("RubriquesTransactions").'</td><td>';
-		print img_picto('', 'category').Form::selectarray('category_transaction', $options, GETPOST('category_transaction'), 1, 0, 0, '', 0, 0, 0, '', 'minwidth300', 1);
+		print img_picto('', 'category', 'class="pictofixedwidth"').Form::selectarray('category_transaction', $options, GETPOST('category_transaction'), 1, 0, 0, '', 0, 0, 0, '', 'minwidth300', 1);
 		print '</td></tr>';
 	}
 
@@ -585,7 +585,16 @@ if ($action == 'create') {
 	print '<tr><td>';
 	$labelsens = $form->textwithpicto($langs->trans('Sens'), $langs->trans("AccountingDirectionHelp"));
 	print $form->editfieldkey($labelsens, 'sens', '', $object, 0, 'string', '', 1).'</td><td>';
-	$sensarray = array('0' => $langs->trans("Debit"), '1' => $langs->trans("Credit"));
+	$sensarray = array(
+		'0' => array('label' => $langs->trans("Debit")),
+		'1' => array('label' => $langs->trans("Credit"))
+	);
+	// We can't use this module to enter customer payments
+	include_once DOL_DOCUMENT_ROOT.'/blockedlog/lib/blockedlog.lib.php';
+	if (isALNERunningVersion()) {
+		$sensarray['1']['disabled'] = 1;
+	}
+
 	print $form->selectarray('sens', $sensarray, $sens, 1, 0, 0, '', 0, 0, 0, '', 'minwidth100', 1);
 	print '</td></tr>';
 
