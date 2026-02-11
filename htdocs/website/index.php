@@ -3381,6 +3381,7 @@ if (!GETPOST('hide_websitemenu')) {
 
 			$examplewithapache = "<VirtualHost *:80>\n";
 			$examplewithapache .= '#php_admin_value open_basedir /tmp/:'.DOL_DOCUMENT_ROOT.':'.DOL_DATA_ROOT.':/dev/urandom'."\n";
+			$examplewithapache .= '#php_admin_value disable_functions "exec,passthru,shell_exec,system,popen,proc_open"'."\n";
 			$examplewithapache .= "\n";
 			$examplewithapache .= 'DocumentRoot "'.DOL_DOCUMENT_ROOT.'"'."\n";
 			$examplewithapache .= "\n";
