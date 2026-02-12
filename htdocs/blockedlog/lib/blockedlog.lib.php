@@ -340,8 +340,8 @@ function callApiToPushCounter($id, $signature, $test = 0)
 	global $mysoc, $conf;
 
 	if (isALNERunningVersion(1) && $mysoc->country_code == 'FR') {
-		// TODO Push last rowid + signature to remote dolibarr server
-		// TODO Do it only selected events: BILL_VALIDATE
+		// Push last rowid + signature to remote dolibarr server
+		// TODO Do it only for selected events: BILL_VALIDATE ?
 
 		// Code here is similar to the one into printCodeForPing()
 		$url_for_ping = getDolGlobalString('MAIN_URL_FOR_PING', "https://ping.dolibarr.org/");
@@ -378,6 +378,8 @@ function callApiToPushCounter($id, $signature, $test = 0)
 		$addheaders = array();
 		$timeoutconnect = 1;
 		$timeoutresponse = 1;
+
+		$conf->global->BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING = 1;		// Force probability to 1
 
 		// Probability will be between 1/10 by default and 1/1 if const BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING is set to 1. Can't be lower than 1/10.
 		$BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING = min(10, getDolGlobalInt('BLOCKEDLOG_RANDOMRANGE_FOR_TRACKING', 10));
