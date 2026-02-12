@@ -1103,6 +1103,24 @@ if (!defined('NOLOGIN')) {
 		}
 	}
 
+	// Check if user must change password at next login
+	if (!empty($user->force_pass_change) && $dol_authmode == 'dolibarr') {
+		// redirect to a simple page with only one action is possible : change your password
+		$allowedpages = array('/user/changepassword.php', '/user/logout.php');
+		$currentpage = $_SERVER['PHP_SELF'];
+		$isallowed = false;
+		foreach ($allowedpages as $page) {
+			if (preg_match('/'.preg_quote($page, '/').'$/', $currentpage)) {
+				$isallowed = true;
+				break;
+			}
+		}
+		if (!$isallowed) {
+			header('Location: '.DOL_URL_ROOT.'/user/changepassword.php?id='.$user->id);
+			exit;
+		}
+	}
+
 	// If user admin, we force the rights-based modules
 	if ($user->admin) {
 		$user->rights->user->user->lire = 1;
