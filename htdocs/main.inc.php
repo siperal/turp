@@ -1567,7 +1567,7 @@ function top_httphead($contenttype = 'text/html', $forcenocache = 0)
 			header("Content-Security-Policy-Report-Only: ".$contentsecuritypolicy);
 		}
 	} else {
-		header("Content-Security-Policy: ".constant('MAIN_SECURITY_FORCECSPRO'));
+		header("Content-Security-Policy-Report-Only: ".constant('MAIN_SECURITY_FORCECSPRO'));
 	}
 
 	// Content-Security-Policy
