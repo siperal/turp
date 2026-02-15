@@ -252,6 +252,12 @@ if ($confirm == 'confirmresetblockedlog') {
 	print "\n";
 	$db->query($sql);
 
+	$sql = "DELETE FROM ".MAIN_DB_PREFIX."const WHERE name = 'MAIN_FIRST_REGISTRATION_OK_DATE'";
+	print $sql;
+	print "\n";
+	$db->query($sql);
+
+
 	/*
 	// Delete corrupted record no more used that still exists in demo image but can't exist in a production env
 	$sql = "DELETE FROM ".MAIN_DB_PREFIX."blockedlog WHERE action LIKE 'PAYMENT_VARIOUS_%'";

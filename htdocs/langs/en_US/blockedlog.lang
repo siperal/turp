@@ -11,7 +11,7 @@ UnalterableLogToolRegistrationFR=Before using a software compliant with VAT Anti
 ApplicationHasBeenRegistered=Your application has been registered.
 InformationWillBePublishedTo=Fill this form and submit it.
 InformationWillBePublishedTo2=All the following information will be pushed to the following organization: %s (See %s for the data privacy policy)
-InformationWillBePublishedTo3=Also, each time you record a sensible data, a counter and footprint may be transferred to this organization too (to allow detection of data restauration). If you don't agree with this, do not register and enable this module.
+InformationWillBePublishedTo3=Also, each time you record a sensible data, a counter and footprint may be transferred to this organization too (to allow detection of data restauration or unallowed record deletion). If you don't agree with this, do not register and do not enable this module.
 FingerprintsDesc2=If you really need to purge this table because you used your application for a demo/test purpose and want to clean your data to start your production, you can ask your reseller or integrator to reset your database (all your data will be removed).
 CompanyInitialKey=Company initial key (hash of genesis block)
 BrowseBlockedLog=Unalterable logs
@@ -85,6 +85,7 @@ MAIN_INFO_ITPROVIDER_ZIP=IT service provider zip
 MAIN_INFO_ITPROVIDER_TOWN=IT service provider town
 RegistrationDoneAndModuleEnabled=The new registration information have been saved and registered. The module %s is enabled.
 UserRegistration=User registration
+RegistrationRequired=Registration expected
 
 ## logTypes
 logBILL_DELETE=Customer invoice logically deleted
