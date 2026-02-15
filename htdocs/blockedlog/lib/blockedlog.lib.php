@@ -334,12 +334,14 @@ function sumAmountsForUnalterableEvent($block, &$refinvoicefound, &$totalhtamoun
 /**
  * Call remote API service to push the last counter and signature
  *
- * @param 	int		$id			Last counter ID/value
- * @param 	string	$signature	Signature
- * @param	int		$test		Add property test to 1 if it is for test
- * @return	int					Return <0 if KO, 0 if nothing done, >0 if OK
+ * @param 	int		$id					Last counter ID/value
+ * @param 	string	$signature			Signature
+ * @param	int		$test				Add property test to 1 if it is for test
+ * @param 	int		$previousid			Last counter ID/value
+ * @param 	string	$previoussignature	Signature
+ * @return	int							Return <0 if KO, 0 if nothing done, >0 if OK
  */
-function callApiToPushCounter($id, $signature, $test = 0)
+function callApiToPushCounter($id, $signature, $test, $previousid, $previoussignature)
 {
 	global $mysoc, $conf;
 
@@ -347,7 +349,7 @@ function callApiToPushCounter($id, $signature, $test = 0)
 		// Push last rowid + signature to remote dolibarr server
 		// TODO Do it only for selected events: BILL_VALIDATE ?
 
-		// Code here is similar to the one into printCodeForPing()
+		// Code here is similar to the one into printCodeForPing(), except that message code/properties/fields may differ.
 		$url_for_ping = getDolGlobalString('MAIN_URL_FOR_PING', "https://ping.dolibarr.org/");
 
 		$algo = 'sha256';
@@ -362,6 +364,8 @@ function callApiToPushCounter($id, $signature, $test = 0)
 
 		$data .= '&lastrowid='.(int) $id;
 		$data .= '&lastsignature='.urlencode($signature);
+		$data .= '&previousrowid='.(int) $previousid;
+		$data .= '&previoussignature='.urlencode($previoussignature);
 		if ($test) {
 			$data .= '&test=1';
 		}
