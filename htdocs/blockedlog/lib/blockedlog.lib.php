@@ -38,7 +38,7 @@ function blockedlogadmin_prepare_head($withtabsetup)
 
 	$param = '';
 	$param .= ($withtabsetup? "?withtab=".$withtabsetup : "");
-	$param .= (GETPOST('origin') ? ($param ? '&' : '').'origin='.GETPOST('origin') : '');
+	$param .= (GETPOST('origin') ? ($param ? '&' : '?').'origin='.GETPOST('origin') : '');
 
 	$h = 0;
 	$head = array();
