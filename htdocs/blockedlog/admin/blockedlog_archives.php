@@ -915,7 +915,6 @@ if (is_array($tmparray) && !empty($tmparray)) {
 }
 
 // List of document
-// TODO Replace with specific code to list files with mass action, ...
 $formfile->list_of_documents(
 	$filearray,
 	null,
@@ -938,7 +937,7 @@ $formfile->list_of_documents(
 	0,
 	-1,
 	'',
-	array('afteruploadtitle' => $formToUploadAFile, 'showhideaddbutton' => 1)
+	array('afteruploadtitle' => $formToUploadAFile, 'showhideaddbutton' => 1, 'hideshared' => 1, 'buttons' => array(0 => array('picto' => img_picto($langs->trans("ControlFile"), 'question'), 'url' => $_SERVER["PHP_SELF"].'?action=check')))
 );
 
 /*
