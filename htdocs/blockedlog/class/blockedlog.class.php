@@ -1161,7 +1161,7 @@ class BlockedLog
 	{
 		$aaa = null;
 		try {
-			$aaa = (object) jsonOrUnserialize($data);
+			$aaa = (object) jsonOrUnserialize($data, false);
 		} catch (Exception $e) {
 			// print $e->getErrs);
 		}

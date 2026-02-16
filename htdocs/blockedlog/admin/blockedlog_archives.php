@@ -376,6 +376,7 @@ if ($action == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is 
 				$concatenateddata = $block_static->buildKeyForSignature();
 
 				// Version line archive VE1=sha256
+				$signatureexport = '';
 				if ($formatexport == 'VE1') {
 					// Note: The signature on export line is not used. It has been replaced with a global signature on all file.
 					$signatureexport = dol_hash($previoushashexport.$concatenateddata, 'sha256');
@@ -777,6 +778,7 @@ if ($action == 'check' || $action == 'checkconfirmed') {
 
 	$reg = array();
 	$period = '';
+	$regnumber = '';
 	$formatexport = '';
 	if (preg_match('/\speriod=([^\s]+)/', $line, $reg)) {
 		$period = $reg[1];	// Get period on first line
@@ -884,24 +886,24 @@ if ($action == 'check' || $action == 'checkconfirmed') {
 					$lineanalyzed = 1;
 					$linetech = $line[0];
 
-					$block_static->id = $line[1];
-					$block_static->date_creation = $line[2];
-					$block_static->action = $lineactioncode = $line[3];
-					$block_static->module_source = $line[4];
+					$block_static->id = (int) $line[1];
+					$block_static->date_creation = (string) $line[2];
+					$block_static->action = $lineactioncode = (string) $line[3];
+					$block_static->module_source = (string) $line[4];
 					$block_static->amounts_taxexcl = $lineamountht = $line[5];
 					$block_static->amounts = $lineamountttc = $line[6];
-					$block_static->ref_object = $lineref = $line[7];
-					$block_static->date_object = $line[8];
-					$block_static->user_fullname = $line[9];
-					$block_static->linktoref = $line[10];
-					$block_static->linktype = $line[11];
-					$block_static->object_data = json_decode($line[12]);
-					$block_static->object_version = $line[13];
-					$block_static->object_format = $line[14];
-					$block_static->signature = $line[15];
+					$block_static->ref_object = $lineref = (string) $line[7];
+					$block_static->date_object = (string) $line[8];
+					$block_static->user_fullname = (string) $line[9];
+					$block_static->linktoref = (string) $line[10];
+					$block_static->linktype = (string) $line[11];
+					$block_static->object_data = json_decode((string) $line[12]);
+					$block_static->object_version = (string) $line[13];
+					$block_static->object_format = (string) $line[14];
+					$block_static->signature = (string) $line[15];
 
 					// Status from file: 'Valid' or 'KO'
-					$statusline = $line[16];
+					$statusline = (string) $line[16];
 
 					// Status revalidated from calculation using the HMAC secret key (possible only when we are on the same instance than
 					// the one hosting the initial database of the archive)
