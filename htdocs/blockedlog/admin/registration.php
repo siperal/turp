@@ -241,8 +241,12 @@ print '<span class="opacitymedium">'.$langs->trans("BlockedLogDesc")."</span><br
 print '<br>';
 
 // Show version
-print '<div class="center"><span class="opacitymedium">'.$langs->trans("CurrentVersion").'</span> <span class="badge-text badge-secondary">'.DOL_VERSION.'</span></div>';
-
+$versionbadge = '<span class="badge-text badge-secondary">'.DOL_VERSION.'</span>';
+/*
+print '<div class="center"><span class="opacitymedium">'.$langs->trans("CurrentVersion").'</span> ';
+print $versionbadge;
+print '</div>';
+*/
 
 // Special additional message for FR only
 $infotoshow = '';
@@ -251,12 +255,12 @@ if ($mysoc->country_code == 'FR') {
 	if ($islne) {
 		if (preg_match('/\-/', DOL_VERSION)) {
 			// This is an alpha or beta version
-			$infotoshow = $langs->trans("LNECandidateVersionForCertificationFR");
+			$infotoshow = $langs->trans("LNECandidateVersionForCertificationFR", $versionbadge);
 		} else {
-			$infotoshow = $langs->trans("LNECertifiedVersionFR");
+			$infotoshow = $langs->trans("LNECertifiedVersionFR", $versionbadge);
 		}
 	} else {
-		$infotoshow = $langs->trans("NotCertifiedVersionFR");
+		$infotoshow = $langs->trans("NotCertifiedVersionFR", $versionbadge);
 	}
 }
 
@@ -271,7 +275,7 @@ if (in_array($mysoc->country_code, array('FR'))) {
 		}
 
 		if ((!isRegistrationDataSavedAndPushed() || !isModEnabled('blockedlog')) && $mode != "forceregistration") {
-			print '<center><span class="error">'.$langs->trans("RegistrationRequired").'</span></center>';
+			print '<center><span class="error"><br>'.$langs->trans("RegistrationRequired").'<br><br></span></center>';
 		}
 
 		$htmltext = "";
