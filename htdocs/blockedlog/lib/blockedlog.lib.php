@@ -265,9 +265,16 @@ function pdfCertifMentionblockedLog(&$pdf, $outputlangs, $seller, $default_font_
 {
 	$result = 0;
 
-	if (in_array($seller->country_code, array('FR')) && isALNEQualifiedVersion()) {	// If necessary, we could replace with "if isALNERunningVersion()"
+	if (in_array($seller->country_code, array('FR'))) {
 		$outputlangs->load("blockedlog");
-		$blockedlog_mention = $outputlangs->transnoentitiesnoconv("InvoiceGeneratedWithLNECertifiedPOSSystem");
+
+		$isalne = isALNEQualifiedVersion(); // If necessary, we could replace with "if isALNERunningVersion()"
+		if ($isalne == 'CERTIF_LNE_IS_2') {
+			$blockedlog_mention = $outputlangs->transnoentitiesnoconv("InvoiceGeneratedWithLNECandidatePOSSystem");
+		} else {
+			$blockedlog_mention = $outputlangs->transnoentitiesnoconv("InvoiceGeneratedWithLNECertifiedPOSSystem");
+		}
+
 		if ($blockedlog_mention) {
 			$pdf->SetFont('', '', $default_font_size - 2);
 			$pdf->SetXY($pdftemplate->marge_gauche, $posy);
