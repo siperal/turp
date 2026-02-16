@@ -1676,7 +1676,7 @@ class FormFile
 					if (!empty($moreoptions['buttons'])) {
 						print '<td>';
 						foreach ($moreoptions['buttons'] as $moreoptkey => $moreoptval) {
-							print '<a href="'.$moreoptval['url'].'">';
+							print '<a href="'.$moreoptval['url'].'&urlfile='.urlencode($file['name']).'">';
 							print $moreoptval['picto'];
 							print '</a>';
 						}
