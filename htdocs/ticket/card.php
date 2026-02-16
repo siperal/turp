@@ -642,8 +642,8 @@ if (empty($reshook)) {
 		// Reopen ticket
 		if ($object->fetch(GETPOST('id', 'int'), GETPOST('track_id', 'alpha')) >= 0) {
 			$new_status = GETPOST('new_status', 'int');
-			//$old_status = $object->status;
-			$res = $object->setStatut($new_status);
+
+			$res = $object->setStatut($new_status, null, '', 'TICKET_MODIFY');
 			if ($res) {
 				$url = 'card.php?track_id='.$object->track_id;
 				header("Location: ".$url);
