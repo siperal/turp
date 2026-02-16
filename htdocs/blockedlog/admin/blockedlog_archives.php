@@ -172,7 +172,7 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter.x'
 
 include DOL_DOCUMENT_ROOT.'/core/actions_linkedfiles.inc.php';
 
-if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is read/export for blockedlog
+if ($action == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is read/export for blockedlog
 	$error = 0;
 
 	$previoushash = '';
@@ -689,6 +689,8 @@ if (GETPOST('action') == 'export' && $user->hasRight('blockedlog', 'read')) {		/
 			}
 		}
 	}
+
+	$action = '';
 }
 
 
@@ -840,8 +842,7 @@ if ($action == 'check' || $action == 'checkconfirmed') {
 	print '<center><a href="'.$_SERVER["PHP_SELF"].'">'.$langs->trans("BackToList").'</a></center>';
 }
 
-
-if (empty($action)) {
+if ($action != 'check' && $action != 'checkconfirmed') {
 	$htmltext = '';
 
 	$htmltext .= $langs->trans("UnalterableLogTool2", $langs->transnoentities("Archives"))."<br>";
