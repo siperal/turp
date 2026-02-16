@@ -15632,11 +15632,12 @@ function showValueWithClipboardCPButton($valuetocopy, $showonlyonhover = 1, $tex
  * Decode an encoded string. The string can be encoded in json format (recommended) or with serialize (avoid this)
  *
  * @param 	string	$stringtodecode		String to decode (json or serialize coded)
+ * @param	boolean	$assoc				true=Return is converted into associative array
  * @return	mixed						The decoded object.
  */
-function jsonOrUnserialize($stringtodecode)
+function jsonOrUnserialize($stringtodecode, $assoc = true)
 {
-	$result = json_decode($stringtodecode);
+	$result = json_decode($stringtodecode, $assoc);
 	if ($result === null) {
 		$result = unserialize($stringtodecode);	// For backward compatibility. Is no more used in recent versions.
 	}
