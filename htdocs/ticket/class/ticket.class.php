@@ -3016,7 +3016,7 @@ class Ticket extends CommonObject
 				if (($object->status < self::STATUS_IN_PROGRESS && !$user->socid && !$private) ||
 					($object->status > self::STATUS_IN_PROGRESS && $public_area)
 				) {
-					$object->setStatut($object::STATUS_IN_PROGRESS);
+					$object->setStatut($object::STATUS_IN_PROGRESS, null, '', 'TICKET_MODIFY');
 				}
 				return 1;
 			} else {
