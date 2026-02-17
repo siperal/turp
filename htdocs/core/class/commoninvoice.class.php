@@ -771,7 +771,7 @@ abstract class CommonInvoice extends CommonObject
 				if (!empty($hookmanager->resArray['errors'])) {
 					$this->errors[] = array_merge($this->errors, $hookmanager->resArray['errors']);
 				}
-				return $hookmanager->resArray('result');
+				return $hookmanager->resArray['result'];
 			}
 
 			return 1;
@@ -881,7 +881,7 @@ abstract class CommonInvoice extends CommonObject
 				if (!empty($hookmanager->resArray['errors'])) {
 					$this->errors[] = array_merge($this->errors, $hookmanager->resArray['errors']);
 				}
-				return $hookmanager->resArray('result');
+				return $hookmanager->resArray['result'];
 			}
 		}
 
