@@ -535,7 +535,22 @@ if (getDolGlobalString('TAKEPOS_FOOTER') || getDolGlobalString($constFreeText)) 
 if (isALNEQualifiedVersion() || isALNERunningVersion()) {
 	$langs->load("blockedlog");
 	print '<center class="small"><i>';
-	print $langs->trans("LNECertifiedPOSSystem")."<br>";
+
+	// Special additional message for FR only
+	$infotoshow = '';
+	if ($mysoc->country_code == 'FR') {
+		$islne = isALNEQualifiedVersion(1, 1);
+		if ($islne) {
+			if (preg_match('/\-/', DOL_VERSION)) {
+				// This is an alpha or beta version
+				$infotoshow = $langs->trans("LNECandidatePOSSystem");
+			} else {
+				$infotoshow = $langs->trans("LNECertifiedPOSSystem");
+			}
+		}
+	}
+	print $infotoshow."<br>";
+
 	if ($mysoc->idprof2) {
 		$labelidprof = $langs->transcountry("ProfId2Short", $mysoc->country_code);
 		print $labelidprof.': '.$mysoc->idprof2;
