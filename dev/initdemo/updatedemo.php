@@ -175,7 +175,7 @@ if ($confirm == 'regenerate') {
 			$block_static->object_format = $obj->object_format;					// Not in signature.
 			$block_static->object_version = $obj->object_version;				// Not in signature
 
-			$block_static->certified = ($obj->certified == 1);					// Not in signature
+			//$block_static->certified = ($obj->certified == 1);				// Not in signature
 
 			//var_dump($obj->date_creation, $tz, $block_static->date_creation);
 
