@@ -241,7 +241,6 @@ if ($withtab) {
 
 print '<span class="opacitymedium">'.$langs->trans("BlockedLogDesc")."</span><br>\n";
 
-print '<br>';
 
 // Version
 $versionbadge = '<span class="badge-text badge-secondary">'.getBlockedLogVersionToShow().'</span>';
@@ -289,6 +288,13 @@ if (in_array($mysoc->country_code, array('FR'))) {
 		}
 
 		print info_admin($htmltext, 0, 0, $color);
+
+		$htmltext = '';
+		if ($mysoc->country_code == 'FR') {
+			$htmltext .= $langs->trans("UnalterableLogTool1FR").'<br>';
+		}
+
+		print info_admin($htmltext, 0, 0, 'warning');
 
 		if (isRegistrationDataSavedAndPushed() && isModEnabled('blockedlog') && $mode != "forceregistration") {
 			print '<center><span class="ok"><br>'.$langs->trans("ApplicationHasBeenRegistered").'<br><br></span></center>';
