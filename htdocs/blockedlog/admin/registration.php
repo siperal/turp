@@ -244,7 +244,7 @@ print '<span class="opacitymedium">'.$langs->trans("BlockedLogDesc")."</span><br
 print '<br>';
 
 // Version
-$versionbadge = '<span class="badge-text badge-secondary">'.DOL_VERSION.'</span>';
+$versionbadge = '<span class="badge-text badge-secondary">'.getBlockedLogVersionToShow().'</span>';
 
 
 // Special additional message for FR only

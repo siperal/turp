@@ -120,7 +120,7 @@ if ($withtab) {
 
 print '<span class="opacitymedium">'.$langs->trans("BlockedLogDesc")."</span><br>\n";
 
-$versionbadge = '<span class="badge-text badge-secondary">'.DOL_VERSION.'</span>';
+$versionbadge = '<span class="badge-text badge-secondary">'.getBlockedLogVersionToShow().'</span>';
 
 
 // Special additional message for FR only
