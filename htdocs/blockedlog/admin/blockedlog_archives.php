@@ -257,6 +257,10 @@ if ($action == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is 
 
 	if (!$error) {
 		$fh = fopen($tmpfile, 'w');
+		if (empty($fh)) {
+			$error++;
+			setEventMessages('Failed to open file for writing', null, 'errors');
+		}
 	}
 
 	if (!$error && $fh) {
@@ -318,8 +322,13 @@ if ($action == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is 
 					fwrite($fh, ";NOTE - previoushash=".$previoushash."\n");
 				}
 
-				$block_static->date_creation = $db->jdate($obj->date_creation, 'gmt');		// jdate(date_creation) is UTC
-				$block_static->date_modification = $db->jdate($obj->tms, 'gmt');			// jdate(tms) is UTC
+				$tz = 'gmt';
+				if (empty($obj->object_format) || $obj->object_format == 'V1') {
+					$tz = 'tzserver';
+				}
+
+				$block_static->date_creation = $db->jdate($obj->date_creation, $tz);		// jdate(date_creation) is UTC
+				$block_static->date_modification = $db->jdate($obj->tms, $tz);			// jdate(tms) is UTC
 
 				$block_static->action = $obj->action;
 				$block_static->module_source = $obj->module_source;
@@ -328,7 +337,7 @@ if ($action == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is 
 				$block_static->amounts = (float) $obj->amounts;															// Database store value with 8 digits, we cut ending 0 them with (flow)
 
 				$block_static->fk_object = $obj->fk_object;							// Not in signature
-				$block_static->date_object = $db->jdate($obj->date_object, 'gmt');	// jdate(date_object) is UTC
+				$block_static->date_object = $db->jdate($obj->date_object, $tz);	// jdate(date_object) is UTC
 				$block_static->ref_object = $obj->ref_object;
 
 				$block_static->linktoref = $obj->linktoref;
@@ -729,7 +738,7 @@ $formother = new FormOther($db);
 if ($withtab) {
 	$title = $langs->trans("ModuleSetup").' '.$langs->trans('BlockedLog');
 } else {
-	$title = $langs->trans("ArchiveLogs");
+	$title = $langs->trans("BrowseBlockedLog");
 }
 $help_url = "EN:Module_Unalterable_Archives_-_Logs|FR:Module_Archives_-_Logs_Inaltérable";
 
