@@ -127,6 +127,7 @@ function formatObject($objtoshow, $prefix, $parentelement = '')
 	);
 
 	$otherlabels = array(
+		'link' => 'Link',
 		'module_source' => 'POSModule',
 		'pos_source' => "POSTerminal",
 		'posmodule' => 'POSModule',
