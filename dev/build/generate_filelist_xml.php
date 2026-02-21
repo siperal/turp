@@ -44,7 +44,7 @@ define('DOL_DOCUMENT_ROOT', dirname(dirname($path)).'/htdocs');
 $algo = 'sha256';
 
 require_once $path."../../htdocs/master.inc.php";
-require_once DOL_DOCUMENT_ROOT."/blockedlog/versioncert.inc.php";
+require_once DOL_DOCUMENT_ROOT."/blockedlog/versionmod.inc.php";
 require_once DOL_DOCUMENT_ROOT."/core/lib/files.lib.php";
 
 
