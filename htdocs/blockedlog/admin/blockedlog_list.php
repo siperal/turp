@@ -214,7 +214,6 @@ print $langs->trans("FilesIntegrityDesc").': ';
 print '</span>';
 print '<a href="'.DOL_URL_ROOT.'/blockedlog/admin/filecheck.php">'.img_picto('', 'url', 'class="pictofixedwidth"').$langs->trans("FileCheck").'</a>';
 print '<br>';
-print "<br>\n";
 print "</div>\n";
 
 $htmltext = '';
