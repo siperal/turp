@@ -3,7 +3,7 @@ diff -up htdocs/filefunc.inc.php.patch htdocs/filefunc.inc.php
 +++ htdocs/filefunc.inc.php	2011-09-03 02:33:00.510952001 +0200
 @@ -128,8 +128,8 @@
  $conffile = "conf/conf.php";
- $conffiletoshow = "htdocs/conf/conf.php";	// Used into the include
+ $conffiletoshow = "htdocs/conf/conf.php";
  // For debian/redhat like systems
 -//$conffile = "/etc/dolibarr/conf.php";
 -//$conffiletoshow = "/etc/dolibarr/conf.php";

@@ -126,7 +126,7 @@ function dol_session_rotate($sessionname = '')
 // Define localization of conf file
 // --- Start of part replaced by Dolibarr packager makepack-dolibarr
 $conffile = "conf/conf.php";
-$conffiletoshow = "htdocs/conf/conf.php";	// Used into the include
+$conffiletoshow = "htdocs/conf/conf.php";
 // For debian/redhat like systems
 //$conffile = "/etc/dolibarr/conf.php";
 //$conffiletoshow = "/etc/dolibarr/conf.php";
