@@ -66,7 +66,6 @@ if (!$user->admin) {
 	accessforbidden();
 }
 
-
 /*
  * Action
  */
