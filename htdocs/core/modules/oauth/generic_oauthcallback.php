@@ -114,9 +114,9 @@ if ($state) {
 	}
 }
 
-// Add a test to check that the state parameter is provided into URL when we make the first call to ask the redirect or when we receive the callback
-// but not when callback was ok and we recall the page
-if ($action != 'delete' && !GETPOST('afteroauthloginreturn') && (empty($statewithscopeonly) || empty($requestedpermissionsarray)) && $state != 'none') {
+// Add a test to check that the state parameter is provided into URL when we make the first call to ask the redirect or when we receive the callback,
+// but NOT when callback was ok and we recall the page
+if ($action != 'delete' && !GETPOST('afteroauthloginreturn') && (empty($statewithscopeonly) || empty($requestedpermissionsarray)) && !preg_match('/^none/', $state)) {
 	if (GETPOST('error') || GETPOST('error_description')) {
 		setEventMessages($langs->trans("Error").' '.GETPOST('error_description'), null, 'errors');
 	} else {
@@ -208,7 +208,7 @@ if (!GETPOST('code') && !GETPOST('error')) {
 
 	if (empty($state) || $state == 'none') {
 		// Generate a random state value to prevent CSRF attack. Store it into session juste after to check it when we will receive the callback from provider.
-		$state = bin2hex(random_bytes(16));
+		$state = 'none-'.bin2hex(random_bytes(16));
 	}
 
 	// If we enter this page without 'code' parameter, it means we click on the link from login page ($forlogin is set) or from setup page and we want to get the redirect
@@ -301,24 +301,57 @@ if (!GETPOST('code') && !GETPOST('error')) {
 
 			$db->begin();
 
-			// This requests the token from the received OAuth code (call of the endpoint)
-			// Result is stored into object managed by class DoliStorage into includes/OAuth/Common/Storage/DoliStorage.php and into database table llx_oauth_token
-			$token = $apiService->requestAccessToken(GETPOST('code'), $state);
-			'@phan-var-force OAuth\Common\Token\AbstractToken $token';
+			$token = null;
+			$last_insert_id = 0;
+			try {
+				// This requests the token from the received OAuth code (call of the endpoint)
+				// Result is stored into object managed by class DoliStorage into includes/OAuth/Common/Storage/DoliStorage.php and into database table llx_oauth_token
+				$token = $apiService->requestAccessToken(GETPOST('code'), $state);
+				'@phan-var-force OAuth\Common\Token\AbstractToken $token';
+
+				$storage = $apiService->getStorage();
+				if (property_exists($storage, 'last_insert_id')) {
+					$last_insert_id = $storage->last_insert_id;
+				}
+			} catch (Exception $e) {
+				dol_syslog("Failed to get token with requestAccessToken: ".$e->getMessage(), LOG_ERR);
+				setEventMessages("Failed to get token with requestAccessToken: ".$e->getMessage(), null, 'errors');
+				$errorincheck++;
+			}
+
+			// The refresh token is inside the object token if the prompt was forced only. Otherwise, it may be found into extraParams section.
+			//$refreshtoken = $token->getRefreshToken();
+			//var_dump($refreshtoken);
+			dol_syslog("requestAccessToken complete");
 
 			// The refresh token is inside the object token if the prompt was forced only.
 			//$refreshtoken = $token->getRefreshToken();
 			//var_dump($refreshtoken);
 
 			// Note: The extraparams has the 'id_token' than contains a lot of information about the user.
-			$extraparams = $token->getExtraParams();
+			if ($token)	{
+				$extraparams = $token->getExtraParams();
 
-			$scope = empty($extraparams['scope']) ? '' : $extraparams['scope'];
-			$tokenstring = $token->getAccessToken();
-			// Update entry in llx_oauth_token to store the scope associated to the token into field "state" (field should be renamed).
-			// It is not stored by default by DoliStorage.
-			// TODO Update using $scope and $tokenstring
+				$scope = empty($extraparams['scope']) ? '' : $extraparams['scope'];
+				$tokenstring = $token->getAccessToken();
+				// Update entry in llx_oauth_token to store the scope associated to the token into field "state" (field should be renamed).
+				// It is not stored by default by DoliStorage.
+				// TODO Update using $scope and $tokenstring and $last_insert_id
+				$refreshtoken = empty($extraparams['refresh_token']) ? '' : $extraparams['refresh_token'];
+				if (empty($refreshtoken)) {
+					$refreshtoken = $token->getRefreshToken();
+				}
 
+				if ($last_insert_id) {
+					$sqlupdate = "UPDATE ".MAIN_DB_PREFIX."oauth_token";
+					$sqlupdate .= " SET state = '".(empty($scope) ? '' : $db->escape($scope))."', tokenstring = '".$db->escape($tokenstring)."', tokenstring_refresh = '".$db->escape($refreshtoken)."'";
+					$sqlupdate .= " WHERE rowid = ".((int) $last_insert_id);
+
+					$db->query($sqlupdate);
+
+					//var_dump($scope, $token, $refreshtoken, $last_insert_id, $sqlupdate);exit;
+				}
+			}
 
 			$username = '';
 			$useremail = '';
