@@ -608,8 +608,12 @@ if ($action == 'export' && $user->hasRight('blockedlog', 'read')) {		// read is 
 			$object->fullname = $user->getFullName($langs);
 
 			$object->label = 'Export unalterable logs';
-			$object->total = 123;
-			$object->totallifetime = 123;
+
+			$object->total_billed = $totalhtamountalllines['BILL_VALIDATE'].' '.$langs->trans("HT").' - '.$totalvatamountalllines['BILL_VALIDATE'].' '.$langs->trans("VAT").' - '.$totalamountalllines['BILL_VALIDATE'].' '.$langs->trans("HT");
+			$object->total_collected = $totalamountalllines['PAYMENT_CUSTOMER'];
+			$object->totallifetime_billed = $totalhtamountlifetime['BILL_VALIDATE'].' '.$langs->trans("HT")." - ".($foundoldformat ? '' : ($totalamountlifetime['BILL_VALIDATE'] - $totalhtamountlifetime['BILL_VALIDATE']).' '.$langs->transnoentitiesnoconv("VAT")).' - '.$totalamountlifetime['BILL_VALIDATE'].' '.$langs->trans("HT");
+			$object->totallifetime_collected = ($totalamountlifetime['PAYMENT_CUSTOMER_CREATE'] + $totalamountlifetime['PAYMENT_CUSTOMER_DELETE']);
+
 			$object->period = 'year='.GETPOSTINT('yeartoexport').(GETPOSTINT('monthtoexport') ? ' month='.GETPOSTINT('monthtoexport') : '');
 
 			$action = 'BLOCKEDLOG_EXPORT';
