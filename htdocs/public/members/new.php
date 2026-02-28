@@ -992,7 +992,7 @@ if (getDolGlobalString('MEMBER_SKIP_TABLE') || getDolGlobalString('MEMBER_NEWFOR
 
 
 	// Add hook to complete the form
-	$parameters = array('country_id' => $country_id);
+	$parameters = array('country_id' => $country_id, 'mode' => 'new');
 	$reshook = $hookmanager->executeHooks('membershipNewSubscriptionPublicForm', $parameters, $object, $action);
 	if ($reshook < 0) {
 		setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
