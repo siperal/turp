@@ -473,6 +473,7 @@ Permission1522=Supprimer des documents
 Permission2401=Lire les actions (événements ou tâches) liées à son compte utilisateur (si propriétaire de l'événement ou juste attribué à)
 Permission2403=Supprimer les actions (événements ou tâches) liées à son compte utilisateur (si propriétaire de l'événement)
 Permission2414=Exportation d'actions/tâches des autres
+Permission3201=Lire, exporter et contrôler les journaux immuables et la signature
 Permission4003=Supprimer la compétence/l'emploi/le poste
 Permission4021=Lire les évaluations (les vôtres et celles de vos subordonnés)
 Permission4028=Voir le menu comparatif
