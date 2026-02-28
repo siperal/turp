@@ -111,7 +111,7 @@ if [ "x$param1" = "xall" ] || [ "x$param1" = "xmerge" ]; then
         git remote add $REMOTE_NAME "../dolibarr_$END.0"
         git fetch $REMOTE_NAME
 
-	    git merge "$REMOTE_NAME/dolibarr_$END.0" -m "Automated merge from $END.0 to $DEV_BRANCH" && git push || exit 1
+	    git merge "$REMOTE_NAME/$END.0" -m "Automated merge from $END.0 to $DEV_BRANCH" && git push || exit 1
 
 	    git remote remove $REMOTE_NAME
 	    cd ..
