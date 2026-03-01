@@ -100,13 +100,12 @@ FileHasBeenCorrupted=L'intégrité de fichier est incorrecte. Elle a peut-être 
 FileHasBeenCorruptedOrNotFromInstance=L'intégrité/l'authenticité de fichier est incorrecte. fichier a peut-être été altérée (par un problème de disque ou une corruption manuelle).
 FileNotFromInstance=L'intégrité de fichier semble correcte, mais son authenticité est erronée. fichier n'a pas été généré par cette instance.
 nbLinesModifiedInExportButKo=Certaines lignes sont définies comme valides lors de l'exportation, mais sont détectées comme modifiées dans la base de données Journaux Inaltérables.
-nbLinesModifiedBeforeExport=Certaines lignes ont été signalées comme modifiées dans la base de données Immutable Logs avant l'exportation. Ces lignes sont signalées avec la valeur KO dans la colonne « état » de l'archive fichier.
+nbLinesModifiedBeforeExport=Certaines lignes ont été signalées comme modifiées dans la base de données de Logs Inaltérables avant l'exportation. Ces lignes sont signalées avec la valeur KO dans la colonne « état » du fichier archive.
 YouMayFindDocumentOn=Vous trouverez à ce lien de la documentation relative à la responsabilité concernant l'utilisation de l'application et afin de garantir sa conformité avec la législation locale.
 IfIntegrityAuthenticityIsOkYouCanGetdetailByOpeningTheFile=Si l'intégrité de fichier est correcte, vous pouvez obtenir plus de détails sur tous les événements en téléchargeant et et en ouvrant fichier avec n'importe quel tableur (Excel, LibreOffice Calc, Google Sheets, etc.) en utilisant le caractère <b>;</b> comme séparateur de colonnes. et et <b>.</b> servent de séparateur décimal. Utilisez « international » ou « English USA » si vous avez de tels préréglages d'importation prédéfinis.
 IfIntegrityAuthenticityIsOkYouCanGetdetailByOpeningTheFile2=Vous pouvez donc utiliser n'importe quel filtre de votre choix et voir le détail des références, des montants, des cumuls et/ou des montants individuels de chaque événement.
 DetectionOfSystemRestoration=Détection de la restauration ou de la suppression de la dernière ligne du système de base de données
 FeatureOnlyWhenArchiveAnalyzedFrom=Cette fonctionnalité est pour le moment disponible uniquement lorsque l'archivage est contrôlé depuis %s
-DiscountInPercent=Remise (en %)
 
 ## logTypes
 logBILL_DELETE=Suppression logique de la facture client
