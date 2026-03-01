@@ -16671,6 +16671,8 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 					}
 				}
 				$out .= $contactGetNomUrlCache[$histo[$key]['msg_from']];
+			} else {
+				$out .= '<img class="photomemberphoto userphoto" alt="" src="/public/theme/common/user_anonymous.png">'.$langs->trans("Anonymous");
 			}
 			$out .= '</div>';
 
