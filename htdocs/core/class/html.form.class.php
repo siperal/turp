@@ -9039,7 +9039,8 @@ class Form
 	 * @param 	int				$forcecombo           	Force to load all values and output a standard combobox (with no beautification)
 	 * @param 	int<0,1>		$disabled             	1=Html component is disabled
 	 * @param	string			$selected_input_value 	Value of preselected input text (for use with ajax)
-	 * @param	string|array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int<-6,6>|string,alwayseditable?:int<0,1>,noteditable?:int<0,1>,default?:string,index?:int,foreignkey?:string,searchall?:int<0,1>,isameasure?:int<0,1>,css?:string,csslist?:string,help?:string,showoncombobox?:int<0,4>,disabled?:int<0,1>,arrayofkeyval?:array<int|string,string>,autofocusoncreate?:int<0,1>,comment?:string,copytoclipboard?:int<1,2>,validate?:int<0,1>,showonheader?:int<0,1>}	$objectfield	'Object:Field' that contains the definition of parent (in table $fields or $extrafields). Example: 'Object:xxx' or 'Object@module:xxx' or 'Object:options_xxx' or 'Object@module:options_xxx' or,  better, the full entry array in ->fields
+	 * @param	string|array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int<-6,6>|string,alwayseditable?:int<0,1>,noteditable?:int<0,1>,default?:string,index?:int,foreignkey?:string,searchall?:int<0,1>,isameasure?:int<0,1>,css?:string,csslist?:string,help?:string,showoncombobox?:int<0,4>,disabled?:int<0,1>,arrayofkeyval?:array<int|string,string>,autofocusoncreate?:int<0,1>,comment?:string,copytoclipboard?:int<1,2>,validate?:int<0,1>,showonheader?:int<0,1>}	$objectfield	'Object:fieldkey' that contains the definition of parent (in table $fields or $extrafields). Example: 'Object:xxx' or 'Object@module:xxx' or 'Object:options_xxx' or 'Object@module:options_xxx' or
+	 *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  better, the full entry array in ->fields
 	 * @return  string	    							Return HTML string
 	 * @see selectForFormsList(), select_thirdparty_list()
 	 */
@@ -9052,14 +9053,14 @@ class Form
 		// We got this in a modulebuilder form of "MyObject" of module "mymodule".
 		// When ->fields is array( ... "fk_soc" => array("type"=>"integer:Societe:societe/class/societe.class.php:1:((status:=:1) AND (entity:IN:__SHARED_ENTITIES__))" ...), we have
 		// $objectdesc = 'Societe'
-		// $objectfield = 'myobject@mymodule:fk_soc'  ('fk_soc' is code to retrieve myobject->fields['fk_soc'])   or it can be an array that is directly
-		//                 array("type"=>"integer:Societe:societe/class/societe.class.php:1:((status:=:1) AND (entity:IN:__SHARED_ENTITIES__))" ...)
+		// $objectfield = Method 1: 'myobject@mymodule:fk_soc'  ('fk_soc' is code to retrieve myobject->fields['fk_soc'])
+		//                Method 2 recommended (it can be the array): array("type"=>"integer:Societe:societe/class/societe.class.php:1:((status:=:1) AND (entity:IN:__SHARED_ENTITIES__))" ...)
 
 		// We got this when showing an extrafields on resource that is a link to societe
-		// When extrafields 'link_to_societe' of Resource is 'link' to 'Societe:societe/class/societe.class.php:1:((status:=:1) AND (entity:IN:__SHARED_ENTITIES__))" ...)', we have
+		// When extrafields 'link_to_societe' for object Resource is 'link' to 'Societe:societe/class/societe.class.php:1:((status:=:1) AND (entity:IN:__SHARED_ENTITIES__))', we have
 		// $objectdesc = 'Societe'
-		// $objectfield = 'resource:options_link_to_societe'  or it can be an array that is directly
-		//                array("type"=>'Societe:societe/class/societe.class.php:1:((status:=:1) AND (entity:IN:__SHARED_ENTITIES__))" ...)
+		// $objectfield = Method 1: 'resource:options_link_to_societe'
+		//                Method 2 recommended (it can be the array): array("type"=>'Societe:societe/class/societe.class.php:1:((status:=:1) AND (entity:IN:__SHARED_ENTITIES__))" ...)
 
 		// With old usage:
 		// $objectdesc = 'Societe:societe/class/societe.class.php:1:((status:=:1) AND (entity:IN:__SHARED_ENTITIES__))'
@@ -9200,6 +9201,7 @@ class Form
 			// Set url and param to call to get json of the search results
 			$urlforajaxcall = DOL_URL_ROOT . '/core/ajax/selectobject.php';
 			$urloption = 'htmlname=' . urlencode($htmlname) . '&outjson=1&objectdesc=' . urlencode($objectdescorig) . (is_scalar($objectfield) ? '&objectfield='.urlencode($objectfield) : '') . ($sortfield ? '&sortfield=' . urlencode($sortfield) : '');
+			//$urloption = 'htmlname=' . urlencode($htmlname) . '&outjson=1'.(is_scalar($objectfield) ? '&objectfield='.urlencode($objectfield) : '') . ($sortfield ? '&sortfield=' . urlencode($sortfield) : '');
 
 			// Activate the auto complete using ajax call.
 			$out .= ajax_autocompleter((string) $preSelectedValue, $htmlname, $urlforajaxcall, $urloption, getDolGlobalInt($confkeyforautocompletemode), 0);
