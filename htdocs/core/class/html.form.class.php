@@ -855,12 +855,6 @@ class Form
 			$img = img_help(($tooltiptrigger != '' ? 2 : 1), $alt);
 		} elseif ($type == 'helpclickable') {
 			$img = img_help(($tooltiptrigger != '' ? 2 : 1), $alt);
-		} elseif ($type == 'superadmin') {
-			// @phan-suppress-next-line PhanPluginSuspiciousParamPosition
-			$img = img_picto($alt, 'redstar');
-		} elseif ($type == 'admin') {
-			// @phan-suppress-next-line PhanPluginSuspiciousParamPosition
-			$img = img_picto($alt, 'star');
 		} elseif ($type == 'warning') {
 			$img = img_warning($alt);
 		} elseif ($type != 'none') {
