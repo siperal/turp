@@ -6117,7 +6117,7 @@ class Form
 		if (empty($height)) {
 			$height = 250;
 			if (is_array($formquestion) && count($formquestion) > 2) {
-				$height += ((count($formquestion) - 2) * 24) + 5;
+				$height += ((count($formquestion) - 2) * 24) + 10;
 			}
 		}
 
