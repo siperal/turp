@@ -620,7 +620,9 @@ if ($object->fetch($id) >= 0) {
 
 					print '<div class="tagtd center valignmiddle">';
 					if ($nbofrecipient === '' || $nbofrecipient >= 0) {
-						print $nbofrecipient;
+						if ($nbofrecipient !== '') {
+							print '<span class="badge badge-info">'.$nbofrecipient.'</span>';
+						}
 					} else {
 						print $langs->trans("Error").' '.img_error($obj->error);
 					}
