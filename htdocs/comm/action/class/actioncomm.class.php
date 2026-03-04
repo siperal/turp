@@ -1986,7 +1986,7 @@ class ActionComm extends CommonObject
 	/**
 	 *  Return label of type of event
 	 *
-	 *  @param	int		$mode			0=Mode short, 1=Mode long
+	 *  @param	int		$mode			0=Mode short, 1=Mode long, 2=Mode very long
 	 *  @return	string					HTML String
 	 */
 	public function getTypeLabel($mode = 0)
@@ -2020,6 +2020,11 @@ class ActionComm extends CommonObject
 
 		if ($this->type == 'systemauto' && $mode == 1) {
 			$labeltype .= ' ('.$langs->trans("auto").')';
+		}
+		if ($this->type == 'systemauto' && $mode == 2) {
+			$labeltype = $langs->trans("AutoActions").($this->type_code == 'AC_OTH_AUTO' ? '' : ': '.$labeltype);
+		} elseif ($this->type != 'systemauto' && $mode == 2) {
+			$labeltype = $langs->trans("ManualActions").($this->type_code == 'AC_OTH' ? '' : ': '.$labeltype);
 		}
 
 
