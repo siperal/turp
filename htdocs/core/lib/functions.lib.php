@@ -3983,6 +3983,12 @@ function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = 
 		$format = ($outputlangs->trans("FormatDateShort") != "FormatDateShort" ? $outputlangs->trans("FormatDateShort") : $conf->format_date_short);
 	} elseif ($format == 'hour') {
 		$format = ($outputlangs->trans("FormatHourShort") != "FormatHourShort" ? $outputlangs->trans("FormatHourShort") : $conf->format_hour_short);
+	} elseif ($format == 'hoursec') {
+		$s1 = $outputlangs->trans("FormatDateShort");
+		$s2 = $outputlangs->trans("FormatDateHourSecShort");
+		$s3 = trim(preg_replace('/'.preg_quote($s1, '/').'/', '', $s2));	// Try to guess the format for FormatHourSecShort using FormatDateShort and FormatDateHourSecShort
+		$format = $s3;
+		//$format = ($outputlangs->trans("FormatHourSecShort") != "FormatHourSecShort" ? $outputlangs->trans("FormatHourSecShort") : ($s3 ? $s3 : $conf->format_hour_sec_short));
 	} elseif ($format == 'hourduration') {
 		$format = ($outputlangs->trans("FormatHourShortDuration") != "FormatHourShortDuration" ? $outputlangs->trans("FormatHourShortDuration") : $conf->format_hour_short_duration);
 	} elseif ($format == 'daytext') {
@@ -4540,6 +4546,82 @@ function dol_print_email($email, $contactid = 0, $socid = 0, $addlink = 0, $max 
 
 	return $rep;
 }
+
+
+/**
+ * Print decorated date-hour
+ *
+ * @param	int			$datep			Date
+ * @param	int|null	$datef			Second date
+ * @param	int			$fullday		Set to 1 for full day (hours are hidden)
+ * @param	int			$addseconds		Add also seconds
+ * @param	string		$pictotoadd		Picto to add
+ * @param	string|bool	$tzoutput		true or 'gmt' => string is for Greenwich location
+ * 										false or 'tzserver' => output string is for local PHP server TZ usage
+ * 										'tzuser' => output string is for user TZ (current browser TZ with current dst) => In a future, we should have same behaviour than 'tzuserrel'
+ *                                 	    'tzuserrel' => output string is for user TZ (current browser TZ with dst or not, depending on date position)
+ * @param	string 		$reduceformat	Use 1 to use a reduce format
+ * @return	string						Decorated date
+ */
+function dolOutputDates($datep, $datef = null, $fullday = 0, $addseconds = 0, $pictotoadd = '', $tzoutput = 'tzuserrel', $reduceformat = 0)
+{
+	$tmpa = dol_getdate($datep);
+	if (empty($datef)) {
+		$tmpb = $tmpa;
+	} else {
+		$tmpb = dol_getdate($datef);
+	}
+
+	$s = '';
+
+	if ($tmpa['mday'] == $tmpb['mday'] && $tmpa['mon'] == $tmpb['mon'] && $tmpa['year'] == $tmpb['year']) {
+		// The same day
+		$s .= '<div class="center inline-block">';
+		if ($tmpa['hours'] != $tmpb['hours'] || $tmpa['minutes'] != $tmpb['minutes']) {
+			// Not the same hour
+			$s .=  dol_print_date($datep, 'day'.($reduceformat ? 'reduceformat' : ''), $tzoutput);
+			$s .= $pictotoadd;
+			if (empty($fullday)) {
+				$s .=  '<br><span class="small opacitymedium">';
+				$s .=  dol_print_date($datep, 'hour'.($addseconds ? 'sec' : '').'reduceformat', $tzoutput);
+				$s .=  '-'.dol_print_date($datef, 'hour'.($addseconds ? 'sec' : '').'reduceformat', $tzoutput);
+				$s .=  '</span>';
+			}
+		} else {
+			// The same hour
+			$s .=  dol_print_date($datep, 'day'.($reduceformat ? 'reduceformat' : ''), 'tzuserrel');
+			$s .= $pictotoadd;
+			if (empty($fullday)) {
+				$s .=  '<br><span class="small opacitymedium">';
+				$s .=  dol_print_date($datep, 'hour'.($addseconds ? 'sec' : '').'reduceformat', $tzoutput);
+				$s .=  '</span>';
+			}
+		}
+		$s .=  '</div>';
+	} else {
+		// Not the same day
+		$s .=  '<div class="center inline-block dateborderright">';
+		$s .=  dol_print_date($datep, 'day'.($reduceformat ? 'reduceformat' : ''), $tzoutput);
+		if (empty($fullday)) {
+			$s .=  '<br><span class="small opacitymedium">';
+			$s .=  dol_print_date($datep, 'hour'.($addseconds ? 'sec' : '').'reduceformat', $tzoutput);
+			$s .=  '</span>';
+		}
+		$s .=  '</div>';
+		$s .=  '<div class="center inline-block dateborderleft">';
+		$s .=  dol_print_date($datef, 'day'.($reduceformat ? 'reduceformat' : ''), 'tzuserrel');
+		$s .= $pictotoadd;
+		if (empty($fullday)) {
+			$s .=  '<br><span class="small opacitymedium">';
+			$s .=  dol_print_date($datef, 'hour'.($addseconds ? 'sec' : '').'reduceformat', $tzoutput);
+			$s .=  '</span>';
+		}
+		$s .=  '</div>';
+	}
+
+	return $s;
+}
+
 
 /**
  * Get array of social network dictionary

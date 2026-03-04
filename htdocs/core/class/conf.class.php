@@ -192,6 +192,10 @@ class Conf extends stdClass
 	/**
 	 * @var string
 	 */
+	public $format_hour_sec_short;
+	/**
+	 * @var string
+	 */
 	public $format_hour_short_duration;
 	/**
 	 * @var string
@@ -1079,6 +1083,7 @@ class Conf extends stdClass
 			$this->format_date_short = "%d/%m/%Y"; // Format of day with PHP/C tags (strftime functions)
 			$this->format_date_short_java = "dd/MM/yyyy"; // Format of day with Java tags
 			$this->format_hour_short = "%H:%M";
+			$this->format_hour_sec_short = "%H:%M:%S";
 			$this->format_hour_short_duration = "%H:%M";
 			$this->format_date_text_short = "%d %b %Y";
 			$this->format_date_text = "%d %B %Y";
