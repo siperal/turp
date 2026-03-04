@@ -816,7 +816,7 @@ input.pageplusone {
 select:invalid, select.--error {
 	color: gray;
 }
-input:disabled, textarea:disabled, select[disabled='disabled']
+input:disabled:not(.colorthumb), textarea:disabled, select[disabled='disabled']
 {
 	/* background: var(--inputbackgroundcolordisabled); */
 	/* color: var(--inputcolordisabled); */
@@ -3837,6 +3837,9 @@ img.userphotopublicvcard {
 img.userphoto[alt="Gravatar avatar"], img.photouserphoto.dropdown-user-image[alt="Gravatar avatar"] {
 	background: #fff;
 }
+img.gravatar.photouserphoto {
+	filter: grayscale(50%);
+}
 form[name="addtime"] img.userphoto, form[name="addtime"] img.userphotosmall {
 	border: 1px solid #444;
 }
@@ -6757,8 +6760,14 @@ span.jPicker {
 	border-collapse: collapse;
 	border: none;
 }
+.jPicker tr.Hex td.Text input {
+	width: 60px !important;
+}
 .jPicker td.Text input {
-	width: 35px !important;
+	min-width: 40px;
+	padding: 8px;
+	border: 1px solid #bbb !important;
+	border-radius: 4px;
 }
 
 A.color, A.color:active, A.color:visited {
