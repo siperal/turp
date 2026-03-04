@@ -2765,7 +2765,7 @@ function addOtherFilterSQL(&$sql, $donetodo, $now, $filters)
 	if (is_array($filters) && !empty($filters['search_rowid'])) {
 		$sql .= natural_search('a.id', $filters['search_rowid'], 1);
 	}
-	if (is_array($filters) && !empty($filters['search_filtert'])) {
+	if (is_array($filters) && !empty($filters['search_filtert']) && ((int) $filters['search_filtert']) != -1) {
 		$sql .= natural_search('a.fk_user_action', $filters['search_filtert'], 1);
 	}
 
