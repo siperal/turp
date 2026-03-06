@@ -601,7 +601,7 @@ $sql .= $db->order($sortfield, $sortorder);
 if ($limit) {
 	$sql .= $db->plimit($limit + 1, $offset);
 }
-print $sql;
+
 $resql = $db->query($sql);
 if (!$resql) {
 	dol_print_error($db);
