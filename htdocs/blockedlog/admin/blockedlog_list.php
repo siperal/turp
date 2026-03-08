@@ -199,9 +199,11 @@ if (GETPOST('withtab', 'alpha')) {
 $morehtmlcenter = '';
 
 $registrationnumber = getHashUniqueIdOfRegistration();
-$texttop = '<small class="opacitymedium">'.$langs->trans("RegistrationNumber").':</small> <small>'.dol_trunc($registrationnumber, 10).'</small>';
-if (!isRegistrationDataSavedAndPushed()) {
-	$texttop = '';
+if (!getDolGlobalString("BLOCKEDLOG_FOR_TAX_AUDITOR")) {
+	$texttop = '<small class="opacitymedium">'.$langs->trans("RegistrationNumber").':</small> <small>'.dol_trunc($registrationnumber, 10).'</small>';
+	if (!isRegistrationDataSavedAndPushed()) {
+		$texttop = '';
+	}
 }
 
 print load_fiche_titre($title.'<br>'.$texttop, $linkback, 'blockedlog', 0, '', '', $morehtmlcenter);

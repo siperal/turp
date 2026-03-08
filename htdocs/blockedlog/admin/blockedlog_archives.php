@@ -679,9 +679,11 @@ if ($withtab) {
 $morehtmlcenter = '';
 
 $registrationnumber = getHashUniqueIdOfRegistration();
-$texttop = '<small class="opacitymedium">'.$langs->trans("RegistrationNumber").':</small> <small>'.dol_trunc($registrationnumber, 10).'</small>';
-if (!isRegistrationDataSavedAndPushed()) {
-	$texttop = '';
+if (!getDolGlobalString("BLOCKEDLOG_FOR_TAX_AUDITOR")) {
+	$texttop = '<small class="opacitymedium">'.$langs->trans("RegistrationNumber").':</small> <small>'.dol_trunc($registrationnumber, 10).'</small>';
+	if (!isRegistrationDataSavedAndPushed()) {
+		$texttop = '';
+	}
 }
 
 print load_fiche_titre($title.'<br>'.$texttop, $linkback, 'blockedlog', 0, '', '', $morehtmlcenter);
@@ -694,9 +696,11 @@ print dol_get_fiche_head($head, 'archives', '', -1);
 //print '<br><br>';
 
 print '<div class="opacitymedium hideonsmartphone justify">';
-
-print $langs->trans("ArchivesDesc")."<br>";
-
+if (!getDolGlobalString("BLOCKEDLOG_FOR_TAX_AUDITOR")) {
+	print $langs->trans("ArchivesDesc")."<br>";
+} else {
+	print $langs->trans("ArchivesAuditorDesc")."<br>";
+}
 print "</div>\n";
 
 
@@ -1051,17 +1055,20 @@ if ($action == 'check' || $action == 'checkconfirmed') {
 if ($action != 'check' && $action != 'checkconfirmed') {
 	$htmltext = '';
 
-	$htmltext .= $langs->trans("UnalterableLogTool2", $langs->transnoentities("Archives"))."<br>";
-	if ($mysoc->country_code == 'FR') {
-		$htmltext .= '<br>'.$langs->trans("UnalterableLogTool1FR").'<br>';
+	if (!getDolGlobalString("BLOCKEDLOG_FOR_TAX_AUDITOR")) {
+		$htmltext .= $langs->trans("UnalterableLogTool2", $langs->transnoentities("Archives"))."<br>";
+		if ($mysoc->country_code == 'FR') {
+			$htmltext .= '<br>'.$langs->trans("UnalterableLogTool1FR").'<br>';
+		}
+		//$htmltext .= $langs->trans("UnalterableLogTool1");
+		//$htmltext .= $langs->trans("UnalterableLogTool3")."<br>";
+
+		print info_admin($htmltext, 0, 0, 'warning');
+
+		print '<br>';
+	} else {
+		print '<br>';
 	}
-	//$htmltext .= $langs->trans("UnalterableLogTool1");
-	//$htmltext .= $langs->trans("UnalterableLogTool3")."<br>";
-
-	print info_admin($htmltext, 0, 0, 'warning');
-
-
-	print '<br>';
 
 	$param = '';
 	if ($contextpage != getDolDefaultContextPage(__FILE__)) {
@@ -1127,33 +1134,34 @@ if ($action != 'check' && $action != 'checkconfirmed') {
 	}
 
 
-	print '<form method="POST" id="exportArchives" action="'.$_SERVER["PHP_SELF"].'?output=file">';
-	print '<input type="hidden" name="token" value="'.newToken().'">';
-	print '<input type="hidden" name="action" value="export">';
+	if (!getDolGlobalString("BLOCKEDLOG_FOR_TAX_AUDITOR")) {
+		print '<form method="POST" id="exportArchives" action="'.$_SERVER["PHP_SELF"].'?output=file">';
+		print '<input type="hidden" name="token" value="'.newToken().'">';
+		print '<input type="hidden" name="action" value="export">';
 
-	print '<div class="right">';
+		print '<div class="right">';
 
-	print '<span class="hideonsmartphone">'.$langs->trans("RestrictYearToExport").': </span>';
-	// Month
-	print $formother->select_month((string) GETPOSTINT('monthtoexport'), 'monthtoexport', $langs->trans("Month"), 0, 'minwidth50 maxwidth75imp valignmiddle', true);
-	print '<input type="text" name="yeartoexport" class="valignmiddle maxwidth75imp" value="'.GETPOST('yeartoexport').'" placeholder="'.$langs->trans("Year").'">';
+		print '<span class="hideonsmartphone">'.$langs->trans("RestrictYearToExport").': </span>';
+		// Month
+		print $formother->select_month((string) GETPOSTINT('monthtoexport'), 'monthtoexport', $langs->trans("Month"), 0, 'minwidth50 maxwidth75imp valignmiddle', true);
+		print '<input type="text" name="yeartoexport" class="valignmiddle maxwidth75imp" value="'.GETPOST('yeartoexport').'" placeholder="'.$langs->trans("Year").'">';
 
-	print ' ';
+		print ' ';
 
-	// Disabled, we will use the getHashUniqueIdOfRegistration() as secret HMAC
-	//print '<input type="text" name="hmacexportkey" class="valignmiddle minwidth150imp maxwidth300imp" required value="'.GETPOST('hmacexportkey').'" placeholder="'.$langs->trans("Password").'">';
+		// Disabled, we will use the getHashUniqueIdOfRegistration() as secret HMAC
+		//print '<input type="text" name="hmacexportkey" class="valignmiddle minwidth150imp maxwidth300imp" required value="'.GETPOST('hmacexportkey').'" placeholder="'.$langs->trans("Password").'">';
 
-	print ' ';
+		print ' ';
 
-	print '<input type="hidden" name="withtab" value="'.GETPOST('withtab', 'alpha').'">';
-	print '<input type="submit" name="downloadcsv" class="button" value="'.$langs->trans('DownloadLogCSV').'">';
-	/*if (getDolGlobalString('BLOCKEDLOG_USE_REMOTE_AUTHORITY')) {
-		print ' | <a href="?action=downloadblockchain'.(GETPOST('withtab', 'alpha') ? '&withtab='.GETPOST('withtab', 'alpha') : '').'">'.$langs->trans('DownloadBlockChain').'</a>';
-	}*/
-	print ' </div><br>';
+		print '<input type="hidden" name="withtab" value="'.GETPOST('withtab', 'alpha').'">';
+		print '<input type="submit" name="downloadcsv" class="button" value="'.$langs->trans('DownloadLogCSV').'">';
+		/*if (getDolGlobalString('BLOCKEDLOG_USE_REMOTE_AUTHORITY')) {
+			print ' | <a href="?action=downloadblockchain'.(GETPOST('withtab', 'alpha') ? '&withtab='.GETPOST('withtab', 'alpha') : '').'">'.$langs->trans('DownloadBlockChain').'</a>';
+		}*/
+		print ' </div><br>';
 
-	print '</form>';
-
+		print '</form>';
+	}
 
 	/*
 	print '<form method="POST" id="searchFormList" action="'.dolBuildUrl($_SERVER["PHP_SELF"]).'">';
