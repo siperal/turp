@@ -157,6 +157,12 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter.x'
 	$search_array_options = array();
 }
 
+if (getDolGlobalString("BLOCKEDLOG_FOR_TAX_AUDITOR")) {
+	// When this hidden option is on, open another tab as the tab by default
+	header("Location: ".DOL_URL_ROOT."/blockedlog/admin/blockedlog_archives.php");
+	exit;
+}
+
 
 /*
  *	View
