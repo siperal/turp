@@ -590,9 +590,31 @@ if ($step == 2 && $datatoexport) {
 	print '<input type="hidden" name="datatoexport" value="'.$datatoexport.'">';
 	print '<div class="valignmiddle marginbottomonly">';
 	print '<span class="opacitymedium">'.$langs->trans("SelectExportFields").'</span> ';
-	$htmlother->select_export_model((string) $exportmodelid, 'exportmodelid', $datatoexport, 0, $user->id);
+	$htmlother->select_export_model((string) $exportmodelid, 'exportmodelid', $datatoexport, 1, $user->id);
 	print ' ';
-	print '<input type="submit" class="button small" value="'.$langs->trans("Select").'">';
+	print '<input type="submit" name="applyprofile" id="applyprofile" class="button smallpaddingimp hidden" value="'.$langs->trans("Apply").'">';
+	// Add js to show button
+	if (!empty($conf->use_javascript_ajax)) {
+		print '<script>
+			$(document).ready(function() {
+			    // hide button
+			    $("#applyprofile").hide();
+
+			    // follow change on list
+			    $("#exportmodelid").change(function() {
+					console.log("We select a new profile");
+			        if ($(this).val()) {
+			            $("#applyprofile").show();
+			        } else {
+			            $("#applyprofile").hide();
+			        }
+
+			    });
+
+			});
+			</script>
+		';
+	}
 	print '</div>';
 	print '</form>';
 
@@ -771,7 +793,7 @@ if ($step == 3 && $datatoexport) {
 	print $objexport->array_export_module[0]->getName();
 	print '</td></tr>';
 
-	// Lot de donnees a exporter
+	// Dataset to export
 	print '<tr><td>'.$langs->trans("DatasetToExport").'</td>';
 	print '<td>';
 	$entity = preg_replace('/:.*$/', '', $objexport->array_export_icon[0]);
@@ -795,7 +817,7 @@ if ($step == 3 && $datatoexport) {
 			}
 		}
 	}
-	print '<td>'.$list.'</td></tr>';
+	print '<td><span class="small">'.$list.'</span></td></tr>';
 
 	print '</table>';
 	print '</div>';
@@ -803,7 +825,7 @@ if ($step == 3 && $datatoexport) {
 	print '<br><br>';
 
 	// Combo list of export models
-	print '<span class="opacitymedium">'.$langs->trans("SelectFilterFields").'</span><br><br>';
+	print '<span class="opacitymedium">'.$langs->trans("SelectFilterFields").'...</span><br><br>';
 
 
 	// un formulaire en plus pour recuperer les filtres
