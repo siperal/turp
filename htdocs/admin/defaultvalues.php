@@ -216,18 +216,20 @@ llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admi
 $param = '&mode='.$mode;
 
 $enabledisablehtml = '<span class="divfilteralone">';
-$enabledisablehtml .= $langs->trans("EnableDefaultValues").' ';
 if (!getDolGlobalString('MAIN_ENABLE_DEFAULT_VALUES')) {
 	// Button off, click to enable
-	$enabledisablehtml .= '<a class="reposition valignmiddle" href="'.$_SERVER["PHP_SELF"].'?action=setMAIN_ENABLE_DEFAULT_VALUES&token='.newToken().'&value=1'.$param.'">';
-	$enabledisablehtml .= img_picto($langs->trans("Disabled"), 'switch_off');
-	$enabledisablehtml .= '</a>';
+	$enabledisablehtml .= '<a class="reposition valignmiddle nounderlineimp" href="'.$_SERVER["PHP_SELF"].'?action=setMAIN_ENABLE_DEFAULT_VALUES&token='.newToken().'&value=1'.$param.'">';
 } else {
 	// Button on, click to disable
-	$enabledisablehtml .= '<a class="reposition valignmiddle" href="'.$_SERVER["PHP_SELF"].'?action=setMAIN_ENABLE_DEFAULT_VALUES&token='.newToken().'&value=0'.$param.'">';
-	$enabledisablehtml .= img_picto($langs->trans("Activated"), 'switch_on');
-	$enabledisablehtml .= '</a>';
+	$enabledisablehtml .= '<a class="reposition valignmiddle nounderlineimp" href="'.$_SERVER["PHP_SELF"].'?action=setMAIN_ENABLE_DEFAULT_VALUES&token='.newToken().'&value=0'.$param.'">';
 }
+$enabledisablehtml .= $langs->trans("EnableDefaultValues");
+if (!getDolGlobalString('MAIN_ENABLE_DEFAULT_VALUES')) {
+	$enabledisablehtml .= img_picto($langs->trans("Disabled"), 'switch_off', 'class="paddingleft valignmiddle"');
+} else {
+	$enabledisablehtml .= img_picto($langs->trans("Activated"), 'switch_on', 'class="paddingleft valignmiddle"');
+}
+$enabledisablehtml .= '</a>';
 $enabledisablehtml .= '</span>';
 
 print load_fiche_titre($langs->trans("DefaultValues"), $enabledisablehtml, 'title_setup');
