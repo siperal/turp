@@ -1534,7 +1534,7 @@ div.divsearchfield {
 .divfilteralone {
 	background-color: rgba(0, 0, 0, 0.08);
 	border-radius: 5px;
-	padding-left: 5px;
+	padding: 10px;
 }
 .divsearchfieldfilter {
 	text-overflow: clip;
@@ -5718,7 +5718,7 @@ div.fiche div.info, div.fiche div.warning, div.fiche div.neutral {
 
 /* Neutral message */
 div.neutral {
-	border-<?php print $left; ?>: solid 5px #aaa;
+	border-<?php print $left; ?>: solid 5px #888;
 	background: #f8f8f8;
 }
 

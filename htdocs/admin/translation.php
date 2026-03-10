@@ -231,7 +231,7 @@ llxHeader('', $title, $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-translati
 
 $param = '&mode='.urlencode($mode);
 
-$enabledisablehtml = '';
+$enabledisablehtml = '<span class="divfilteralone">';
 $enabledisablehtml .= $langs->trans("EnableOverwriteTranslation").' ';
 if (!getDolGlobalString('MAIN_ENABLE_OVERWRITE_TRANSLATION')) {
 	// Button off, click to enable
@@ -244,6 +244,7 @@ if (!getDolGlobalString('MAIN_ENABLE_OVERWRITE_TRANSLATION')) {
 	$enabledisablehtml .= img_picto($langs->trans("Activated"), 'switch_on');
 	$enabledisablehtml .= '</a>';
 }
+$enabledisablehtml .= '</span>';
 
 $current_language_code = $langs->defaultlang;
 $s = picto_from_langcode($current_language_code);
