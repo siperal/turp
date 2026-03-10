@@ -581,37 +581,46 @@ if ($mode == 'searchkey') {
 	print '<div class="div-table-responsive-no-min">';
 	print '<table class="noborder centpercent">';
 
-	print '<tr class="liste_titre liste_titre_filter"><td>';
+	print '<tr class="liste_titre liste_titre_filter">';
+	// Action column
+	if ($conf->main_checkbox_left_column) {
+		print '<td class="center nowraponall">';
+		$searchpicto = $form->showFilterAndCheckAddButtons(!empty($massactionbutton) ? 1 : 0, 'checkforselect', 1);
+		print $searchpicto;
+		print '</td>';
+	}
+	print '<td>';
 	print $formadmin->select_language($langcode, 'langcode', 0, array(), 0, 0, 0, 'minwidth100 maxwidth250', 1);
 	print '</td>'."\n";
 	print '<td>';
 	print '<input type="text" class="flat maxwidthonsmartphone" name="transkey" value="'.dol_escape_htmltag($transkey).'">';
 	print '</td><td>';
 	print '<input type="text" class="quatrevingtpercent" name="transvalue" value="'.dol_escape_htmltag($transvalue).'">';
-	// Limit to superadmin
-	/*if (isModEnabled('multicompany') && !$user->entity)
-	{
-		print '</td><td>';
-		print '<input type="text" class="flat" size="1" name="entitysearch" value="'.$conf->entity.'">';
-	}
-	else
-	{*/
 	print '<input type="hidden" name="entitysearch" value="'.$conf->entity.'">';
-	//}
 	print '</td>';
+	print '<td></td>';
 	// Action column
-	print '<td class="right nowraponall">';
-	$searchpicto = $form->showFilterAndCheckAddButtons(!empty($massactionbutton) ? 1 : 0, 'checkforselect', 1);
-	print $searchpicto;
-	print '</td>';
+	if (!$conf->main_checkbox_left_column) {
+		print '<td class="right nowraponall">';
+		$searchpicto = $form->showFilterAndCheckAddButtons(!empty($massactionbutton) ? 1 : 0, 'checkforselect', 1);
+		print $searchpicto;
+		print '</td>';
+	}
 	print '</tr>';
 
 	print '<tr class="liste_titre">';
+	// Action column
+	if ($conf->main_checkbox_left_column) {
+		print_liste_field_titre("");
+	}
 	print_liste_field_titre("Language_en_US_es_MX_etc", $_SERVER["PHP_SELF"], 'lang,transkey', '', $param, '', $sortfield, $sortorder);
 	print_liste_field_titre("TranslationKey", $_SERVER["PHP_SELF"], 'transkey', '', $param, '', $sortfield, $sortorder);
 	print_liste_field_titre("CurrentTranslationString", $_SERVER["PHP_SELF"], 'transvalue', '', $param, '', $sortfield, $sortorder);
-	//if (isModEnabled('multicompany') && !$user->entity) print_liste_field_titre("Entity", $_SERVER["PHP_SELF"], 'entity,transkey', '', $param, '', $sortfield, $sortorder);
-	print '<td align="center"></td>';
+	print_liste_field_titre("");
+	// Action column
+	if (!$conf->main_checkbox_left_column) {
+		print_liste_field_titre("");
+	}
 	print "</tr>\n";
 
 
@@ -638,7 +647,15 @@ if ($mode == 'searchkey') {
 		if ($limit && $i > ($offset + $limit)) {
 			break;
 		}
-		print '<tr class="oddeven"><td>'.dolPrintHTML($langcode).'</td>';
+
+		print '<tr class="oddeven">';
+		// Action column
+		if ($conf->main_checkbox_left_column) {
+			print '<td class="center nowraponall">';
+			print '</td>';
+		}
+		// Code lang
+		print '<td>'.dolPrintHTML($langcode).'</td>';
 		// Key
 		print '<td class="" title="'.dolPrintHTMLForAttribute($key).'">'.dolPrintHTML($key).'</td>';
 		print '<td class="tdoverflowmax300 small">';
@@ -657,6 +674,7 @@ if ($mode == 'searchkey') {
 		}
 		print '</span>';
 		print '</td>';
+
 		print '<td class="right nowraponall">';
 		if (!empty($newlangfileonly->tab_translate[$key])) {
 			if ($val != $newlangfileonly->tab_translate[$key]) {
@@ -714,11 +732,13 @@ if ($mode == 'searchkey') {
 				print $form->textwithpicto('', $htmltext, 1, 'warning');
 			}
 		}
-		/*if (isModEnabled('multicompany') && !$user->entity)
-		{
-			print '<td>'.$val.'</td>';
-		}*/
-		print '</td></tr>'."\n";
+		print '</td>';
+
+		// Action column
+		if (!$conf->main_checkbox_left_column) {
+			print'<td></td>';
+		}
+		print '</tr>'."\n";
 	}
 
 	if (empty($recordtoshow)) {
