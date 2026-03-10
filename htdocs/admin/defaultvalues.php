@@ -51,6 +51,7 @@ if (!$user->admin) {
 
 $id = GETPOSTINT('rowid');
 $action = GETPOST('action', 'aZ09');
+$contextpage = GETPOST('contextpage', 'aZ09');
 $optioncss = GETPOST('optionscss', 'alphanohtml');
 
 $mode = GETPOST('mode', 'aZ09') ? GETPOST('mode', 'aZ09') : 'createform'; // 'createform', 'filters', 'sortorder', 'focus'
