@@ -1775,121 +1775,123 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 			// Transfer in accounting
 			$newmenu->add("/accountancy/index.php?leftmenu=accountancy_transfer", $langs->trans("TransferInAccounting"), 0, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'transfer', 1, '', '', '', img_picto('', 'long-arrow-alt-right', 'class="paddingright pictofixedwidth"'));
 
-			// Binding
-			// $newmenu->add("", $langs->trans("Binding"), 0, $user->hasRight('accounting',  'bind', 'write'), '', $mainmenu, 'dispatch');
-			if (isModEnabled('invoice') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_SALES')) {
-				$newmenu->add("/accountancy/customer/index.php?leftmenu=accountancy_dispatch_customer&amp;mainmenu=accountancy", $langs->trans("CustomersVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_customer');
-				if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_dispatch_customer/', $leftmenu)) {
-					$newmenu->add("/accountancy/customer/list.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_customer", $langs->trans("ToBind"), 2, $user->hasRight('accounting', 'bind', 'write'));
-					$newmenu->add("/accountancy/customer/lines.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_customer", $langs->trans("Binded"), 2, $user->hasRight('accounting', 'bind', 'write'));
+			if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_transfer/', $leftmenu)) {
+				// Binding
+				// $newmenu->add("", $langs->trans("Binding"), 0, $user->hasRight('accounting',  'bind', 'write'), '', $mainmenu, 'dispatch');
+				if (isModEnabled('invoice') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_SALES')) {
+					$newmenu->add("/accountancy/customer/index.php?leftmenu=accountancy_transfer_dispatch_customer&mainmenu=accountancy", $langs->trans("CustomersVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_customer');
+					if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_transfer_dispatch_customer/', $leftmenu)) {
+						$newmenu->add("/accountancy/customer/list.php?mainmenu=accountancy&leftmenu=accountancy_transfer_dispatch_customer", $langs->trans("ToBind"), 2, $user->hasRight('accounting', 'bind', 'write'));
+						$newmenu->add("/accountancy/customer/lines.php?mainmenu=accountancy&leftmenu=accountancy_transfer_dispatch_customer", $langs->trans("Binded"), 2, $user->hasRight('accounting', 'bind', 'write'));
+					}
 				}
-			}
-			if (isModEnabled('supplier_invoice') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_PURCHASES')) {
-				$newmenu->add("/accountancy/supplier/index.php?leftmenu=accountancy_dispatch_supplier&amp;mainmenu=accountancy", $langs->trans("SuppliersVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_supplier');
-				if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_dispatch_supplier/', $leftmenu)) {
-					$newmenu->add("/accountancy/supplier/list.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_supplier", $langs->trans("ToBind"), 2, $user->hasRight('accounting', 'bind', 'write'));
-					$newmenu->add("/accountancy/supplier/lines.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_supplier", $langs->trans("Binded"), 2, $user->hasRight('accounting', 'bind', 'write'));
+				if (isModEnabled('supplier_invoice') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_PURCHASES')) {
+					$newmenu->add("/accountancy/supplier/index.php?leftmenu=accountancy_dispatch_supplier&amp;mainmenu=accountancy", $langs->trans("SuppliersVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_supplier');
+					if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_transfer_dispatch_supplier/', $leftmenu)) {
+						$newmenu->add("/accountancy/supplier/list.php?mainmenu=accountancy&leftmenu=accountancy_transfer_dispatch_supplier", $langs->trans("ToBind"), 2, $user->hasRight('accounting', 'bind', 'write'));
+						$newmenu->add("/accountancy/supplier/lines.php?mainmenu=accountancy&leftmenu=accountancy_transfer_dispatch_supplier", $langs->trans("Binded"), 2, $user->hasRight('accounting', 'bind', 'write'));
+					}
 				}
-			}
-			if (isModEnabled('expensereport') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_EXPENSEREPORTS')) {
-				$newmenu->add("/accountancy/expensereport/index.php?leftmenu=accountancy_dispatch_expensereport&amp;mainmenu=accountancy", $langs->trans("ExpenseReportsVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_expensereport');
-				if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_dispatch_expensereport/', $leftmenu)) {
-					$newmenu->add("/accountancy/expensereport/list.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_expensereport", $langs->trans("ToBind"), 2, $user->hasRight('accounting', 'bind', 'write'));
-					$newmenu->add("/accountancy/expensereport/lines.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_expensereport", $langs->trans("Binded"), 2, $user->hasRight('accounting', 'bind', 'write'));
+				if (isModEnabled('expensereport') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_EXPENSEREPORTS')) {
+					$newmenu->add("/accountancy/expensereport/index.php?leftmenu=accountancy_dispatch_expensereport&amp;mainmenu=accountancy", $langs->trans("ExpenseReportsVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_expensereport');
+					if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_transfer_dispatch_expensereport/', $leftmenu)) {
+						$newmenu->add("/accountancy/expensereport/list.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_expensereport", $langs->trans("ToBind"), 2, $user->hasRight('accounting', 'bind', 'write'));
+						$newmenu->add("/accountancy/expensereport/lines.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_expensereport", $langs->trans("Binded"), 2, $user->hasRight('accounting', 'bind', 'write'));
+					}
 				}
-			}
 
-			// Journals
-			if (isModEnabled('accounting') && $user->hasRight('accounting', 'comptarapport', 'lire') && $mainmenu == 'accountancy') {
-				$newmenu->add('', $langs->trans("RegistrationInAccounting"), 1, $user->hasRight('accounting', 'comptarapport', 'lire'), '', $mainmenu, 'accountancy_journal');
+				// Journals
+				if (isModEnabled('accounting') && $user->hasRight('accounting', 'comptarapport', 'lire') && $mainmenu == 'accountancy') {
+					$newmenu->add('', $langs->trans("RegistrationInAccounting"), 1, $user->hasRight('accounting', 'comptarapport', 'lire'), '', $mainmenu, 'accountancy_journal');
 
-				// Multi journal
-				$sql = "SELECT rowid, code, label, nature";
-				$sql .= " FROM ".MAIN_DB_PREFIX."accounting_journal";
-				$sql .= " WHERE entity = ".((int) $conf->entity);
-				if (getDolGlobalString('ACCOUNTING_MODE') == 'RECETTES-DEPENSES') {
-					$sql .= " AND nature = 4"; // only bank journal when using treasury accounting mode
-				}
-				$sql .= " AND active = 1";
-				$sql .= " ORDER BY nature ASC, label DESC";
+					// Multi journal
+					$sql = "SELECT rowid, code, label, nature";
+					$sql .= " FROM ".MAIN_DB_PREFIX."accounting_journal";
+					$sql .= " WHERE entity = ".((int) $conf->entity);
+					if (getDolGlobalString('ACCOUNTING_MODE') == 'RECETTES-DEPENSES') {
+						$sql .= " AND nature = 4"; // only bank journal when using treasury accounting mode
+					}
+					$sql .= " AND active = 1";
+					$sql .= " ORDER BY nature ASC, label DESC";
 
-				$resql = $db->query($sql);
-				if ($resql) {
-					$numr = $db->num_rows($resql);
-					$i = 0;
+					$resql = $db->query($sql);
+					if ($resql) {
+						$numr = $db->num_rows($resql);
+						$i = 0;
 
-					if ($numr > 0) {
-						while ($i < $numr) {
-							$objp = $db->fetch_object($resql);
+						if ($numr > 0) {
+							while ($i < $numr) {
+								$objp = $db->fetch_object($resql);
 
-							$nature = '';
+								$nature = '';
 
-							// Must match array $sourceList defined into journals_list.php
-							if ($objp->nature == 2 && isModEnabled('invoice') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_SALES')) {
-								$nature = "sells";
-							}
-							if ($objp->nature == 3
-								&& isModEnabled('supplier_invoice')
-								&& !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_PURCHASES')) {
-								$nature = "purchases";
-							}
-							if ($objp->nature == 4 && isModEnabled('bank')) {
-								$nature = "bank";
-							}
-							if ($objp->nature == 5 && isModEnabled('expensereport') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_EXPENSEREPORTS')) {
-								$nature = "expensereports";
-							}
-							if ($objp->nature == 1 && (isModEnabled('asset') || isModEnabled('invoice') || isModEnabled('supplier_invoice'))) {
-								$nature = "various";
-							}
-							if ($objp->nature == 8) {
-								$nature = "inventory";
-							}
-							if ($objp->nature == 9) {
-								$nature = "hasnew";
-							}
-
-							// To enable when page exists
-							if (!getDolGlobalString('ACCOUNTANCY_SHOW_DEVELOP_JOURNAL')) {
-								if ($nature == 'hasnew' || $nature == 'inventory') {
-									$nature = '';
+								// Must match array $sourceList defined into journals_list.php
+								if ($objp->nature == 2 && isModEnabled('invoice') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_SALES')) {
+									$nature = "sells";
 								}
-							}
-
-							if ($nature) {
-								$langs->load('accountancy');
-								$journallabel = '';
-								$journallabelwithoutspan = '';
-								if ($objp->label) {
-									$journallabelwithoutspan = $langs->trans($objp->label);
-									$journallabel = '<span class="opacitymedium">('.$langs->trans($objp->label).')</span>'; // Label of bank account in llx_accounting_journal
+								if ($objp->nature == 3
+									&& isModEnabled('supplier_invoice')
+									&& !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_PURCHASES')) {
+									$nature = "purchases";
+								}
+								if ($objp->nature == 4 && isModEnabled('bank')) {
+									$nature = "bank";
+								}
+								if ($objp->nature == 5 && isModEnabled('expensereport') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_EXPENSEREPORTS')) {
+									$nature = "expensereports";
+								}
+								if ($objp->nature == 1 && (isModEnabled('asset') || isModEnabled('invoice') || isModEnabled('supplier_invoice'))) {
+									$nature = "various";
+								}
+								if ($objp->nature == 8) {
+									$nature = "inventory";
+								}
+								if ($objp->nature == 9) {
+									$nature = "hasnew";
 								}
 
-								$key = $langs->trans("AccountingJournalType".$objp->nature);	// $objp->nature is 1, 2, 3 ...
-								$transferlabel = (($objp->nature && $key != "AccountingJournalType".$objp->nature) ? $key.($journallabelwithoutspan != $key ? ' '.$journallabelwithoutspan : '') : $journallabelwithoutspan);
-
-								if (getDolGlobalString('ACCOUNTING_MODE') == 'RECETTES-DEPENSES') {
-									$journalNaturePrefixUrl = 'treasury';
-								} else {
-									$journalNaturePrefixUrl = $nature;
+								// To enable when page exists
+								if (!getDolGlobalString('ACCOUNTANCY_SHOW_DEVELOP_JOURNAL')) {
+									if ($nature == 'hasnew' || $nature == 'inventory') {
+										$nature = '';
+									}
 								}
-								$newmenu->add('/accountancy/journal/'.$journalNaturePrefixUrl.'journal.php?mainmenu=accountancy&leftmenu=accountancy_journal&id_journal='.$objp->rowid, $transferlabel, 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
+
+								if ($nature) {
+									$langs->load('accountancy');
+									$journallabel = '';
+									$journallabelwithoutspan = '';
+									if ($objp->label) {
+										$journallabelwithoutspan = $langs->trans($objp->label);
+										$journallabel = '<span class="opacitymedium">('.$langs->trans($objp->label).')</span>'; // Label of bank account in llx_accounting_journal
+									}
+
+									$key = $langs->trans("AccountingJournalType".$objp->nature);	// $objp->nature is 1, 2, 3 ...
+									$transferlabel = (($objp->nature && $key != "AccountingJournalType".$objp->nature) ? $key.($journallabelwithoutspan != $key ? ' '.$journallabelwithoutspan : '') : $journallabelwithoutspan);
+
+									if (getDolGlobalString('ACCOUNTING_MODE') == 'RECETTES-DEPENSES') {
+										$journalNaturePrefixUrl = 'treasury';
+									} else {
+										$journalNaturePrefixUrl = $nature;
+									}
+									$newmenu->add('/accountancy/journal/'.$journalNaturePrefixUrl.'journal.php?mainmenu=accountancy&leftmenu=accountancy_transfer_journal&id_journal='.$objp->rowid, $transferlabel, 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
+								}
+								$i++;
 							}
-							$i++;
+						} else {
+							// Should not happen. Entries are added
+							$newmenu->add('', $langs->trans("NoJournalDefined"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
 						}
 					} else {
-						// Should not happen. Entries are added
-						$newmenu->add('', $langs->trans("NoJournalDefined"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
+						dol_print_error($db);
 					}
-				} else {
-					dol_print_error($db);
+					$db->free($resql);
 				}
-				$db->free($resql);
-			}
 
-			// Files
-			if (!getDolGlobalString('ACCOUNTANCY_HIDE_EXPORT_FILES_MENU')) {
-				$newmenu->add("/compta/accounting-files.php?mainmenu=accountancy&amp;leftmenu=accountancy_files", $langs->trans("AccountantFiles"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+				// Files
+				if (!getDolGlobalString('ACCOUNTANCY_HIDE_EXPORT_FILES_MENU')) {
+					$newmenu->add("/compta/accounting-files.php?mainmenu=accountancy_transfer_sourcefiles&leftmenu=accountancy_files", $langs->trans("AccountantFiles"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+				}
 			}
 
 
@@ -1897,19 +1899,19 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 			$newmenu->add("/accountancy/index.php?leftmenu=accountancy_accountancy", $langs->trans("MenuAccountancy"), 0, (int) ($user->hasRight('accounting', 'mouvements', 'lire') || $user->hasRight('accounting', 'comptarapport', 'lire')), '', $mainmenu, 'accountancy', 1, '', '', '', img_picto('', 'accountancy', 'class="paddingright pictofixedwidth"'));
 
 			// General Ledger
-			$newmenu->add("/accountancy/bookkeeping/listbyaccount.php?mainmenu=accountancy&amp;leftmenu=accountancy_accountancy", $langs->trans("Bookkeeping"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+			$newmenu->add("/accountancy/bookkeeping/listbyaccount.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("Bookkeeping"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
 
 			// Journals
-			$newmenu->add("/accountancy/bookkeeping/list.php?mainmenu=accountancy&amp;leftmenu=accountancy_accountancy", $langs->trans("Journals"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+			$newmenu->add("/accountancy/bookkeeping/list.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("Journals"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
 
 			// Account Balance
-			$newmenu->add("/accountancy/bookkeeping/balance.php?mainmenu=accountancy&amp;leftmenu=accountancy_accountancy", $langs->trans("AccountBalance"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+			$newmenu->add("/accountancy/bookkeeping/balance.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("AccountBalance"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
 
 			// Export accountancy
-			$newmenu->add("/accountancy/bookkeeping/export.php?mainmenu=accountancy&amp;leftmenu=accountancy_accountancy", $langs->trans("MenuExportAccountancy"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+			$newmenu->add("/accountancy/bookkeeping/export.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("MenuExportAccountancy"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
 
 			// Closure
-			$newmenu->add("/accountancy/closure/index.php?mainmenu=accountancy&amp;leftmenu=accountancy_closure", $langs->trans("MenuAccountancyClosure"), 1, $user->hasRight('accounting', 'fiscalyear', 'write'), '', $mainmenu, 'closure');
+			$newmenu->add("/accountancy/closure/index.php?mainmenu=accountancy&leftmenu=accountancy_closure", $langs->trans("MenuAccountancyClosure"), 1, $user->hasRight('accounting', 'fiscalyear', 'write'), '', $mainmenu, 'closure');
 
 			// Reports
 			$newmenu->add("/accountancy/index.php?leftmenu=accountancy_report", $langs->trans("Reportings"), 1, $user->hasRight('accounting', 'comptarapport', 'lire'), '', $mainmenu, 'ca');
