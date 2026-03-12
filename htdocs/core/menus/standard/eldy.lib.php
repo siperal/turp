@@ -1786,17 +1786,17 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 					}
 				}
 				if (isModEnabled('supplier_invoice') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_PURCHASES')) {
-					$newmenu->add("/accountancy/supplier/index.php?leftmenu=accountancy_dispatch_supplier&amp;mainmenu=accountancy", $langs->trans("SuppliersVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_supplier');
+					$newmenu->add("/accountancy/supplier/index.php?leftmenu=accountancy_transfer_dispatch_supplier&amp;mainmenu=accountancy", $langs->trans("SuppliersVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_supplier');
 					if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_transfer_dispatch_supplier/', $leftmenu)) {
 						$newmenu->add("/accountancy/supplier/list.php?mainmenu=accountancy&leftmenu=accountancy_transfer_dispatch_supplier", $langs->trans("ToBind"), 2, $user->hasRight('accounting', 'bind', 'write'));
 						$newmenu->add("/accountancy/supplier/lines.php?mainmenu=accountancy&leftmenu=accountancy_transfer_dispatch_supplier", $langs->trans("Binded"), 2, $user->hasRight('accounting', 'bind', 'write'));
 					}
 				}
 				if (isModEnabled('expensereport') && !getDolGlobalString('ACCOUNTING_DISABLE_BINDING_ON_EXPENSEREPORTS')) {
-					$newmenu->add("/accountancy/expensereport/index.php?leftmenu=accountancy_dispatch_expensereport&amp;mainmenu=accountancy", $langs->trans("ExpenseReportsVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_expensereport');
+					$newmenu->add("/accountancy/expensereport/index.php?leftmenu=accountancy_transfer_dispatch_expensereport&amp;mainmenu=accountancy", $langs->trans("ExpenseReportsVentilation"), 1, $user->hasRight('accounting', 'bind', 'write'), '', $mainmenu, 'dispatch_expensereport');
 					if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_transfer_dispatch_expensereport/', $leftmenu)) {
-						$newmenu->add("/accountancy/expensereport/list.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_expensereport", $langs->trans("ToBind"), 2, $user->hasRight('accounting', 'bind', 'write'));
-						$newmenu->add("/accountancy/expensereport/lines.php?mainmenu=accountancy&amp;leftmenu=accountancy_dispatch_expensereport", $langs->trans("Binded"), 2, $user->hasRight('accounting', 'bind', 'write'));
+						$newmenu->add("/accountancy/expensereport/list.php?mainmenu=accountancy&leftmenu=accountancy_transfer_dispatch_expensereport", $langs->trans("ToBind"), 2, $user->hasRight('accounting', 'bind', 'write'));
+						$newmenu->add("/accountancy/expensereport/lines.php?mainmenu=accountancy&leftmenu=accountancy_transfer_dispatch_expensereport", $langs->trans("Binded"), 2, $user->hasRight('accounting', 'bind', 'write'));
 					}
 				}
 
@@ -1890,73 +1890,76 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 
 				// Files
 				if (!getDolGlobalString('ACCOUNTANCY_HIDE_EXPORT_FILES_MENU')) {
-					$newmenu->add("/compta/accounting-files.php?mainmenu=accountancy_transfer_sourcefiles&leftmenu=accountancy_files", $langs->trans("AccountantFiles"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+					$newmenu->add("/compta/accounting-files.php?mainmenu=accountancy&leftmenu=accountancy_transfer_sourcefiles", $langs->trans("AccountantFiles"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
 				}
 			}
 
 
 			// Accounting
+
 			$newmenu->add("/accountancy/index.php?leftmenu=accountancy_accountancy", $langs->trans("MenuAccountancy"), 0, (int) ($user->hasRight('accounting', 'mouvements', 'lire') || $user->hasRight('accounting', 'comptarapport', 'lire')), '', $mainmenu, 'accountancy', 1, '', '', '', img_picto('', 'accountancy', 'class="paddingright pictofixedwidth"'));
 
-			// General Ledger
-			$newmenu->add("/accountancy/bookkeeping/listbyaccount.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("Bookkeeping"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+			if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_accountancy/', $leftmenu)) {
+				// General Ledger
+				$newmenu->add("/accountancy/bookkeeping/listbyaccount.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("Bookkeeping"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
 
-			// Journals
-			$newmenu->add("/accountancy/bookkeeping/list.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("Journals"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+				// Journals
+				$newmenu->add("/accountancy/bookkeeping/list.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("Journals"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
 
-			// Account Balance
-			$newmenu->add("/accountancy/bookkeeping/balance.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("AccountBalance"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+				// Account Balance
+				$newmenu->add("/accountancy/bookkeeping/balance.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("AccountBalance"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
 
-			// Export accountancy
-			$newmenu->add("/accountancy/bookkeeping/export.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("MenuExportAccountancy"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
+				// Export accountancy
+				$newmenu->add("/accountancy/bookkeeping/export.php?mainmenu=accountancy&leftmenu=accountancy_accountancy", $langs->trans("MenuExportAccountancy"), 1, $user->hasRight('accounting', 'mouvements', 'lire'));
 
-			// Closure
-			$newmenu->add("/accountancy/closure/index.php?mainmenu=accountancy&leftmenu=accountancy_closure", $langs->trans("MenuAccountancyClosure"), 1, $user->hasRight('accounting', 'fiscalyear', 'write'), '', $mainmenu, 'closure');
+				// Closure
+				$newmenu->add("/accountancy/closure/index.php?mainmenu=accountancy&leftmenu=accountancy_accountancy_closure", $langs->trans("MenuAccountancyClosure"), 1, $user->hasRight('accounting', 'fiscalyear', 'write'), '', $mainmenu, 'closure');
 
-			// Reports
-			$newmenu->add("/accountancy/index.php?leftmenu=accountancy_report", $langs->trans("Reportings"), 1, $user->hasRight('accounting', 'comptarapport', 'lire'), '', $mainmenu, 'ca');
+				// Reports
+				$newmenu->add("/accountancy/index.php?leftmenu=accountancy_accountancy_report", $langs->trans("Reportings"), 1, $user->hasRight('accounting', 'comptarapport', 'lire'), '', $mainmenu, 'ca');
 
-			if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_report/', $leftmenu)) {
-				$newmenu->add("/compta/resultat/index.php?leftmenu=accountancy_report", $langs->trans("MenuReportInOut"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
-				$newmenu->add("/compta/resultat/clientfourn.php?leftmenu=accountancy_report", $langs->trans("ByPredefinedAccountGroups"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+				if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_accountancy_report/', $leftmenu)) {
+					$newmenu->add("/compta/resultat/index.php?leftmenu=accountancy_accountancy_report", $langs->trans("MenuReportInOut"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/resultat/clientfourn.php?leftmenu=accountancy_accountancy_report", $langs->trans("ByPredefinedAccountGroups"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
 
-				if (isModEnabled('comptabilite')) {
-					$newmenu->add("/compta/resultat/projects.php?leftmenu=accountancy_report", $langs->trans("ByProject"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
-				}
+					if (isModEnabled('comptabilite')) {
+						$newmenu->add("/compta/resultat/projects.php?leftmenu=accountancy_accountancy_report", $langs->trans("ByProject"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					}
 
-				if (getDolGlobalInt('MAIN_FEATURES_LEVEL') >= 2) {
-					global $mysoc;
+					if (getDolGlobalInt('MAIN_FEATURES_LEVEL') >= 2) {
+						global $mysoc;
 
-					// Multi personalized reports
-					$sql = "SELECT rowid, code, label";
-					$sql .= " FROM ".MAIN_DB_PREFIX."c_accounting_report";
-					$sql .= " WHERE entity = ".((int) $conf->entity);
-					$sql .= " AND fk_country = ".((int) $mysoc->country_id);
-					$sql .= " AND active = 1";
-					$sql .= " ORDER BY label DESC";
+						// Multi personalized reports
+						$sql = "SELECT rowid, code, label";
+						$sql .= " FROM ".MAIN_DB_PREFIX."c_accounting_report";
+						$sql .= " WHERE entity = ".((int) $conf->entity);
+						$sql .= " AND fk_country = ".((int) $mysoc->country_id);
+						$sql .= " AND active = 1";
+						$sql .= " ORDER BY label DESC";
 
-					$resql = $db->query($sql);
-					if ($resql) {
-						$numr = $db->num_rows($resql);
-						$i = 0;
+						$resql = $db->query($sql);
+						if ($resql) {
+							$numr = $db->num_rows($resql);
+							$i = 0;
 
-						if ($numr > 0) {
-							while ($i < $numr) {
-								$objp = $db->fetch_object($resql);
-								$newmenu->add('/compta/resultat/result.php?mainmenu=accountancy&leftmenu=accountancy_report&id_report='.$objp->rowid, $langs->trans("Personalized") . " - " . $objp->label, 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
-								$i++;
+							if ($numr > 0) {
+								while ($i < $numr) {
+									$objp = $db->fetch_object($resql);
+									$newmenu->add('/compta/resultat/result.php?mainmenu=accountancy&leftmenu=accountancy_accountancy_report&id_report='.$objp->rowid, $langs->trans("Personalized") . " - " . $objp->label, 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+									$i++;
+								}
+							} else {
+								// Should not happen. We keep a link in case it happen to go to the page to explain how to create custom groups.
+								$newmenu->add("/compta/resultat/result.php?mainmenu=accountancy&leftmenu=accountancy_accountancy_report", $langs->trans("ByPersonalizedAccountGroups"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+								//$newmenu->add('', $langs->trans("NoReportDefined"), 3, 0);
 							}
 						} else {
-							// Should not happen. We keep a link in case it happen to go to the page to explain how to create custom groups.
-							$newmenu->add("/compta/resultat/result.php?mainmenu=accountancy&leftmenu=accountancy_report", $langs->trans("ByPersonalizedAccountGroups"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
-							//$newmenu->add('', $langs->trans("NoReportDefined"), 3, 0);
+							dol_print_error($db);
 						}
+						$db->free($resql);
 					} else {
-						dol_print_error($db);
+						$newmenu->add("/compta/resultat/result.php?leftmenu=accountancy_accountancy_report", $langs->trans("ByPersonalizedAccountGroups"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
 					}
-					$db->free($resql);
-				} else {
-					$newmenu->add("/compta/resultat/result.php?leftmenu=accountancy_report", $langs->trans("ByPersonalizedAccountGroups"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
 				}
 			}
 
@@ -1966,11 +1969,11 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 			}
 			if ($modecompta) {
 				if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_report/', $leftmenu)) {
-					$newmenu->add("/compta/stats/index.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ReportTurnover"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
-					$newmenu->add("/compta/stats/casoc.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByCompanies"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
-					$newmenu->add("/compta/stats/cabyuser.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByUsers"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
-					$newmenu->add("/compta/stats/cabyprodserv.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByProductsAndServices"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
-					$newmenu->add("/compta/stats/byratecountry.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByVatRate"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/index.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ReportTurnover"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/casoc.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ByCompanies"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/cabyuser.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ByUsers"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/cabyprodserv.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ByProductsAndServices"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/byratecountry.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ByVatRate"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
 				}
 			}
 
@@ -1978,9 +1981,9 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 			//if (isModEnabled('accounting') && $user->hasRight('accounting',  'comptarapport', 'lire') && $mainmenu == 'accountancy') $modecompta='';	// Not yet implemented. Should be BOOKKEEPINGCOLLECTED
 			if ($modecompta) {
 				if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_report/', $leftmenu)) {
-					$newmenu->add("/compta/stats/index.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ReportTurnoverCollected"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
-					$newmenu->add("/compta/stats/casoc.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByCompanies"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
-					$newmenu->add("/compta/stats/cabyuser.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByUsers"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/index.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ReportTurnoverCollected"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/casoc.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ByCompanies"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/cabyuser.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ByUsers"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
 					//$newmenu->add("/compta/stats/cabyprodserv.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByProductsAndServices"),3,$user->hasRight('accounting',  'comptarapport', 'lire'));
 					//$newmenu->add("/compta/stats/byratecountry.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByVatRate"),3,$user->hasRight('accounting',  'comptarapport', 'lire'));
 				}
@@ -1992,9 +1995,9 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 			}
 			if ($modecompta && isModEnabled('supplier_invoice')) {
 				if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_report/', $leftmenu)) {
-					$newmenu->add("/compta/stats/supplier_turnover.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ReportPurchaseTurnover"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
-					$newmenu->add("/compta/stats/supplier_turnover_by_thirdparty.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByCompanies"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
-					$newmenu->add("/compta/stats/supplier_turnover_by_prodserv.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByProductsAndServices"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/supplier_turnover.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ReportPurchaseTurnover"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/supplier_turnover_by_thirdparty.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ByCompanies"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/supplier_turnover_by_prodserv.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ByProductsAndServices"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
 				}
 			}
 
@@ -2004,8 +2007,8 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 			}
 			if ($modecompta && ((isModEnabled('fournisseur') && !getDolGlobalString('MAIN_USE_NEW_SUPPLIERMOD')) || isModEnabled('supplier_invoice'))) {
 				if ($usemenuhider || empty($leftmenu) || preg_match('/accountancy_report/', $leftmenu)) {
-					$newmenu->add("/compta/stats/supplier_turnover.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ReportPurchaseTurnoverCollected"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
-					$newmenu->add("/compta/stats/supplier_turnover_by_thirdparty.php?leftmenu=accountancy_report&modecompta=".$modecompta, $langs->trans("ByCompanies"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/supplier_turnover.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ReportPurchaseTurnoverCollected"), 2, $user->hasRight('accounting', 'comptarapport', 'lire'));
+					$newmenu->add("/compta/stats/supplier_turnover_by_thirdparty.php?leftmenu=accountancy_accountancy_report&modecompta=".$modecompta, $langs->trans("ByCompanies"), 3, $user->hasRight('accounting', 'comptarapport', 'lire'));
 				}
 			}
 		}
@@ -2014,15 +2017,16 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 		if (isModEnabled('comptabilite')) {
 			// Files
 			if (!getDolGlobalString('ACCOUNTANCY_HIDE_EXPORT_FILES_MENU')) {
-				$newmenu->add("/compta/accounting-files.php?mainmenu=accountancy&leftmenu=accountancy_files", $langs->trans("AccountantFiles"), 0, $user->hasRight('compta', 'resultat', 'lire'), '', $mainmenu, 'files', 0, '', '', '', img_picto('', 'accountancy', 'class="paddingright pictofixedwidth"'));
+				$newmenu->add("/compta/accounting-files.php?mainmenu=accountancy&leftmenu=accountancy_accountancy_files", $langs->trans("AccountantFiles"), 0, $user->hasRight('compta', 'resultat', 'lire'), '', $mainmenu, 'files', 0, '', '', '', img_picto('', 'accountancy', 'class="paddingright pictofixedwidth"'));
 			}
 
+
 			// Bilan, resultats
-			$newmenu->add("/compta/resultat/index.php?leftmenu=report&mainmenu=accountancy", $langs->trans("Reportings"), 0, $user->hasRight('compta', 'resultat', 'lire'), '', $mainmenu, 'ca', 0, '', '', '', img_picto('', 'accountancy', 'class="paddingright pictofixedwidth"'));
+			$newmenu->add("/compta/resultat/index.php?leftmenu=accountancy_report&mainmenu=accountancy", $langs->trans("Reportings"), 0, $user->hasRight('compta', 'resultat', 'lire'), '', $mainmenu, 'ca', 0, '', '', '', img_picto('', 'accountancy', 'class="paddingright pictofixedwidth"'));
 
 			if ($usemenuhider || empty($leftmenu) || preg_match('/report/', $leftmenu)) {
-				$newmenu->add("/compta/resultat/index.php?leftmenu=report", $langs->trans("MenuReportInOut"), 1, $user->hasRight('compta', 'resultat', 'lire'));
-				$newmenu->add("/compta/resultat/clientfourn.php?leftmenu=report", $langs->trans("ByPredefinedAccountGroups"), 2, $user->hasRight('compta', 'resultat', 'lire'));
+				$newmenu->add("/compta/resultat/index.php?leftmenu=accountancy_report", $langs->trans("MenuReportInOut"), 1, $user->hasRight('compta', 'resultat', 'lire'));
+				$newmenu->add("/compta/resultat/clientfourn.php?leftmenu=accountancy_report", $langs->trans("ByPredefinedAccountGroups"), 2, $user->hasRight('compta', 'resultat', 'lire'));
 				$newmenu->add("/compta/resultat/projects.php?leftmenu=accountancy_report", $langs->trans("ByProject"), 2, $user->hasRight('compta', 'resultat', 'lire'));
 				/* We will see with double party module
 				 $newmenu->add("/compta/resultat/compteres.php?leftmenu=report","Compte de resultat",2,$user->hasRight('compta',  'resultat', 'lire'));
@@ -2063,8 +2067,8 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 				 */
 
 				// Journals
-				$newmenu->add("/compta/journal/sellsjournal.php?leftmenu=report", $langs->trans("SellsJournal"), 1, $user->hasRight('compta', 'resultat', 'lire'), '', '', '', 50);
-				$newmenu->add("/compta/journal/purchasesjournal.php?leftmenu=report", $langs->trans("PurchasesJournal"), 1, $user->hasRight('compta', 'resultat', 'lire'), '', '', '', 51);
+				$newmenu->add("/compta/journal/sellsjournal.php?leftmenu=accountancy_report", $langs->trans("SellsJournal"), 1, $user->hasRight('compta', 'resultat', 'lire'), '', '', '', 50);
+				$newmenu->add("/compta/journal/purchasesjournal.php?leftmenu=accountancy_report", $langs->trans("PurchasesJournal"), 1, $user->hasRight('compta', 'resultat', 'lire'), '', '', '', 51);
 			}
 			//if ($leftmenu=="ca") $newmenu->add("/compta/journaux/index.php?leftmenu=ca",$langs->trans("Journals"),1,$user->hasRight('compta',  'resultat', 'lire')||$user->hasRight('accounting',  'comptarapport', 'lire'));
 		}
@@ -2082,9 +2086,15 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 		// Assets
 		if (isModEnabled('asset')) {
 			$newmenu->add("/asset/list.php?leftmenu=asset&mainmenu=accountancy", $langs->trans("MenuAssets"), 0, $user->hasRight('asset', 'read'), '', $mainmenu, 'asset', 100, '', '', '', img_picto('', 'payment', 'class="paddingright pictofixedwidth"'));
-			$newmenu->add("/asset/card.php?leftmenu=asset&action=create", $langs->trans("MenuNewAsset"), 1, $user->hasRight('asset', 'write'));
-			$newmenu->add("/asset/list.php?leftmenu=asset&mainmenu=accountancy", $langs->trans("MenuListAssets"), 1, $user->hasRight('asset', 'read'));
-			$newmenu->add("/asset/model/list.php?leftmenu=asset_model", $langs->trans("ListOfTemplates"), 1, (int) ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('asset', 'read')) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('asset', 'model_advance', 'read'))), '', $mainmenu, 'asset_model');
+			if ($usemenuhider || empty($leftmenu) || preg_match('/asset/', $leftmenu)) {
+				$newmenu->add("/asset/card.php?leftmenu=asset&action=create", $langs->trans("MenuNewAsset"), 1, $user->hasRight('asset', 'write'));
+				$newmenu->add("/asset/list.php?leftmenu=asset&mainmenu=accountancy", $langs->trans("MenuListAssets"), 1, $user->hasRight('asset', 'read'));
+				$newmenu->add("/asset/model/list.php?leftmenu=asset_model", $langs->trans("MenuAssetModels"), 1, (int) ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('asset', 'read')) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('asset', 'model_advance', 'read'))), '', $mainmenu, 'asset_model');
+				if ($usemenuhider || empty($leftmenu) || preg_match('/asset_model/', $leftmenu)) {
+					$newmenu->add("/asset/model/card.php?leftmenu=asset_model&action=create", $langs->trans("MenuNewAssetModel"), 2, (int) ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('asset', 'write')) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('asset', 'model_advance', 'write'))));
+					$newmenu->add("/asset/model/list.php?leftmenu=asset_model", $langs->trans("MenuListAssetModels"), 2, (int) ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('asset', 'read')) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('asset', 'model_advance', 'read'))));
+				}
+			}
 		}
 	}
 }
