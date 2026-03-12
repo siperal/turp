@@ -639,6 +639,13 @@ if (empty($reshook)) {
 
 			$res = $object->setStatut($new_status, null, '', $triggermodname);
 			if ($res) {
+				if ($new_status != Ticket::STATUS_NOT_READ) {
+					$res = $object->setReadDate($user, 1);	// Update date read if necessary, without trigger because we already run trigger in setStatut()
+					if ($res < 0) {
+						$error++;
+						setEventMessages($object->error, $object->errors, 'errors');
+					}
+				}
 				$url = 'card.php?track_id=' . $object->track_id;
 				header("Location: " . $url);
 				exit();
