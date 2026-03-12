@@ -5704,8 +5704,8 @@ div.ok {
 
 div.info, div.warning, div.error, div.green, div.neutral, section.neutral {
 	padding-top: 16px;
-	padding-left: 10px;
-	padding-right: 4px;
+	padding-left: 20px;
+	padding-right: 10px;
 	padding-bottom: 16px;
 	margin: 1em 0em 1em 0em;
 	border-radius: 5px;
@@ -5720,7 +5720,7 @@ div.fiche div.info, div.fiche div.warning, div.fiche div.neutral {
 div.neutral, section.neutral {
 	background: #f8f8f8;
 }
-div.neutral
+div.neutral {
 	border-<?php print $left; ?>: solid 5px #888;
 }
 
