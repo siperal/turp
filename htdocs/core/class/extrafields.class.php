@@ -1892,9 +1892,9 @@ class ExtraFields
 						$tablesuffixcategory = empty($tmpcategory->MAP_CAT_TABLE[$InfoFieldList[5]]) ? $InfoFieldList[5] : $tmpcategory->MAP_CAT_TABLE[$InfoFieldList[5]];
 						$fksuffixcategory = empty($tmpcategory->MAP_CAT_FK[$InfoFieldList[5]]) ? $InfoFieldList[5] : $tmpcategory->MAP_CAT_FK[$InfoFieldList[5]];
 
-						$sqlwhere .= ' AND EXISTS (SELECT fk_categorie as categid FROM '.MAIN_DB_PREFIX.'categorie_'.$tablesuffixcategory;
+						$sqlwhere .= ' AND EXISTS (SELECT fk_categorie as categid FROM '.MAIN_DB_PREFIX.'categorie_'.$this->db->sanitize($tablesuffixcategory);
 						$sqlwhere .= ' WHERE fk_categorie IN ('.$this->db->sanitize($InfoFieldList[6]).')';
-						$sqlwhere .= ' AND fk_'.$fksuffixcategory.' = rowid)';
+						$sqlwhere .= ' AND fk_'.$this->db->sanitize($fksuffixcategory).' = rowid)';
 						//var_dump($sqlwhere);exit;
 					}
 
