@@ -1124,6 +1124,9 @@ textarea.centpercent {
 .centerimp {
 	text-align: center !important;
 }
+.centeronsmartphone {
+	text-align: center;
+}
 .centergrid {
 	display: grid;
 	text-align: center;
@@ -5347,13 +5350,14 @@ ul.noborder li:nth-child(even):not(.liste_titre) {
 	padding-bottom: 2px;
 }
 .boxstats, .boxstatsempty {
-	padding-left: 6px;
-	padding-right: 6px;
+	padding-left: 5px;
+	padding-right: 3px;
 	width: 118px;
 }
 
 .boxtable:not(.widgetstats) td.tdboxstats .boxstats {
 	box-shadow: 1px 1px 8px var(--colorboxstatsborder);
+	border-radius: 6px;
 }
 
 .tabBar .fichehalfright .boxstats {
@@ -5454,8 +5458,11 @@ ul.noborder li:nth-child(even):not(.liste_titre) {
 /*span.boxstatstext span:not(.fas) {
 	opacity: 0.5;
 }*/
+span.boxstatstext span.fas {
+	filter: grayscale(100%);
+}
 span.boxstatstext {
-	opacity: 0.5;		/* a bug if browser make z-index was discovered when opacity is set, if still present, we must disable it */
+	opacity: 0.9;		/* a bug if browser make z-index was discovered when opacity is set, if still present, we must disable it */
 	line-height: 18px;
 	color: var(--colortext);
 	font-size: 0.8em;

@@ -1277,6 +1277,9 @@ textarea.centpercent {
 .centerimp {
 	text-align: center !important;
 }
+.centeronsmartphone {
+	text-align: center;
+}
 .centergrid {
 	display: grid;
 	text-align: center;
@@ -5428,7 +5431,7 @@ ul.noborder li:nth-child(even):not(.liste_titre) {
 	box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.20);
 }
 span.boxstatstext {
-	opacity: 0.5;		/* a bug if browser make z-index was discovered when opacity is set, if still present, we must disable it */
+	opacity: 0.9;		/* a bug if browser make z-index was discovered when opacity is set, if still present, we must disable it */
 	line-height: 18px;
 	color: #000;
 	font-size: 0.8em;
