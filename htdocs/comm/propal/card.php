@@ -2151,6 +2151,7 @@ if (empty($reshook)) {
 
 	if (getDolGlobalString('MAIN_DISABLE_CONTACTS_TAB')) {
 		if ($action == 'addcontact' && $usercancreate) {
+			$result = 0;
 			if ($object->id > 0) {
 				$contactid = (GETPOST('userid') ? GETPOSTINT('userid') : GETPOSTINT('contactid'));
 				$typeid = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
