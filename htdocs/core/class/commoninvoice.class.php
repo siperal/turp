@@ -694,9 +694,7 @@ abstract class CommonInvoice extends CommonObject
 	 *  Return if an invoice can be set back to draft.
 	 *	Rule is:
 	 *  If invoice is draft and has a temporary ref -> yes (1)
-	 *  If hidden option INVOICE_CAN_NEVER_BE_REMOVED is 1 -> no (0)
 	 *  If invoice is transferred in bookkeeping -> no (-1)
-	 *  If invoice has a definitive ref, is not last in ref -> no (-2)
 	 *  If invoice has a definitive ref, is not last in a situation cycle -> no (-3)
 	 *  If there is one payment -> no (-4)
 	 *  If already sent by email -> no (-5)
