@@ -1618,7 +1618,7 @@ while ($currentdaytoshow < $lastdaytoshow) {
 			$valtoshow = $currentdaytoshow;
 		}
 		if (dol_print_date($valtoshow, '%Y%m%d') == dol_print_date(dol_now(), '%Y%m%d')) {
-			echo '<span class="badgeneutral">';
+			echo '<span class="badgeliketopmenu">';
 		}
 		print dol_print_date($valtoshow, 'dayreduceformat', 'tzuserrel');
 		if (dol_print_date($valtoshow, '%Y%m%d') == dol_print_date(dol_now(), '%Y%m%d')) {
