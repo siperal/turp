@@ -663,6 +663,9 @@ span.userimg.notfirst, div.userimg.notfirst {
 div.userimg.notfirst {
 	display: block-inline;
 }
+.cell2linesheight {
+	line-height: 1.4em;
+}
 .center.inline-block.dateheight {
 	line-height: 1.1em;
 }
