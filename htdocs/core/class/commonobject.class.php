@@ -10540,7 +10540,7 @@ abstract class CommonObject
 	 */
 	public function createCommon(User $user, $notrigger = 0)
 	{
-		global $langs;
+		//global $langs;  		// Should be able to work with $langs loaded
 
 		dol_syslog(get_class($this)."::createCommon create", LOG_DEBUG);
 
@@ -10608,7 +10608,13 @@ abstract class CommonObject
 
 			if (isset($key_fields['notnull']) && $key_fields['notnull'] == 1 && (!isset($values[$key]) || $values[$key] === 'NULL') && (!isset($key_fields['default']) || is_null($key_fields['default']))) {
 				$error++;
-				$langs->load("errors");
+				global $langs;
+				if (empty($langs)) {
+					require_once DOL_DOCUMENT_ROOT.'/core/class/translate.class.php';
+					$langs = new Translate($this->db);
+					$langs->setDefaultLang();
+					$langs->load("errors");
+				}
 				dol_syslog("Mandatory field '".$key."' is empty and required into ->fields definition of class");
 				$this->errors[] = $langs->trans("ErrorFieldRequired", isset($key_fields['label']) ? $key_fields['label'] : $key);
 			}
