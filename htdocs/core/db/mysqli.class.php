@@ -979,10 +979,8 @@ class DoliDBMysqli extends DoliDB
 			$sql .= 'datetime';
 		}
 
-		if (isset($field_desc['value']) && preg_match("/^[^\s]/i", $field_desc['value'])) {
-			if (!in_array($field_desc['type'], array('tinyint', 'smallint', 'int', 'date', 'datetime', 'datetimegmt')) && $field_desc['value']) {
-				$sql .= "(".$this->sanitize($field_desc['value']).")";
-			}
+		if (in_array($field_desc['type'], array('double', 'int', 'varchar')) && array_key_exists('value', $field_desc) && !empty($field_desc['value'])) {
+			$sql .= "(".$this->sanitize($field_desc['value']).")";
 		}
 		if (isset($field_desc['attribute']) && preg_match("/^[^\s]/i", $field_desc['attribute'])) {
 			$sql .= " ".$this->sanitize($field_desc['attribute']);
@@ -1036,7 +1034,7 @@ class DoliDBMysqli extends DoliDB
 			$sql .= 'datetime';
 		}
 
-		if (in_array($field_desc['type'], array('double', 'tinyint', 'int', 'varchar')) && array_key_exists('value', $field_desc) && $field_desc['value']) {
+		if (in_array($field_desc['type'], array('double', 'int', 'varchar')) && array_key_exists('value', $field_desc) && !empty($field_desc['value'])) {
 			$sql .= "(".$this->sanitize($field_desc['value']).")";
 		}
 		if (isset($field_desc['null']) && ($field_desc['null'] == 'not null' || $field_desc['null'] == 'NOT NULL')) {
