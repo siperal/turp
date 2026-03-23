@@ -409,10 +409,10 @@ function callApiToPushCounter($id, $signature, $datecreation, $test, $previousid
 
 		$data .= '&lastrowid='.(int) $id;
 		$data .= '&lastsignature='.urlencode($signature);
-		$data .= '&lastdatecreation='.urlencode($datecreation);
+		$data .= '&lastdatecreation='.urlencode(dol_print_date($datecreation, 'standard', 'gmt'));
 		$data .= '&previousrowid='.(int) $previousid;
 		$data .= '&previoussignature='.urlencode($previoussignature);
-		$data .= '&previousdatecreation='.urlencode($previousdatecreation);
+		$data .= '&previousdatecreation='.urlencode(dol_print_date($previousdatecreation, 'standard', 'gmt'));
 		if ($test) {
 			$data .= '&test=1';
 		}
