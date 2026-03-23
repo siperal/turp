@@ -172,7 +172,7 @@ function product_prepare_head($object)
 			$h++;
 		}
 	}
-	if (!getDolGlobalString('MAIN_ENABLE_PRODUCTS_CONTACTS_TAB')) {
+	if (getDolGlobalString('MAIN_ENABLE_PRODUCTS_CONTACTS_TAB')) {
 		$objectsrc = $object;
 		if ($object->origin_type == 'product' && $object->origin_id > 0) {
 			$objectsrc = new Product($db);
