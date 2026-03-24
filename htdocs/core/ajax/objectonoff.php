@@ -127,7 +127,10 @@ if (($action == 'set') && !empty($id)) {	// Test on permission already done in h
 	$result = $object->setValueFrom($field, $value, $object->table_element, $id, $format, '', $user, $triggerkey);
 
 	if ($result < 0) {
-		print $object->error;
+		print $object->error."\n";
+		foreach ($object->errors as $msg) {
+			print $msg."\n";;
+		}
 		http_response_code(500);
 		exit;
 	}
