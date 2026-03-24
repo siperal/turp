@@ -2361,15 +2361,12 @@ abstract class CommonObject
 				} else {
 					$result = $this->fetchCommon($id);
 				}
-				if (property_exists($this, $field)) {	// Set again the property field because it may have been erased by the previous fetch
-					$this->$field = $value;
-				}
-				if ($propfield != $field && property_exists($this, $propfield)) {	// Set again the property field because it may have been erased by the previous fetch
-					$this->$propfield = $value;
-				}
 
 				$this->oldcopy = clone $this;
-				if (property_exists($this->oldcopy, $propfield)) {
+				if (property_exists($this->oldcopy, $field)) {
+					$this->oldcopy->$field = $oldvalue;
+				}
+				if ($propfield != $field && property_exists($this->oldcopy, $propfield)) {
 					$this->oldcopy->$propfield = $oldvalue;
 				}
 
