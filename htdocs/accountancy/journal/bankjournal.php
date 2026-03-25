@@ -879,12 +879,12 @@ if (!$error && $action == 'writebookkeeping' && $user->hasRight('accounting', 'b
 						} elseif ($tabtype[$key] == 'payment_various') {
 							$bookkeeping->subledger_account = $k;
 							$bookkeeping->subledger_label = $tabcompany[$key]['name'];
-							if (empty($conf->cache['accountingaccountincurrententity'][$k])) {
+							if (empty($conf->cache['accountingaccountincurrententity'][$tabpay[$key]["account_various"]])) {
 								$accountingaccount = new AccountingAccount($db);
-								$accountingaccount->fetch(0, $k, true);
-								$conf->cache['accountingaccountincurrententity'][$k] = $accountingaccount;
+								$accountingaccount->fetch(null, $tabpay[$key]["account_various"], true);
+								$conf->cache['accountingaccountincurrententity'][$tabpay[$key]["account_various"]] = $accountingaccount;
 							} else {
-								$accountingaccount = $conf->cache['accountingaccountincurrententity'][$k];
+								$accountingaccount = $conf->cache['accountingaccountincurrententity'][$tabpay[$key]["account_various"]];
 							}
 							$bookkeeping->numero_compte = $tabpay[$key]["account_various"];
 							$bookkeeping->label_compte = $accountingaccount->label;
