@@ -269,7 +269,7 @@ if (empty($reshook)) {
 			'severity_code' => ['check' => 'alpha', 'langs' => 'TicketSeverity'],
 			'subject' => ['check' => 'alphanohtml', 'langs' => 'Subject'],
 		];
-		if (getDolGlobalString('TICKET_PUBLIC_ALLOW_RICH_TEXT')) {
+		if (getDolGlobalInt('FCKEDITOR_ENABLE_TICKET') >= 2) {		// 0=no reich text editor, 1=allowed on backoffice only, 2=allowed on backoffice and public page (very dangerous)
 			$fieldsToCheck['message'] = ['check' => 'restricthtml', 'langs' => 'Message'];
 		} else {
 			$fieldsToCheck['message'] = ['check' => 'alphanohtml', 'langs' => 'Message'];
@@ -332,7 +332,7 @@ if (empty($reshook)) {
 			$object->db->begin();
 
 			$object->subject = GETPOST("subject", "alphanohtml");
-			if (getDolGlobalString('TICKET_PUBLIC_ALLOW_RICH_TEXT')) {
+			if (getDolGlobalInt('FCKEDITOR_ENABLE_TICKET') >= 2) {		// 0=no reich text editor, 1=allowed on backoffice only, 2=allowed on backoffice and public page (very dangerous)
 				$object->message = GETPOST("message", "restricthtml");
 			} else {
 				$object->message = GETPOST("message", "alphanohtml");
