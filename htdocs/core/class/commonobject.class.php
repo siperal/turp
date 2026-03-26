@@ -2238,7 +2238,16 @@ abstract class CommonObject
 	{
 		$result = false;
 		if (!empty($id) && !empty($field) && !empty($table)) {
-			$sql = "SELECT ".$field." FROM ".$this->db->prefix().$table;
+			if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $table)) {
+				dol_syslog(get_class($this).'::getValueFrom Bad table name: '.$table, LOG_WARNING);
+				return -1;
+			}
+			if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_.]*$/', $field)) {
+				dol_syslog(get_class($this).'::getValueFrom Bad field name: '.$field, LOG_WARNING);
+				return -1;
+			}
+
+			$sql = "SELECT ".$this->db->sanitize($field)." FROM ".$this->db->prefix().$this->db->sanitize($table);
 			$sql .= " WHERE rowid = ".((int) $id);
 
 			dol_syslog(get_class($this).'::getValueFrom', LOG_DEBUG);
@@ -2308,6 +2317,15 @@ abstract class CommonObject
 		}
 		if (in_array($table, array('prelevement_bons'))) {	// TODO Add a field fk_user_modif into llx_prelevement_bons
 			$fk_user_field = '';
+		}
+
+		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $table)) {
+			dol_syslog(get_class($this).'::getValueFrom Bad table name: '.$table, LOG_WARNING);
+			return -1;
+		}
+		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_.]*$/', $field)) {
+			dol_syslog(get_class($this).'::getValueFrom Bad field name: '.$field, LOG_WARNING);
+			return -1;
 		}
 
 		$oldvalue = null;
