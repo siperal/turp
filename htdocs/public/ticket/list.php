@@ -475,7 +475,7 @@ if ($action == "view_ticketlist") {
 
 				if (!empty($arrayfields['type.code']['checked'])) {
 					print '<td class="liste_titre">';
-					$formTicket->selectTypesTickets($search_type, 'search_type', '', 2, 1, 1, 0, 'maxwidth150');
+					$formTicket->selectTypesTickets($search_type, 'search_type', '', 2, 1, 1, 0, 'maxwidth150', 0, 1);
 					print '</td>';
 				}
 
