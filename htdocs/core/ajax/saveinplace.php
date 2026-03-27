@@ -71,7 +71,6 @@ if (!empty($field) && !empty($element) && !empty($table_element) && !empty($fk_e
 	$value = ($type == 'ckeditor' ? GETPOST('value', '', 2) : GETPOST('value', 'alpha', 2));
 	$loadmethod = GETPOST('loadmethod', 'alpha', 2);
 	$savemethod = GETPOST('savemethod', 'alpha', 2);
-	$savemethodname = (!empty($savemethod) ? $savemethod : 'setValueFrom');
 	$newelement = $element;
 
 	$view = '';
@@ -120,7 +119,6 @@ if (!empty($field) && !empty($element) && !empty($table_element) && !empty($fk_e
 		$feature = 'fournisseur';
 		$feature2 = 'facture';
 	}
-
 	//var_dump(GETPOST('action','aZ09'));
 	//var_dump($newelement.'-'.$subelement."-".$feature."-".$object_id);
 	$check_access = restrictedArea($user, $feature, $object_id, '', $feature2);
@@ -194,11 +192,7 @@ if (!empty($field) && !empty($element) && !empty($table_element) && !empty($fk_e
 			}
 		}
 
-		if (!$error) {
-			if ((isset($object) && !is_object($object)) || empty($savemethod)) {
-				$object = new GenericObject($db);
-			}
-
+		if (!$error && isset($object) && is_object($object)) {
 			// Specific for add_object_linked()
 			// TODO add a function for variable treatment
 			$object->ext_fk_element = $newvalue;
