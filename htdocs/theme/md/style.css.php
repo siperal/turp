@@ -1500,7 +1500,7 @@ td.wordbreak img, td.wordbreakimp img {
 	overflow-y: auto;
 	word-break: break-word;
 }
-.overflowellipsis {
+.overflowellipsis .shortmessagecut, .overflowellipsis .longmessagecut {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
