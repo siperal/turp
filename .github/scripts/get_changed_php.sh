@@ -68,10 +68,10 @@ done
 all_changed_files=$(IFS=" " ; echo "${changed_php_files[*]}")
 
 
-#FORBIDDEN_FILES=$(echo "$all_changed_files" | grep -E 'htdocs/langs/([^/]+)/.*\.lang$' | grep -v 'htdocs/langs/en_US/')
-#if [ -n "$FORBIDDEN_FILES" ]; then
+forbidden_files=$(echo "$all_changed_files" | grep -E 'htdocs/langs/([^/]+)/.*\.lang$' | grep -v 'htdocs/langs/en_US/')
+#if [ -n "$forbidden_files" ]; then
 #  echo "You tried to modify one or more language files that are not allowed to be modified in Pull requests."
-#  echo "$FORBIDDEN_FILES"
+#  echo "$forbidden_files"
 #  echo "To modify translation that are not the source language (en_US), you must modify them from transifex.com"
 #  exit 10
 #fi
@@ -88,8 +88,10 @@ fi
 if [ -n "${GITHUB_OUTPUT:-}" ]; then
 	echo "any_changed=${any_changed}" >> "$GITHUB_OUTPUT"
 	echo "all_changed_files=${all_changed_files}" >> "$GITHUB_OUTPUT"
+	echo "forbidden_files=${forbidden_files}" >> "$GITHUB_OUTPUT"
 else
 	# Otherwise, print the outputs
 	echo "any_changed=${any_changed}"
 	echo "all_changed_files=${all_changed_files}"
+	echo "forbidden_files=${forbidden_files}"
 fi
