@@ -2798,7 +2798,7 @@ class Holiday extends CommonObject
 		$msg = make_substitutions($mailtemplate->content, $substitutionarray, $outputlangs);
 		$from = dol_string_nospecial(getDolGlobalString('MAIN_INFO_SOCIETE_NOM'), ' ', array(",")).' <' . getDolGlobalString('MAIN_INFO_SOCIETE_MAIL').'>';
 
-		$msg = preg_replace('/__ARRAY_EMPLOYEE_STARTDAY_ENDDAY_DAYS__/', $outputarrayleaves, $msg);
+		$msg = preg_replace('/__HOLIDAY_ARRAY_PER_EMPLOYEE_FOR_PERIOD__/', $outputarrayleaves, $msg);
 		$cmail = new CMailFile($subject, $mailto, $from, $msg, array(), array(), array(), '', '', 0, 1);
 		$result = $cmail->sendfile();
 		if (!$result || !empty($cmail->error) || !empty($cmail->errors)) {
