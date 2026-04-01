@@ -1527,7 +1527,8 @@ class BlockedLog
 					$previoussignature = $obj->signature;
 				}
 			} else {
-				dol_print_error($this->db);
+				dol_print_error($this->db);		// can happen after a deadlock when too many requests do create into blocked log happen at the same time.
+				http_response_code(503);
 				exit;
 			}
 		}
