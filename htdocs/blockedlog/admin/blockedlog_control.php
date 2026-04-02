@@ -208,8 +208,7 @@ print dol_get_fiche_end();
 
 print '<br>';
 
-
-if (strlen($inputregistrationnumber) < 8) {
+if ($inputregistrationnumber && strlen($inputregistrationnumber) < 8) {
 	// Message
 	print img_picto('', 'cross', 'class="pictofixedwidth"').$langs->trans("RegistrationNumberIsTooShort");
 } elseif ($inputregistrationnumber) {
