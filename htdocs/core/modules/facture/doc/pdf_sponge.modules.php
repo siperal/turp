@@ -2557,7 +2557,7 @@ class pdf_sponge extends ModelePDFFactures
 
 		$pdf->SetFont('', '', $default_font_size - 2);
 
-		pdfWriteBlockedLogSignature($pdf, $outputlangs, $this->page_hauteur, $object, $w, $posx, $posy);
+		pdfWriteAdditionnalTitle($pdf, $outputlangs, $this->page_hauteur, $object, $w, $posx, $posy);
 
 		/*
 		$posy += 5;
