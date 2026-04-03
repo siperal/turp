@@ -223,8 +223,8 @@ if (isModEnabled('don')) {
 	if (getDolGlobalString('MAIN_SECURITY_ENABLECAPTCHA_DONATION')) {
 		$showavailablecaptcha = 1;
 	}
+	print '</td></tr>';
 }
-print '</td></tr>';
 
 if (isModEnabled('recruitment')) {
 	print '<tr class="oddeven"><td>' . $langs->trans("UseCaptchaCode").' - Recruitment public form</td><td class="right" width="100">';
