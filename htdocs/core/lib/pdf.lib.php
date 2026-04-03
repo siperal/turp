@@ -793,7 +793,7 @@ function pdfWriteAdditionnalTitle(&$pdf, $outputlangs, $page_height, $object, &$
  *   	@param	int			$index			Index
  *   	@param	TCPDF		$pdf     		Object PDF
  *      @param	Translate	$outputlangs	Object lang for output
- *      @param	Translate	$outputlangsbis	Object lang for output
+ *      @param	?Translate	$outputlangsbis	Object lang for output
  * 		@param	Facture		$object			Object invoice
  * 		@param	float		$col1x			Col1x
  * 		@param	float		$col2x			Col2x
