@@ -448,7 +448,7 @@ if ($projectid > 0) {
 
 	// Categories
 	if (isModEnabled('category')) {
-		print '<tr><td class="titlefield valignmiddle">'.$langs->trans("Categories").'</td><td class="valuefield">';
+		print '<tr><td class="titlefieldmiddle valignmiddle">'.$langs->trans("Categories").'</td><td class="valuefield">';
 		print $form->showCategories($project->id, Categorie::TYPE_PROJECT, 1);
 		print "</td></tr>";
 	}
@@ -463,7 +463,7 @@ if ($projectid > 0) {
 		print '</td></tr>';
 	}
 
-	print '<tr><td class="titlefield">';
+	print '<tr><td class="titlefieldmiddle">';
 	$typeofdata = 'checkbox:'.($project->accept_conference_suggestions ? ' checked="checked"' : '');
 	$htmltext = $langs->trans("AllowUnknownPeopleSuggestConfHelp");
 	print $form->editfieldkey('AllowUnknownPeopleSuggestConf', 'accept_conference_suggestions', ($project->accept_conference_suggestions ? '1' : '0'), $project, $permissiontoadd, $typeofdata, '', 0, 0, 'projectid', $htmltext);
@@ -471,7 +471,7 @@ if ($projectid > 0) {
 	print $form->editfieldval('AllowUnknownPeopleSuggestConf', 'accept_conference_suggestions', ($project->accept_conference_suggestions ? '1' : '0'), $project, $permissiontoadd, $typeofdata, '', null, null, '', 0, '', 'projectid');
 	print "</td></tr>";
 
-	print '<tr><td class="titlefield">';
+	print '<tr><td class="">';
 	$typeofdata = 'checkbox:'.($project->accept_booth_suggestions ? ' checked="checked"' : '');
 	$htmltext = $langs->trans("AllowUnknownPeopleSuggestBoothHelp");
 	print $form->editfieldkey('AllowUnknownPeopleSuggestBooth', 'accept_booth_suggestions', ($project->accept_booth_suggestions ? '1' : '0'), $project, $permissiontoadd, $typeofdata, '', 0, 0, 'projectid', $htmltext);
@@ -479,26 +479,26 @@ if ($projectid > 0) {
 	print $form->editfieldval('AllowUnknownPeopleSuggestBooth', 'accept_booth_suggestions', ($project->accept_booth_suggestions ? '1' : '0'), $project, $permissiontoadd, $typeofdata, '', null, null, '', 0, '', 'projectid');
 	print "</td></tr>";
 
-	print '<tr><td class="titlefield">';
+	print '<tr><td class="">';
 	print $form->editfieldkey($form->textwithpicto($langs->trans('PriceOfBooth'), $langs->trans("PriceOfBoothHelp")), 'price_booth', '', $project, $permissiontoadd, 'amount', '', 0, 0, 'projectid');
 	print '</td><td class="valuefield">';
 	print $form->editfieldval($form->textwithpicto($langs->trans('PriceOfBooth'), $langs->trans("PriceOfBoothHelp")), 'price_booth', $project->price_booth, $project, $permissiontoadd, 'amount', '', null, null, '', 0, '', 'projectid');
 	print "</td></tr>";
 
-	print '<tr><td class="titlefield">';
+	print '<tr><td class="">';
 	print $form->editfieldkey($form->textwithpicto($langs->trans('PriceOfRegistration'), $langs->trans("PriceOfRegistrationHelp")), 'price_registration', '', $project, $permissiontoadd, 'amount', '', 0, 0, 'projectid');
 	print '</td><td class="valuefield">';
 	print $form->editfieldval($form->textwithpicto($langs->trans('PriceOfRegistration'), $langs->trans("PriceOfRegistrationHelp")), 'price_registration', $project->price_registration, $project, $permissiontoadd, 'amount', '', null, null, '', 0, '', 'projectid');
 	print "</td></tr>";
 
-	print '<tr><td class="titlefield">';
+	print '<tr><td class="">';
 	print $form->editfieldkey($form->textwithpicto($langs->trans('MaxNbOfAttendees'), ''), 'max_attendees', '', $project, $permissiontoadd, 'integer:3', '', 0, 0, 'projectid');
 	print '</td><td class="valuefield">';
 	print $form->editfieldval($form->textwithpicto($langs->trans('MaxNbOfAttendees'), ''), 'max_attendees', $project->max_attendees, $project, $permissiontoadd, 'integer:3', '', null, null, '', 0, '', 'projectid');
 	print "</td></tr>";
 
 	// Link to ICS for the event
-	print '<tr><td class="titlefield valignmiddle">'.$langs->trans("EventOrganizationICSLinkProject").'</td><td class="valuefield">';
+	print '<tr><td class="valignmiddle">'.$langs->trans("EventOrganizationICSLinkProject").'</td><td class="valuefield">';
 
 	// Show message
 	$message = '<a target="_blank" rel="noopener noreferrer" href="'.$urlwithroot.'/public/agenda/agendaexport.php?format=ical'.($conf->entity > 1 ? "&entity=".$conf->entity : "");
@@ -511,7 +511,7 @@ if ($projectid > 0) {
 	print "</td></tr>";
 
 	// Link for ICS for conference or booth
-	print '<tr><td class="titlefield valignmiddle">'.$langs->trans("EventOrganizationICSLink");
+	print '<tr><td class="valignmiddle">'.$langs->trans("EventOrganizationICSLink");
 	// TODO Add nb of events
 	$nbofconfbooth = 0;
 	if ($nbofconfbooth > 0) {
@@ -527,34 +527,34 @@ if ($projectid > 0) {
 	print "</td></tr>";
 
 	// Link to the submit vote/register page
-	print '<tr><td class="titlefield">';
+	print '<tr><td class="">';
 	//print '<span class="opacitymedium">';
 	print $form->textwithpicto($langs->trans("SuggestOrVoteForConfOrBooth"), $langs->trans("EvntOrgRegistrationHelpMessage"));
 	//print '</span>';
-	print '</td><td class="valuefield">';
+	print '</td><td class="valuefield nowrap">';
 	$linksuggest = $dolibarr_main_url_root.'/public/project/index.php?id='.((int) $project->id);
 	$encodedsecurekey = dol_hash(getDolGlobalString('EVENTORGANIZATION_SECUREKEY').'conferenceorbooth'.((int) $project->id), 'md5');
 	$linksuggest .= '&securekey='.urlencode($encodedsecurekey);
 	//print '<div class="urllink">';
 	//print '<input type="text" value="'.$linksuggest.'" id="linkregister" class="quatrevingtpercent paddingrightonly">';
-	print '<div class="tdoverflowmax200 inline-block valignmiddle"><a target="_blank" href="'.$linksuggest.'" class="quatrevingtpercent">'.$linksuggest.'</a></div>';
+	print '<div class="tdoverflowmax150 inline-block valignmiddle"><a target="_blank" href="'.$linksuggest.'" class="quatrevingtpercent">'.$linksuggest.'</a></div>';
 	print '<a target="_blank" rel="noopener noreferrer" href="'.$linksuggest.'">'.img_picto('', 'globe').'</a>';
 	//print '</div>';
 	//print ajax_autoselect("linkregister");
 	print '</td></tr>';
 
 	// Link to the subscribe
-	print '<tr><td class="titlefield">';
+	print '<tr><td class="">';
 	//print '<span class="opacitymedium">';
 	print $langs->trans("PublicAttendeeSubscriptionGlobalPage");
 	//print '</span>';
-	print '</td><td class="valuefield">';
+	print '</td><td class="valuefield nowrap">';
 	$link_subscription = $dolibarr_main_url_root.'/public/eventorganization/attendee_new.php?id='.((int) $project->id).'&type=global';
 	$encodedsecurekey = dol_hash(getDolGlobalString('EVENTORGANIZATION_SECUREKEY').'conferenceorbooth'.((int) $project->id), 'md5');
 	$link_subscription .= '&securekey='.urlencode($encodedsecurekey);
 	//print '<div class="urllink">';
 	//print '<input type="text" value="'.$linkregister.'" id="linkregister" class="quatrevingtpercent paddingrightonly">';
-	print '<div class="tdoverflowmax200 inline-block valignmiddle"><a target="_blank" href="'.$link_subscription.'" class="quatrevingtpercent">'.$link_subscription.'</a></div>';
+	print '<div class="tdoverflowmax150 inline-block valignmiddle"><a target="_blank" href="'.$link_subscription.'" class="quatrevingtpercent">'.$link_subscription.'</a></div>';
 	print '<a target="_blank" rel="noopener noreferrer" rel="noopener noreferrer" href="'.$link_subscription.'">'.img_picto('', 'globe').'</a>';
 	//print '</div>';
 	//print ajax_autoselect("linkregister");
