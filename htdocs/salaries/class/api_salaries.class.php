@@ -91,7 +91,7 @@ class Salaries extends DolibarrApi
 				$sql .= ' AND t.fk_user = '.((int) DolibarrApiAccess::$user->id).')';
 			} else {
 				$childids = DolibarrApiAccess::$user->getAllChildIds(1);
-				$sql .= ' AND t.fk_user IN ('.$this->db->sanitize($childids).')';
+				$sql .= ' AND t.fk_user IN ('.$this->db->sanitize(implode(',', $childids)).')';
 			}
 		}
 
@@ -287,7 +287,7 @@ class Salaries extends DolibarrApi
 				$sql .= ' AND s.fk_user = '.((int) DolibarrApiAccess::$user->id).')';
 			} else {
 				$childids = DolibarrApiAccess::$user->getAllChildIds(1);
-				$sql .= ' AND s.fk_user IN ('.$this->db->sanitize($childids).')';
+				$sql .= ' AND s.fk_user IN ('.$this->db->sanitize(implode(',', $childids)).')';
 			}
 		}
 
