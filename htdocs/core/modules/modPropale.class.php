@@ -112,6 +112,7 @@ class modPropale extends DolibarrModules
 		$this->const[$r][4] = 0;
 		$r++;
 
+		include_once DOL_DOCUMENT_ROOT.'/core/lib/security2.lib.php';
 		$this->const[$r][0] = "PROPOSAL_ONLINE_SIGNATURE_SECURITY_TOKEN";
 		$this->const[$r][1] = "chaine";
 		$this->const[$r][2] = getRandomPassword(true);
