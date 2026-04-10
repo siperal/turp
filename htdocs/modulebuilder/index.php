@@ -47,6 +47,10 @@ require '../main.inc.php';
  * @var string $dolibarr_main_document_root
  * @var string $dolibarr_main_document_root_alt
  */
+'
+@phan-var-force string $dolibarr_main_document_root
+@phan-var-force string $dolibarr_main_document_root_alt
+';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formadmin.class.php';
