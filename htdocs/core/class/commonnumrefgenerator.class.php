@@ -171,5 +171,6 @@ abstract class CommonNumRefGenerator
 	 *
 	 *	@return	string	Example
 	 */
-	abstract public function getExample();
+	// Comment this because the signature/declaration of getExample depends on object type, so method is declared in parent abstract class only.
+	//abstract public function getExample();
 }
