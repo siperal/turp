@@ -336,7 +336,8 @@ if ($id > 0 || !empty($ref)) {
 		print dol_get_fiche_end();
 
 
-		print '<br><br>';
+		print '<div class="clearboth"></div><br>';
+
 
 		$prodsfather = $object->getFather(); // Parent Products
 		$object->get_sousproduits_arbo(); // Load $object->sousprods
