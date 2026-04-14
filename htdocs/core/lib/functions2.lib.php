@@ -1179,7 +1179,8 @@ function get_next_value($db, $mask, $table, $field, $where = '', $objsoc = '', $
 		$sql .= $where;
 	}
 	if ($sqlwhere) {
-		$sql .= " AND ".$sqlwhere;
+		$sanitizedsqlwhere = $sqlwhere;
+		$sql .= " AND ".$sanitizedsqlwhere;
 	}
 
 	//print $sql.'<br>';

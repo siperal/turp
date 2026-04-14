@@ -882,15 +882,15 @@ class DoliDBSqlite3 extends DoliDB
 		// phpcs:enable
 		$listtables = array();
 
-		$like = '';
+		$sanitizedlike = '';
 		if ($table) {
 			$tmptable = preg_replace('/[^a-z0-9\.\-\_%]/i', '', $table);
 
-			$like = "LIKE '".$this->escape($tmptable)."'";
+			$sanitizedlike = "LIKE '".$this->escape($tmptable)."'";
 		}
-		$tmpdatabase = preg_replace('/[^a-z0-9\.\-\_]/i', '', $database);
+		$sanitizedtmpdatabase = preg_replace('/[^a-z0-9\.\-\_]/i', '', $database);
 
-		$sql = "SHOW TABLES FROM ".$tmpdatabase." ".$like.";";
+		$sql = "SHOW TABLES FROM ".$sanitizedtmpdatabase." ".$sanitizedlike.";";
 		//print $sql;
 		$result = $this->query($sql);
 		if ($result) {

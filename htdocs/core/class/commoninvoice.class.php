@@ -345,7 +345,7 @@ abstract class CommonInvoice extends CommonObject
 
 		$sql = "SELECT sum(amount) as amount, sum(multicurrency_amount) as multicurrency_amount";
 		$sql .= " FROM ".$this->db->prefix().$table;
-		$sql .= " WHERE ".$field." = ".((int) $this->id);
+		$sql .= " WHERE ".$this->db->sanitize($field)." = ".((int) $this->id);
 
 		dol_syslog(get_class($this)."::getSommePaiement", LOG_DEBUG);
 

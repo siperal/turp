@@ -11851,12 +11851,12 @@ function dol_getIdFromCode($db, $key, $tablename, $fieldkey = 'code', $fieldid =
 
 	dol_syslog('dol_getIdFromCode (value for field ' . $fieldid . ' from key ' . $key . ' not found into cache)', LOG_DEBUG);
 
-	$sql = "SELECT " . $fieldid . " as valuetoget";
-	$sql .= " FROM " . MAIN_DB_PREFIX . $tablename;
+	$sql = "SELECT " . $db->sanitize($fieldid) . " as valuetoget";
+	$sql .= " FROM " . MAIN_DB_PREFIX . $db->sanitize($tablename);
 	if ($fieldkey == 'id' || $fieldkey == 'rowid') {
-		$sql .= " WHERE " . $fieldkey . " = " . ((int) $key);
+		$sql .= " WHERE " . $db->sanitize($fieldkey) . " = " . ((int) $key);
 	} else {
-		$sql .= " WHERE " . $fieldkey . " = '" . $db->escape($key) . "'";
+		$sql .= " WHERE " . $db->sanitize($fieldkey) . " = '" . $db->escape($key) . "'";
 	}
 	if (!empty($entityfilter)) {
 		$sql .= " AND entity IN (" . getEntity($tablename) . ")";
@@ -16155,6 +16155,7 @@ function dolForgeDummyCriteriaCallback($matches)
  * @param  string[]	$matches       	Array of found string by regex search.
  * 									Example: "t.ref:like:'SO-%'" or "t.date_creation:<:'20160101'" or "t.date_creation:<:'2016-01-01 12:30:00'" or "t.nature:is:NULL"
  * @return string                  	Forged criteria. Example: "t.field LIKE 'abc%'"
+ * @see forgeSQLFromUniversalSearchCriteria()
  */
 function dolForgeSQLCriteriaCallback($matches)
 {
