@@ -5746,8 +5746,8 @@ class Form
 		if ($status != 2) {
 			$sql .= " AND status = " . (int) $status;
 		}
-		if ($filtre) {	// TODO Support USF
-			$sql .= " AND " . $filtre;
+		if ($filtre) {
+			$sql .= forgeSQLFromUniversalSearchCriteria($filtre);
 		}
 		$sql .= " ORDER BY name";
 
