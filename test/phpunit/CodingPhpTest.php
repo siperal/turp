@@ -414,7 +414,7 @@ class CodingPhpTest extends CommonClassTest
 		// with $sql = "..." . $...
 		$ok = true;
 		$matches = array();
-		preg_match_all('/\$sql\s*\.?=\s*[\"\'][a-z\s=_,]+[\'\"]\s*\.\s*\$([a-z->_]+)/i', $filecontent, $matches, PREG_SET_ORDER);
+		preg_match_all('/\$sql\s*\.?=\s*[\"\'][a-z\s=_,\.]+[\'\"]\s*\.\s*\$([a-z->_]+)/i', $filecontent, $matches, PREG_SET_ORDER);
 		//var_dump($matches);
 		foreach ($matches as $key => $val) {
 			if (in_array($val[1], array('object->db->prefix', 'object->get', 'object->getFieldList', 'objectline->getFieldList', 'user', 'this->sanitize', 'this->db->sanitize', 'this->db->escape', 'this->db->encrypt', 'this->db->decrypt', 'this->db->ifsql', 'this->db->prefix', 'this->db->plimit', 'this->field_date', 'this->where', 'this->escape', 'this->buildFilterQuery', 'conf->entity', 'db->decrypt', 'db->encrypt', 'db->escape', 'db->regexpsql', 'db->sanitize', 'db->ifsql', 'db->prefix', 'dbs->prefix', 'clause', 'sqlwhere', 'sqlorder', 'sqldesiredstock', 'sqlalertstock', 'user->id'))) {		// exclude $db->escape( and $this->

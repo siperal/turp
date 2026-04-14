@@ -9263,6 +9263,7 @@ class Form
 		}
 		$confkeyforautocompletemode = strtoupper($prefixforautocompletemode) . '_USE_SEARCH_TO_SELECT'; // For example COMPANY_USE_SEARCH_TO_SELECT
 
+		$fieldstoshow = '';
 		if (!empty($objecttmp->fields)) {    // For object that declare it, it is better to use declared fields (like societe, contact, ...)
 			$tmpfieldstoshow = '';
 			foreach ($objecttmp->fields as $key => $val) {
@@ -9308,8 +9309,10 @@ class Form
 
 		$num = 0;
 
+		$sanitizedfieldstoshow = $fieldstoshow;
+
 		// Search data
-		$sql = "SELECT t.rowid, " . $fieldstoshow . " FROM " . $this->db->prefix() . $this->db->sanitize($objecttmp->table_element) . " as t";
+		$sql = "SELECT t.rowid, " . $sanitizedfieldstoshow . " FROM " . $this->db->prefix() . $this->db->sanitize($objecttmp->table_element) . " as t";
 		if (!empty($objecttmp->isextrafieldmanaged)) {
 			$extrafieldTable = $objecttmp->table_element;
 			if ($extrafieldTable == 'categorie') {
