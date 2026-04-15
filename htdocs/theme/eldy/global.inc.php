@@ -6106,6 +6106,7 @@ button.ui-button-icon-only.ui-dialog-titlebar-close {
 	padding-right: 5px;
 	padding-top: 5px;
 	padding-bottom: 5px;
+	min-width: 300px;
 }
 .ui-widget-header {
 	padding: 8px !important;
