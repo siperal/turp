@@ -20,7 +20,7 @@ class TestCase {
     public function fail(string $message = ''): void {}
 	*/
 
-	public function	onNotSuccessfulTest(\Throwable $t): void
+	public function	onNotSuccessfulTest(\PHPUnit\Framework\Throwable $t): void
 	{
 	}
 }
