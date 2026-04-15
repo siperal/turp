@@ -1,6 +1,7 @@
 <?php
 /*
  * Copyright (C) 2024 Anthony Damhet <a.damhet@progiseize.fr>
+ * Copyright (C) 2026		MDW				<mdeweerd@users.noreply.github.com>
  *
  * This program and files/directory inner it is free software: you can
  * redistribute it and/or modify it under the terms of the
@@ -49,8 +50,8 @@ $documentation->docHeader('Icons', [], ['admin/tools/ui/css/doc-icons.css'], GET
 $documentation->view = array('Components','Icons');
 $form = new Form($db);
 
-$mode=GETPOST('mode'); // ex : no-btn
-$displayMode = GETPOST('displayMode') == 'kanban' ?  'kanban' : 'icon-only';
+$mode = GETPOST('mode'); // ex : no-btn
+$displayMode = GETPOST('displayMode') == 'kanban' ? 'kanban' : 'icon-only';
 $revertDisplayMode = $displayMode == 'kanban' ? 'icon-only' : 'kanban';
 $revertDisplayName = $displayMode == 'kanban' ? $langs->trans('ViewList') : $langs->trans('ViewKanban');
 $switchDisplayLink = dol_buildpath($documentation->baseUrl . '/components/icons.php', 1) . '?displayMode=' . $revertDisplayMode;
@@ -114,7 +115,7 @@ if (!GETPOST('hidenavmenu')) {
 				<div class="right">
 					<?php
 					if ($mode != 'no-btn') {
-						print dolGetButtonTitle($revertDisplayName, '', $switchDisplayLinkIcon, $switchDisplayLink.'#img-picto-section-list', '', 1, ['forcenohideoftext'=>1]);
+						print dolGetButtonTitle($revertDisplayName, '', $switchDisplayLinkIcon, $switchDisplayLink.'#img-picto-section-list', '', 1, ['forcenohideoftext' => 1]);
 					}
 					?>
 				</div>
@@ -207,7 +208,7 @@ if (!GETPOST('hidenavmenu')) {
 				<div class="right">
 					<?php
 					if ($mode != 'no-btn') {
-						print dolGetButtonTitle($revertDisplayName, '', $switchDisplayLinkIcon, $switchDisplayLink.'#icon-section-list', '', 1, ['forcenohideoftext'=>1]);
+						print dolGetButtonTitle($revertDisplayName, '', $switchDisplayLinkIcon, $switchDisplayLink.'#icon-section-list', '', 1, ['forcenohideoftext' => 1]);
 					}
 					?>
 				</div>
@@ -218,11 +219,11 @@ if (!GETPOST('hidenavmenu')) {
 					$alreadyDisplay = [];
 					if ($fontAwesomeIcons) {
 						foreach ($fontAwesomeIcons as $iconData) {
-							$class= $iconData[1]??'fa';
+							$class = $iconData[1] ?? 'fa';
 							if (!empty($iconData[2])) {
-								$class.= ' fa-'.$iconData[2];
+								$class .= ' fa-'.$iconData[2];
 							} else {
-								$class.= ' fa-'.$iconData[0];
+								$class .= ' fa-'.$iconData[0];
 							}
 
 							if (in_array($class, $alreadyDisplay)) {
