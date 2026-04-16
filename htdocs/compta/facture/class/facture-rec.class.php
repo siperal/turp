@@ -1514,6 +1514,7 @@ class FactureRec extends CommonInvoice
 							}
 						}
 
+						$result = 1;
 						if ($facturerec->generate_pdf) {
 							$result = $facture->generateDocument($facturerec->model_pdf, $outputlangs);
 							if ($result <= 0) {
