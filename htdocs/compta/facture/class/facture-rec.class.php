@@ -1409,7 +1409,7 @@ class FactureRec extends CommonInvoice
 		$sql .= " AND (date_when IS NULL OR date_when <= '".$this->db->idate($today)."')";
 		$sql .= ' AND (nb_gen_done < nb_gen_max OR nb_gen_max = 0)';
 		$sql .= ' AND suspended = 0';
-		$sql .= ' AND entity = '.$conf->entity; // MUST STAY = $conf->entity here
+		$sql .= ' AND entity = '.((int) $conf->entity); // MUST STAY = $conf->entity here
 		if ($restrictioninvoiceid > 0) {
 			$sql .= ' AND rowid = '.((int) $restrictioninvoiceid);
 		}
@@ -1501,7 +1501,7 @@ class FactureRec extends CommonInvoice
 						}
 					}
 					if (!$errorforinvoice && $facturerec->generate_pdf) {
-						// We refresh the object in order to have all necessary data (like date_lim_reglement)
+						// We reload the object in order to have all necessary data (like date_lim_reglement)
 						$facture->fetch($facture->id);
 						$outputlangs = $langs;
 						if (getDolGlobalInt('MAIN_MULTILANGS')) {
