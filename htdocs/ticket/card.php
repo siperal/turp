@@ -1266,17 +1266,17 @@ if ($action == 'create' || $action == 'presend') {
 		print '<div class="div-table-responsive-no-min">'; // You can use div-table-responsive-no-min if you don't need reserved height for your table
 		print '<table class="border tableforfield centpercent margintable bordertopimp">';
 		print '<tr class="liste_titre">';
-		print '<td>';
+		print '<td class="valignmiddle titlefield">';
+		print '<table class="nobordernopadding centpercent"><tr><td class="none noborder">';
 		print $langs->trans('TicketProperties');
+		if (GETPOST('set', 'alpha') != 'properties' && isset($object->status) && ($object->status < $object::STATUS_NEED_MORE_INFO || !getDolGlobalInt('TICKET_DISALLOW_CLASSIFICATION_MODIFICATION_EVEN_IF_CLOSED')) && $permissiontoadd) {
+			print '</td><td class="right noborder"><a class="editfielda" href="card.php?track_id='.$object->track_id.'&set=properties">'.img_edit($langs->trans('Modify')).'</a>';
+		}
+		print '</td></tr></table>';
 		print '</td>';
 		print '<td>';
 		if (GETPOST('set', 'alpha') == 'properties' && $permissiontoadd) {
 			print '<input type="submit" class="button smallpaddingimp" name="btn_update_ticket_prop" value="'.$langs->trans("Modify").'" />';
-		} else {
-			// Button to edit Properties
-			if (isset($object->status) && ($object->status < $object::STATUS_NEED_MORE_INFO || !getDolGlobalInt('TICKET_DISALLOW_CLASSIFICATION_MODIFICATION_EVEN_IF_CLOSED')) && $permissiontoadd) {
-				print ' <a class="editfielda" href="card.php?track_id='.$object->track_id.'&set=properties">'.img_edit($langs->trans('Modify')).'</a>';
-			}
 		}
 		print '</td>';
 		print '</tr>';
