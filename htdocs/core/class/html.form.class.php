@@ -10243,7 +10243,7 @@ class Form
 	 *
 	 * @param int 		$id 		Id of object
 	 * @param string 	$type 		Type of category ('member', 'customer', 'supplier', 'product', 'contact'). Old mode using number (0, 1, 2, ...) is deprecated.
-	 * @param int<0,1>	$rendermode 0=Default, use multiselect (deprecated). 1=Emulate multiselect (recommended)
+	 * @param int<0,1>	$rendermode 0=Default, use multiselect (deprecated). 1=Emulate multiselect (short label, recommended), 2=Emulate multiselect (full path)
 	 * @param int<0,1> 	$nolink 	1=Do not add html links
 	 * @return string               String with categories
 	 */
@@ -10254,16 +10254,34 @@ class Form
 		$cat = new Categorie($this->db);
 		$categories = $cat->containing($id, $type);
 
-		if ($rendermode == 1) {
+		if ($rendermode == 1 || $rendermode == 2) {
 			$toprint = array();
 			foreach ($categories as $c) {
-				$ways = $c->print_all_ways('auto', ($nolink ? 'none' : ''), 0, 1); // $ways[0] = "ccc2 >> ccc2a >> ccc2a1" with html formatted text
+				$ways = $c->print_all_ways('auto', ($nolink ? 'none' : ''), 0, 1, ($rendermode == 2 ? 0 : 1)); // $ways[0] = "ccc2 >> ccc2a >> ccc2a1" with html formatted text
 				foreach ($ways as $way) {
 					$color = $c->color;
-					$sfortag = '<li class="select2-search-choice-dolibarr noborderoncategories'.(empty($toprint) ? ' nomarginleft' : '').'"' . ($color ? ' style="background: #' . $color . ';"' : ' style="background: #bbb"') . '>';
-					$sfortag .= $way;
+					$sfortag = '<li class="select2-search-choice-dolibarr noborderoncategories'.(empty($toprint) ? ' nomarginleft' : '');
+					$forced_color = 'categtextwhite'; // We want color white because the getNomUrl of a tag is always called inside a dark background like '<span color="bbb"></span>' to show it as a tag. TODO Add this in param to force when called outside of span.
+					if ($c->color && colorIsLight($c->color)) {
+						$forced_color = 'categtextblack';
+					}
+					$sfortag .= ' '.$forced_color;
+					$sfortag .= '"';
+					$sfortag .= ($color ? ' style="background: #' . $color . ';"' : ' style="background: #bbb"');
+					$titlestring = $ways[0];
+					$titlestring = str_replace('>', ' - ', dol_string_nohtmltag($titlestring));
+					$sfortag .= ' title="' . dolPrintHTMLForAttribute($titlestring) . '"';
+					$sfortag .= '>';
+					if ($rendermode == 1) {
+						$sfortag .= '<a href="'.DOL_URL_ROOT.'/categories/viewcat.php?id='.((int) $c->id).'&type='.urlencode($c->type).'" class="'.$forced_color.'">';
+						$sfortag .= img_picto('', 'category', 'class="paddingright"').$c->label;
+						$sfortag .= '</a>';
+					} else {
+						$sfortag .= $way;
+					}
 					$sfortag .= '</li>';
-					$toprint[] = $sfortag;
+
+					$toprint[] = $sfortag;	// Add tag in list of tag to show
 				}
 			}
 			if (empty($toprint)) {
@@ -10326,8 +10344,8 @@ class Form
 			print '<tr class="liste_titre">';
 			print '<td>' . $langs->trans("Type") . '</td>';
 			print '<td>' . $langs->trans("Ref") . '</td>';
-			print '<td class="center"></td>';
-			print '<td class="center">' . $langs->trans("Date") . '</td>';
+			print '<td></td>';
+			print '<td></td>';
 			print '<td class="right">' . $langs->trans("AmountHTShort") . '</td>';
 			print '<td class="right">' . $langs->trans("Status") . '</td>';
 			print '<td></td>';
@@ -11035,7 +11053,7 @@ class Form
 
 		// For thirdparty, contact, user, member, the ref is the id, so we show something else
 		if ($object->element == 'societe') {
-			$ret .= '<span class="valignmiddle">'.dol_htmlentities((string) $object->name).'</span>';
+			$ret .= '<span class="valignmiddle">'.dolPrintHTML((string) $object->name).'</span>';
 
 			// List of extra languages
 			$arrayoflangcode = array();
@@ -11072,12 +11090,12 @@ class Form
 			$ret .= $object->ref . '<br>';
 			$fullname = $object->getFullName($langs);
 			if ($object->morphy == 'mor' && $object->societe) {
-				$ret .= '<span class="valignmiddle">'.dol_htmlentities((string) $object->societe) . ((!empty($fullname) && $object->societe != $fullname) ? ' (' . dol_htmlentities($fullname) . $addgendertxt . ')' : '').'</span>';
+				$ret .= '<span class="valignmiddle">'.dolPrintHTML((string) $object->societe) . ((!empty($fullname) && $object->societe != $fullname) ? ' (' . dol_htmlentities($fullname) . $addgendertxt . ')' : '').'</span>';
 			} else {
-				$ret .= '<span class="valignmiddle">'.dol_htmlentities($fullname) . $addgendertxt . ((!empty($object->societe) && $object->societe != $fullname) ? ' (' . dol_htmlentities((string) $object->societe) . ')' : '').'</span>';
+				$ret .= '<span class="valignmiddle">'.dolPrintHTML($fullname) . $addgendertxt . ((!empty($object->societe) && $object->societe != $fullname) ? ' (' . dol_htmlentities((string) $object->societe) . ')' : '').'</span>';
 			}
 		} elseif (in_array($object->element, array('contact', 'user'))) {
-			$ret .= '<span class="valignmiddle">'.dol_htmlentities($object->getFullName($langs)).'</span>'.$addgendertxt;
+			$ret .= '<span class="valignmiddle">'.dolPrintHTML($object->getFullName($langs)).'</span>'.$addgendertxt;
 		} elseif ($object->element == 'usergroup') {
 			$ret .= dol_htmlentities((string) $object->name);
 		} elseif (in_array($object->element, array('action', 'agenda'))) {
@@ -11089,8 +11107,13 @@ class Form
 			$ret .= '';
 		} elseif ($object->element == 'accountingbookkeeping' && !empty($object->context['mode']) && $object->context['mode'] == '_tmp') {
 			$ret .= '<span class="valignmiddle">'.$langs->trans("Draft").'</span>';
+		} elseif ($object instanceOf Ticket) {
+			'@phan-var-force Ticket $object';
+			$ret .= '<span class="valignmiddle">'.dolPrintHTML(!empty($object->$fieldref) ? $object->$fieldref : "").'</span>';
+			$ret .= ' &nbsp; <span class="nobold small" title="'.dolPrintHTMLForAttribute($langs->trans("TicketTrackId")).'">('.$object->track_id.')</span>';
 		} elseif ($fieldref != 'none') {
-			$ret .= '<span class="valignmiddle">'.dol_htmlentities(!empty($object->$fieldref) ? $object->$fieldref : "").'</span>';
+			// Generic case
+			$ret .= '<span class="valignmiddle">'.dolPrintHTML(!empty($object->$fieldref) ? $object->$fieldref : "").'</span>';
 		}
 		if ($morehtmlref) {
 			// don't add a additional space, when "$morehtmlref" starts with a HTML div tag
@@ -11119,8 +11142,6 @@ class Form
 	 */
 	public function showbarcode(&$object, $width = 100, $morecss = '')
 	{
-		global $conf;
-
 		//Check if barcode is filled in the card
 		if (empty($object->barcode)) {
 			return '';
