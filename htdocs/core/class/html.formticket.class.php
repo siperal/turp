@@ -1780,13 +1780,11 @@ class FormTicket
 		if ($this->withtitletopic) {
 			print '<tr><td><label for="summary"><span>'.$langs->trans("Summary").'</span></label></td><td>';
 			// Answer to a ticket : display of the thread title in readonly
-			if ($this->withtopicreadonly) {
+			if ($this->withtopicreadonly && $this->topic_title) {
 				print $langs->trans('Summary').' '.$this->topic_title;
-			} else {
-				if (isset($this->withreadid) && $this->withreadid > 0) {
-					$subject = $langs->trans('Summary').' '.$this->withreadid.' : '.$this->topic_title;
-				}
-				print '<input class="text minwidth500" maxlength="42" id="summary" name="summary" value="'.dolPrintHTMLForAttribute($this->topic_title).'"'.(empty($this->withemail) ? ' autofocus' : '').' />';
+			} elseif (empty($this->withtopicreadonly)) {
+				$subject = $this->topic_title;
+				print '<input class="text minwidth500" maxlength="42" id="summary" name="summary" placeholder="" value="'.dolPrintHTMLForAttribute($subject).'"'.(empty($this->withemail) ? ' autofocus' : '').' />';
 			}
 			print '</td></tr>';
 		}

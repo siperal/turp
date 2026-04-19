@@ -1925,16 +1925,15 @@ class Ticket extends CommonObject
 			$actioncomm->email_from = $_SESSION['email_customer'];
 		}
 		$actioncomm->socid = $this->socid;
+		$actioncomm->label = $this->subject;
 		if ($summary) {
-			if ($this->private) {
-				$actioncomm->label = '['.$langs->trans('Private').'] '.((string) $summary);
-			} else {
-				$actioncomm->label = (string) $summary;
+			$actioncomm->label = preg_replace('/(\[[^\]]*\]).*$/', '\1', $actioncomm->label);
+			if ($actioncomm->label) {
+				$actioncomm->label .= ' ';
 			}
-			$actioncomm->email_subject = $this->subject;
-		} else {
-			$actioncomm->label = $this->subject;
+			$actioncomm->label .= (string) $summary;
 		}
+
 		$actioncomm->note_private = $this->message;
 		$actioncomm->userassigned = array($user->id => array('id' => $user->id,'transparency' => 0));
 		$actioncomm->userownerid = $user->id;

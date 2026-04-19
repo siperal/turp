@@ -219,6 +219,7 @@ if (in_array($action, array("view_ticket", "presend", "close", "confirm_public_c
 	}
 }
 
+
 // Actions to send emails (for ticket, we need to manage the addfile and removefile only)
 $triggersendname = 'TICKET_SENTBYMAIL';
 $paramname = 'id';
@@ -408,7 +409,7 @@ if ($action == "view_ticket" || $action == "presend" || $action == "close" || $a
 			$formticket->withfile = 2;
 			$formticket->withcancel = 1;
 			$formticket->withtitletopic = 1;
-			$formticket->topic_title = $langs->trans('Summary').' '.$langs->trans('CreatedByPublicPortal');
+			//$formticket->topic_title = $langs->trans('Summary').' '.$langs->trans('CreatedByPublicPortal');
 
 			$formticket->showMessageForm('100%');
 		}

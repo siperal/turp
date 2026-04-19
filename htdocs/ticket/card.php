@@ -1603,7 +1603,7 @@ if ($action == 'create' || $action == 'presend') {
 			$formticket->backtopage = $backtopage;
 
 			$formticket->withtitletopic = 1;
-			$formticket->topic_title = $langs->trans('Message').' '.$langs->trans('Summary');
+			//$formticket->topic_title = $langs->trans('Message').' '.$langs->trans('Summary');
 
 			$formticket->showMessageForm('100%');
 			print '</div>';
