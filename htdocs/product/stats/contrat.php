@@ -191,7 +191,7 @@ if ($id > 0 || !empty($ref)) {
 				$option .= '&limit='.((int) $limit);
 			}
 			if (!empty($search_month)) {
-				$option .= '&search_month='.urlencode($search_month);
+				$option .= '&search_month='.urlencode((string) $search_month);
 			}
 			if (!empty($search_year)) {
 				$option .= '&search_year='.urlencode((string) ($search_year));
