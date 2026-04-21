@@ -1151,7 +1151,7 @@ if (getDolGlobalString('MEMBER_SKIP_TABLE') || getDolGlobalString('MEMBER_NEWFOR
 		if ($caneditamount === "1") {
 			print '<input type="text" name="amount" id="amount" class="flat amount right width75" value="'.$showedamount.'">';
 			print '<input type="text" name="amount" id="amounthidden" class="flat amount width75 hidden" disabled value="'.$showedamount.'">';
-			print ' '.$langs->getCurrencySymbol($conf->currency).'<span class="opacitymedium hideifautoturnover small">';
+			print ' '.$langs->getCurrencySymbol($conf->currency).'<span class="opacitymedium amountdescription hideifautoturnover small">';
 			if (!getDolGlobalString('MEMBER_NEWFORM_DOLIBARRTURNOVER')) {
 				print ' - ';
 				if (empty($amountformuladescription)) {
@@ -1167,7 +1167,7 @@ if (getDolGlobalString('MEMBER_SKIP_TABLE') || getDolGlobalString('MEMBER_NEWFOR
 		} else {
 			print '<input type="text" name="amount" id="amount" class="flat amount width75 right hidden" value="'.$showedamount.'">';
 			print '<input type="text" name="amount" id="amounthidden" class="flat amount width75" disabled value="'.$showedamount.'">';
-			print ' '.$langs->getCurrencySymbol($conf->currency).'<span class="opacitymedium hideifautoturnover hidden small">';
+			print ' '.$langs->getCurrencySymbol($conf->currency).'<span class="opacitymedium amountdescription hideifautoturnover hidden small">';
 			if (!getDolGlobalString('MEMBER_NEWFORM_DOLIBARRTURNOVER')) {
 				print ' - ';
 				print $amount > 0 ? $langs->trans("AnyAmountWithAdvisedAmount", price($amount, 0, $langs, 1, -1, -1, $conf->currency)) : $langs->trans("AnyAmountWithoutAdvisedAmount");
