@@ -4,6 +4,9 @@ English Dolibarr ChangeLog
 
 ***** ChangeLog for 23.0.3 compared to 23.0.2 *****
 FIX: IDOR on messaging.php - credit Aksoum Abderrahmane
+FIX: Some remaining cross-customer object creation on API (proposal, orders) - credit Mitch311
+
+
 
 
 ***** ChangeLog for 23.0.2 compared to 23.0.1 *****
