@@ -28,10 +28,6 @@
 
 // Load Dolibarr environment
 require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/doleditor.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
-
 /**
  * @var Conf $conf
  * @var DoliDB $db
@@ -40,6 +36,9 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
  * @var Translate $langs
  * @var User $user
  */
+require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/core/lib/doleditor.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'fckeditor', 'errors'));
@@ -194,7 +193,7 @@ if (empty($conf->use_javascript_ajax)) {
 	print '<td>';
 	print '<select name="editorbackend" class="minwidth150">';
 	print '<option value="ckeditor"'.($currentbackend == 'ckeditor' ? ' selected' : '').'>CKEditor 4</option>';
-	print '<option value="tinymce"'.($currentbackend == 'tinymce' ? ' selected' : '').'>TinyMCE</option>';
+	print '<option value="tinymce"'.($currentbackend == 'tinymce' ? ' selected' : '').'>TinyMCE (experimental)</option>';
 	print '</select>';
 	print ' '.$form->textwithpicto('', $langs->trans("EditorBackendHelp"));
 	print '</td>';

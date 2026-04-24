@@ -7039,6 +7039,20 @@ div.cke_notifications_area .cke_notification_warning {
 
 
 /* ============================================================================== */
+/*  TinyMCE                                                                       */
+/* ============================================================================== */
+
+.tox .tox-edit-area::before {
+	border: none !important;
+}
+.tox:not(.tox-tinymce-inline) .tox-editor-header {
+	/*border-bottom: 1px solid #ddd !important;
+	box-shadow: unset !important; */
+	box-shadow: 0 2px 2px -2px rgba(34,47,62,.1),0 8px 8px -4px rgba(34,47,62,.07) !important;
+}
+
+
+/* ============================================================================== */
 /*  ACE editor                                                                    */
 /* ============================================================================== */
 .ace_editor {

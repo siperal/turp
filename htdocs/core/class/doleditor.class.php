@@ -363,7 +363,7 @@ class DolEditor
 				$out .= '<script nonce="'.getNonce().'" type="text/javascript">'."\n";
 				$out .= '$(document).ready(function () {'."\n";
 				$out .= '	if (typeof tinymce === "undefined") {'."\n";
-				$out .= '		console.error("TinyMCE library not loaded. Check that public/includes/tinymce/tinymce/tinymce.min.js exists and FCKEDITOR_EDITORNAME=tinymce.");'."\n";
+				$out .= '		console.error("TinyMCE library not loaded. Check that .../includes/tinymce/tinymce/tinymce.min.js exists and FCKEDITOR_EDITORNAME=tinymce.");'."\n";
 				$out .= '		return;'."\n";
 				$out .= '	}'."\n";
 				$out .= '	var toolbarName = "'.dol_escape_js($this->toolbarname).'";'."\n";
@@ -376,6 +376,9 @@ class DolEditor
 				$out .= '		toolbar: toolbarStr,'."\n";
 				$out .= '		plugins: pluginsStr,'."\n";
 				$out .= '		menubar: false,'."\n";
+				if (!getDolGlobalString('WYSIWYG_TINYMCE_ENABLE_STATUS_BAR')) {
+					$out .= '		statusbar: false,'."\n";
+				}
 				$out .= '		branding: false,'."\n";
 				$out .= '		promotion: false,'."\n";
 				$out .= '		license_key: "gpl",'."\n";

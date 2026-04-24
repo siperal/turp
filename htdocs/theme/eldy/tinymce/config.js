@@ -14,15 +14,15 @@
  * Loaded by main.inc.php before tinymce.init() is called per field.
  */
 window.dolTinymceToolbars = {
-	'Full': 'undo redo | styles fontfamily fontsize | bold italic underline strikethrough superscript | forecolor backcolor removeformat | align | numlist bullist outdent indent blockquote | ltr rtl | link unlink | image table hr charmap | pastetext searchreplace visualblocks preview fullscreen | code',
-	'dolibarr_mailings': 'styles fontfamily fontsize | bold italic underline strikethrough forecolor removeformat | numlist bullist outdent indent | align | link unlink image table hr charmap | searchreplace visualblocks preview fullscreen | code',
-	'dolibarr_notes': 'styles fontsize | bold italic underline strikethrough forecolor removeformat | numlist bullist outdent indent | align | link unlink image table hr charmap | searchreplace preview fullscreen | code',
-	'dolibarr_details': 'styles fontsize | bold italic underline strikethrough forecolor removeformat | numlist bullist outdent indent | align | link unlink charmap | fullscreen | code',
-	'dolibarr_readonly': 'fullscreen searchreplace | image charmap | code'
+	'Full': 'fullscreen | undo redo | styles fontfamily fontsize | bold italic underline strikethrough superscript | forecolor backcolor removeformat | align | numlist bullist outdent indent blockquote | ltr rtl | link unlink | image table hr charmap | pastetext searchreplace visualblocks preview | code',
+	'dolibarr_mailings': 'fullscreen | styles fontfamily fontsize | bold italic underline strikethrough forecolor removeformat | numlist bullist outdent indent | align | link unlink image table hr charmap | searchreplace visualblocks preview | code',
+	'dolibarr_notes': 'fullscreen | styles fontsize | bold italic underline strikethrough forecolor removeformat | numlist bullist outdent indent | align | link unlink image table hr charmap | searchreplace preview | code',
+	'dolibarr_details': 'fullscreen | styles fontsize | bold italic underline strikethrough forecolor removeformat | numlist bullist outdent indent | align | link unlink charmap | code',
+	'dolibarr_readonly': 'fullscreen'
 };
 
 window.dolTinymcePluginsFor = function (toolbarName) {
-	var base = 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen table help wordcount';
+	var base = 'fullscreen advlist autolink lists link image charmap preview anchor searchreplace visualblocks code table help wordcount';
 	if (toolbarName === 'Full' || toolbarName === 'dolibarr_mailings') {
 		base += ' directionality';
 	}
