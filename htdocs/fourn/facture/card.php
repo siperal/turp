@@ -2376,7 +2376,7 @@ if ($action == 'create') {
 		print '<table class="border centpercent">';
 
 		// Ref
-		print '<tr><td class="titlefieldcreate">'.$langs->trans('Ref').'</td><td>'.$langs->trans('Draft').'</td></tr>';
+		//print '<tr><td class="titlefieldcreate">'.$langs->trans('Ref').'</td><td>'.$langs->trans('Draft').'</td></tr>';
 
 		$exampletemplateinvoice = new FactureFournisseurRec($db);
 		$invoice_predefined = new FactureFournisseurRec($db);
@@ -2481,14 +2481,6 @@ if ($action == 'create') {
 				dol_print_error($db);
 			}
 		}
-
-		// Ref supplier
-		print '<tr><td class="fieldrequired">'.$langs->trans('RefSupplierBill').'</td><td><input name="ref_supplier" value="'.(GETPOSTISSET('ref_supplier') ? GETPOST('ref_supplier') : (!empty($objectsrc->ref_supplier) ? $objectsrc->ref_supplier : '')).'" type="text" spellcheck="false"';
-		if (!empty($societe->id) && $societe->id > 0) {
-			print ' autofocus';
-		}
-		print '></td>';
-		print '</tr>';
 
 		print '<tr><td class="tdtop fieldrequired">'.$langs->trans('Type').'</td><td>';
 
@@ -2742,9 +2734,20 @@ if ($action == 'create') {
 			}
 		}
 
-		print '</div>';
+		print '</div><br>';
 
 		print '</td></tr>';
+
+
+		// Ref supplier
+		print '<tr><td class="fieldrequired">';
+		print $form->textwithpicto($langs->trans('RefSupplierBill'), $langs->trans("RefOfOnVendorSide", $langs->trans("SupplierBill"))).'</td><td>';
+		print '<input name="ref_supplier" value="'.(GETPOSTISSET('ref_supplier') ? GETPOST('ref_supplier') : (!empty($objectsrc->ref_supplier) ? $objectsrc->ref_supplier : '')).'" type="text" spellcheck="false"';
+		if (!empty($societe->id) && $societe->id > 0) {
+			print ' autofocus';
+		}
+		print '></td>';
+		print '</tr>';
 
 
 		// Invoice Subtype
@@ -2767,7 +2770,7 @@ if ($action == 'create') {
 		}
 
 		// Label
-		print '<tr><td>'.$langs->trans('Label').'</td><td><input class="minwidth200" name="label" value="'.dol_escape_htmltag(GETPOST('label')).'" type="text"></td></tr>';
+		print '<tr><td>'.$langs->trans('Label').'</td><td><input class="minwidth300" name="label" value="'.dol_escape_htmltag(GETPOST('label')).'" type="text"></td></tr>';
 
 
 		// Date invoice

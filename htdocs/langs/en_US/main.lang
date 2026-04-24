@@ -1433,3 +1433,5 @@ DUPLICATA=DUPLICATA
 ErrorFailedTriggerCall=Failed to call trigger
 History=History
 Delay=Delay
+RefOfOnCustomerSide=Reference of %s on customer side
+RefOfOnVendorSide=Reference of %s on vendor side
