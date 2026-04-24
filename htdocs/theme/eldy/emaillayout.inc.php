@@ -69,6 +69,11 @@ if (!defined('ISLOADEDBYSTEELSHEET')) {
 	margin-bottom: 10px;
 	margin-top: 10px;
 	width: fit-content;
+
+	position: absolute;
+	z-index: 1000;
+	background-color: #fff;
+	margin-top: 14px;
   }
 
   .template-option[data-template="ai"] i {
