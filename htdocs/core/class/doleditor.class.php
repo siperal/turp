@@ -106,8 +106,8 @@ class DolEditor
 	 *  @param	bool|int			$uselocalbrowser				Enabled to add links to local object with a local media filemanager. -1 or true = auto, false = only external images URL can be added into content, or images saved inline with src="data:..." with a cut/paste.
 	 *  @param  bool|int|string		$okforextendededitor    		1 or True=Allow usage of extended editor tool if qualified (like ckeditor). If 'textarea', force use of simple textarea. If 'ace', force use of Ace.
 	 *                          	                        		Warning: If you use 'ace', don't forget to also include ace.js in page header. Also, the button "save" must have class="buttonforacesave".
-	 *  @param  int					$rows                   		Size of rows for textarea tool
-	 *  @param  string				$cols                   		Size of cols for textarea tool (textarea number of cols '70' or percent 'x%')
+	 *  @param  int					$rows                   		Size of rows for textarea text tool
+	 *  @param  string				$cols                   		Size of cols for textarea text tool (textarea number of cols '70' or percent recommended 'x%')
 	 *  @param	int<0,1>			$readonly						0=Read/Edit, 1=Read only
 	 *  @param	array{x?:string,y?:string,find?:string}	$poscursor	Array for initial cursor position array('x'=>x, 'y'=>y).
 	 *                      	                       				array('find'=> 'word')  can be used to go to line were the word has been found
@@ -235,8 +235,16 @@ class DolEditor
 			// Note: We do not put the attribute 'disabled' tag because on a read form, it change style with grey.
 			$out .= '<textarea id="'.$this->htmlname.'" name="'.$this->htmlname.'"';
 			$out .= ' rows="'.$this->rows.'"';
-			//$out .= ' style="height: 700px; min-height: 700px;"';
-			$out .= (preg_match('/%/', $this->cols) ? ' style="margin-top: 5px; width: '.$this->cols.'"' : ' cols="'.$this->cols.'"');
+			if (preg_match('/%/', $this->cols)) {	// ->cols is a percent
+				$out .= ' style="margin-top: 5px; width: ';
+				if ($this->tool == 'tinymce') {
+					$out .= $this->cols;
+				} else {
+					$out .= 'calc('.$this->cols.' - 20px)';	// The with in percent minus the margin.
+				}
+			} else {
+				$out .= ' cols="'.$this->cols.'"';
+			}
 			$out .= ' '.($moreparam ? $moreparam : '');
 			$out .= ' class="flat '.dol_string_nohtmltag($this->toolbarname).' '.$morecss.'">';
 			$out .= htmlspecialchars($this->content);
@@ -370,6 +378,9 @@ class DolEditor
 				$out .= '	var toolbars = (window.dolTinymceToolbars || {});'."\n";
 				$out .= '	var toolbarStr = toolbars[toolbarName] || toolbars["dolibarr_details"] || "undo redo | bold italic | link | code";'."\n";
 				$out .= '	var pluginsStr = (typeof window.dolTinymcePluginsFor === "function") ? window.dolTinymcePluginsFor(toolbarName) : "advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen table help wordcount";'."\n";
+				if (!getDolGlobalString('FCKEDITOR_ENABLE_SPECIALCHAR')) {
+					$out .= 'pluginsStr = pluginsStr.replace(\' charmap\', \'\');'."\n";
+				}
 				$out .= '	var tinyLang = "'.dol_escape_js($langs->defaultlang).'";'."\n";
 				$out .= '	var tinyConf = {'."\n";
 				$out .= '		selector: "textarea#'.dol_escape_js($this->htmlname).'",'."\n";
@@ -383,7 +394,7 @@ class DolEditor
 				$out .= '		promotion: false,'."\n";
 				$out .= '		license_key: "gpl",'."\n";
 				$out .= '		readonly: '.($this->readonly ? 'true' : 'false').','."\n";
-				$out .= '		height: '.((int) $this->height + 60).','."\n";
+				$out .= '		height: '.((int) $this->height + 80).','."\n";
 				if ($this->width) {
 					$out .= '		width: "'.dol_escape_js($this->width).'",'."\n";
 				}
